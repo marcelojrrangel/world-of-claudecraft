@@ -1,12 +1,15 @@
 import type { WebSocket } from 'ws';
 import { Sim } from '../src/sim/sim';
 import { DT, Entity, SimEvent, dist2d } from '../src/sim/types';
-import { saveCharacterState } from './db';
+import { zoneAt, DUNGEONS } from '../src/sim/data';
+import { saveCharacterState, openPlaySession, closePlaySession } from './db';
 
 const WORLD_SEED = 20061;
 const INTEREST_RADIUS = 120;
 const EVENT_RADIUS = 90;
 const AUTOSAVE_SECONDS = 30;
+// Exponential moving average weight for the per-tick duration stat.
+const TICK_EMA_ALPHA = 0.05;
 
 export interface ClientSession {
   ws: WebSocket;
@@ -16,6 +19,34 @@ export interface ClientSession {
   name: string;
   lastSave: number;
   alive: boolean;
+  joinedAt: number;
+  dbSessionId: number | null; // play_sessions row, set once the insert lands
+}
+
+export interface AdminServerStats {
+  online: number;
+  peakOnline: number;
+  uptimeSeconds: number;
+  tickMsAvg: number;
+  simEntities: number;
+  rssBytes: number;
+  heapUsedBytes: number;
+}
+
+export interface AdminLivePlayer {
+  pid: number;
+  accountId: number;
+  characterId: number;
+  name: string;
+  class: string;
+  level: number;
+  hp: number;
+  maxHp: number;
+  x: number;
+  z: number;
+  zone: string;
+  sessionSeconds: number;
+  lastSaveSecondsAgo: number;
 }
 
 interface WireAura {
@@ -65,6 +96,9 @@ export class GameServer {
   clients = new Map<number, ClientSession>(); // by pid
   private interval: NodeJS.Timeout | null = null;
   private saveTimer = 0;
+  private readonly startedAt = Date.now();
+  private peakOnline = 0;
+  private tickMsAvg = 0;
 
   constructor() {
     this.sim = new Sim({ seed: WORLD_SEED, playerClass: 'warrior', noPlayer: true });
@@ -85,6 +119,8 @@ export class GameServer {
         acc -= DT;
       }
       this.broadcastSnapshots();
+      const tickMs = Number(process.hrtime.bigint() - now) / 1e6;
+      this.tickMsAvg = this.tickMsAvg === 0 ? tickMs : this.tickMsAvg + TICK_EMA_ALPHA * (tickMs - this.tickMsAvg);
       this.saveTimer += dt;
       if (this.saveTimer >= AUTOSAVE_SECONDS) {
         this.saveTimer = 0;
@@ -104,8 +140,15 @@ export class GameServer {
       if (c.characterId === characterId) return { error: 'character already in world' };
     }
     const pid = this.sim.addPlayer(cls, name, { state: state ?? undefined });
-    const session: ClientSession = { ws, accountId, characterId, pid, name, lastSave: Date.now(), alive: true };
+    const session: ClientSession = {
+      ws, accountId, characterId, pid, name,
+      lastSave: Date.now(), alive: true, joinedAt: Date.now(), dbSessionId: null,
+    };
     this.clients.set(pid, session);
+    this.peakOnline = Math.max(this.peakOnline, this.clients.size);
+    openPlaySession(accountId, characterId, name)
+      .then((id) => { session.dbSessionId = id; })
+      .catch((err) => console.error('failed to open play session:', err));
 
     this.send(session, {
       t: 'hello',
@@ -121,6 +164,9 @@ export class GameServer {
   async leave(session: ClientSession, reason: string): Promise<void> {
     if (!this.clients.has(session.pid)) return;
     this.clients.delete(session.pid);
+    if (session.dbSessionId !== null) {
+      void closePlaySession(session.dbSessionId).catch((err) => console.error('failed to close play session:', err));
+    }
     await this.saveCharacter(session).catch((err) => console.error('save on leave failed:', err));
     this.sim.removePlayer(session.pid);
     this.broadcastSystem(`${session.name} has left the world. (${reason})`);
@@ -139,6 +185,61 @@ export class GameServer {
     for (const session of this.clients.values()) {
       await this.saveCharacter(session).catch((err) => console.error(`${reason} failed for ${session.name}:`, err));
     }
+  }
+
+  // Close every open play_sessions row; called on graceful shutdown so the
+  // sessions of currently-online players keep their real duration.
+  async endAllPlaySessions(): Promise<void> {
+    for (const session of this.clients.values()) {
+      if (session.dbSessionId === null) continue;
+      await closePlaySession(session.dbSessionId).catch((err) => console.error('failed to close play session:', err));
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Admin dashboard views (read-only)
+  // -------------------------------------------------------------------------
+
+  adminStats(): AdminServerStats {
+    const mem = process.memoryUsage();
+    return {
+      online: this.clients.size,
+      peakOnline: this.peakOnline,
+      uptimeSeconds: Math.round((Date.now() - this.startedAt) / 1000),
+      tickMsAvg: Math.round(this.tickMsAvg * 100) / 100,
+      simEntities: this.sim.entities.size,
+      rssBytes: mem.rss,
+      heapUsedBytes: mem.heapUsed,
+    };
+  }
+
+  liveSessions(): AdminLivePlayer[] {
+    const now = Date.now();
+    const players: AdminLivePlayer[] = [];
+    for (const session of this.clients.values()) {
+      const e = this.sim.entities.get(session.pid);
+      const meta = this.sim.meta(session.pid);
+      if (!e || !meta) continue;
+      const zone = e.dungeonId
+        ? (DUNGEONS[e.dungeonId]?.name ?? e.dungeonId)
+        : zoneAt(e.pos.z).name;
+      players.push({
+        pid: session.pid,
+        accountId: session.accountId,
+        characterId: session.characterId,
+        name: session.name,
+        class: meta.cls,
+        level: e.level,
+        hp: e.hp,
+        maxHp: e.maxHp,
+        x: round2(e.pos.x),
+        z: round2(e.pos.z),
+        zone,
+        sessionSeconds: Math.round((now - session.joinedAt) / 1000),
+        lastSaveSecondsAgo: Math.round((now - session.lastSave) / 1000),
+      });
+    }
+    return players.sort((a, b) => b.sessionSeconds - a.sessionSeconds);
   }
 
   // -------------------------------------------------------------------------

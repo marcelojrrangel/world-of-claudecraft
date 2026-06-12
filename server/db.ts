@@ -33,6 +33,17 @@ CREATE TABLE IF NOT EXISTS characters (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 CREATE INDEX IF NOT EXISTS characters_account ON characters(account_id);
+ALTER TABLE accounts ADD COLUMN IF NOT EXISTS is_admin BOOLEAN NOT NULL DEFAULT FALSE;
+CREATE TABLE IF NOT EXISTS play_sessions (
+  id SERIAL PRIMARY KEY,
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+  character_id INT REFERENCES characters(id) ON DELETE SET NULL,
+  character_name TEXT NOT NULL DEFAULT '',
+  started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  ended_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS play_sessions_account ON play_sessions(account_id);
+CREATE INDEX IF NOT EXISTS play_sessions_started ON play_sessions(started_at);
 `;
 
 export async function ensureSchema(): Promise<void> {
@@ -120,4 +131,37 @@ export async function saveCharacterState(characterId: number, level: number, sta
     'UPDATE characters SET level = $2, state = $3, updated_at = now() WHERE id = $1',
     [characterId, level, JSON.stringify(state)],
   );
+}
+
+export async function isAdminAccount(accountId: number): Promise<boolean> {
+  const res = await pool.query('SELECT is_admin FROM accounts WHERE id = $1', [accountId]);
+  return res.rows[0]?.is_admin === true;
+}
+
+// ---------------------------------------------------------------------------
+// Play sessions: one row per character login, closed on logout. Powers the
+// admin dashboard's playtime / DAU / sessions-per-day metrics.
+// ---------------------------------------------------------------------------
+
+export async function openPlaySession(
+  accountId: number,
+  characterId: number,
+  characterName: string,
+): Promise<number> {
+  const res = await pool.query(
+    'INSERT INTO play_sessions (account_id, character_id, character_name) VALUES ($1, $2, $3) RETURNING id',
+    [accountId, characterId, characterName],
+  );
+  return res.rows[0].id;
+}
+
+export async function closePlaySession(sessionId: number): Promise<void> {
+  await pool.query('UPDATE play_sessions SET ended_at = now() WHERE id = $1 AND ended_at IS NULL', [sessionId]);
+}
+
+// Sessions left open by a crash have an unknown duration; close them at their
+// start time so they don't inflate playtime stats forever.
+export async function closeOrphanSessions(): Promise<number> {
+  const res = await pool.query('UPDATE play_sessions SET ended_at = started_at WHERE ended_at IS NULL');
+  return res.rowCount ?? 0;
 }

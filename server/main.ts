@@ -4,43 +4,18 @@ import * as path from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
 import {
   ensureSchema, pool, createAccount, findAccount, touchLogin, saveToken, accountForToken,
-  listCharacters, getCharacter, createCharacter, deleteCharacter,
+  listCharacters, getCharacter, createCharacter, deleteCharacter, closeOrphanSessions,
 } from './db';
 import { hashPassword, verifyPassword, newToken, validUsername, validPassword, validCharName } from './auth';
+import { json, readBody } from './http_util';
+import { rateLimited } from './ratelimit';
+import { handleAdminApi } from './admin';
 import { GameServer } from './game';
 
 const PORT = Number(process.env.PORT ?? 8787);
 const STATIC_DIR = path.join(__dirname, '..', 'dist');
 
 const game = new GameServer();
-
-// ---------------------------------------------------------------------------
-// Tiny HTTP helpers
-// ---------------------------------------------------------------------------
-
-function json(res: http.ServerResponse, status: number, body: unknown): void {
-  const data = JSON.stringify(body);
-  res.writeHead(status, { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) });
-  res.end(data);
-}
-
-function readBody(req: http.IncomingMessage): Promise<any> {
-  return new Promise((resolve, reject) => {
-    let data = '';
-    req.on('data', (c) => {
-      data += c;
-      if (data.length > 64 * 1024) reject(new Error('body too large'));
-    });
-    req.on('end', () => {
-      try {
-        resolve(data ? JSON.parse(data) : {});
-      } catch {
-        reject(new Error('bad json'));
-      }
-    });
-    req.on('error', reject);
-  });
-}
 
 async function bearerAccount(req: http.IncomingMessage): Promise<number | null> {
   const auth = req.headers.authorization ?? '';
@@ -57,9 +32,19 @@ const MIME: Record<string, string> = {
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp',
 };
 
+// The admin dashboard is reached via the admin.* subdomain (Caddy proxies it
+// to this same port) or /admin for local dev. The hostname only picks which
+// HTML shell is served — the admin API itself is gated by admin tokens.
+function isAdminRequest(req: http.IncomingMessage): boolean {
+  const host = String(req.headers.host ?? '').toLowerCase();
+  const urlPath = (req.url ?? '/').split('?')[0];
+  return host.startsWith('admin.') || urlPath === '/admin' || urlPath === '/admin/';
+}
+
 function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void {
+  const shell = isAdminRequest(req) ? 'admin.html' : 'index.html';
   let urlPath = (req.url ?? '/').split('?')[0];
-  if (urlPath === '/') urlPath = '/index.html';
+  if (urlPath === '/' || urlPath === '/admin' || urlPath === '/admin/') urlPath = `/${shell}`;
   const file = path.join(STATIC_DIR, path.normalize(urlPath).replace(/^([.][.][/\\])+/, ''));
   if (!file.startsWith(STATIC_DIR) || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
     // Asset paths must 404, not SPA-fall-back: a missing .glb served as index.html
@@ -70,7 +55,7 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
       return;
     }
     // SPA fallback
-    const index = path.join(STATIC_DIR, 'index.html');
+    const index = path.join(STATIC_DIR, shell);
     if (fs.existsSync(index)) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       fs.createReadStream(index).pipe(res);
@@ -87,19 +72,6 @@ function serveStatic(req: http.IncomingMessage, res: http.ServerResponse): void 
 // ---------------------------------------------------------------------------
 // REST API
 // ---------------------------------------------------------------------------
-
-// Simple in-memory rate limiter for auth endpoints (per IP, sliding minute).
-const authAttempts = new Map<string, number[]>();
-function rateLimited(req: http.IncomingMessage): boolean {
-  const ip = String(req.headers['x-forwarded-for'] ?? req.socket.remoteAddress ?? 'unknown').split(',')[0].trim();
-  const now = Date.now();
-  const windowStart = now - 60_000;
-  const list = (authAttempts.get(ip) ?? []).filter((t) => t > windowStart);
-  list.push(now);
-  authAttempts.set(ip, list);
-  if (authAttempts.size > 10_000) authAttempts.clear(); // memory backstop
-  return list.length > 20;
-}
 
 async function handleApi(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
   const url = (req.url ?? '').split('?')[0];
@@ -197,10 +169,14 @@ async function main(): Promise<void> {
     }
   }
   await ensureSchema();
+  const orphans = await closeOrphanSessions();
+  if (orphans > 0) console.log(`closed ${orphans} orphaned play session(s) from a previous run`);
   console.log('database ready');
 
   const server = http.createServer((req, res) => {
-    if ((req.url ?? '').startsWith('/api/')) void handleApi(req, res);
+    const url = req.url ?? '';
+    if (url.startsWith('/admin/api/')) void handleAdminApi(req, res, game);
+    else if (url.startsWith('/api/')) void handleApi(req, res);
     else serveStatic(req, res);
   });
 
@@ -262,6 +238,7 @@ async function main(): Promise<void> {
     console.log('shutting down: saving characters...');
     game.stop();
     await game.saveAll('shutdown');
+    await game.endAllPlaySessions();
     await pool.end();
     process.exit(0);
   };

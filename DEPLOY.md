@@ -108,3 +108,36 @@ For off-box safety, sync the directory to S3 occasionally:
 - If the instance ever feels tight, stop → change instance type →
   start. Everything lives in Docker plus one EBS volume, so nothing
   else changes.
+
+## Admin dashboard
+
+The admin dashboard (account/character/session metrics, live players,
+server health) is served by the same game server process:
+
+- **Production**: point `admin.worldofclaudecraft.com` at the instance
+  (A record) and add a server block for it in the nginx config in the
+  internal `ansible-scripts` repo, proxying to the same game port as the
+  main site. The Node server serves the dashboard for any hostname
+  starting with `admin.`.
+- **Standalone/Caddy**: set `ADMIN_DOMAIN` in `deploy/user-data.sh`
+  (or add the extra site block to `/etc/caddy/Caddyfile` by hand).
+- **Local dev**: open `http://localhost:8787/admin` (or `/admin` under
+  `npm run dev`).
+
+Access requires signing in with a game account that has the `is_admin`
+flag. The hostname only selects which HTML shell is served — every
+`/admin/api/*` call is checked against the account flag.
+
+Grant the first admin:
+
+```bash
+# locally
+npm run admin:grant -- <username>
+
+# on the box (the runtime image only ships bundled code, so use psql)
+sudo docker exec eastbrook-db psql -U eastbrook eastbrook \
+  -c "UPDATE accounts SET is_admin = TRUE WHERE username = '<username>';"
+```
+
+Revoke with `npm run admin:grant -- <username> --revoke` (or set the
+flag to `FALSE` in SQL).

@@ -17,6 +17,12 @@
 # by IP first, set the domain later — see DEPLOY.md).
 DOMAIN=""
 
+# Admin dashboard domain (e.g. "admin.worldofclaudecraft.com"), also with an
+# A record at this instance. Leave empty to skip; the dashboard then stays
+# reachable only at /admin on the game site. Access still requires an
+# is_admin account regardless of hostname (see DEPLOY.md).
+ADMIN_DOMAIN=""
+
 # The repo is private: a fine-grained GitHub PAT with read-only Contents
 # access to levy-street/world-of-claudecraft (see DEPLOY.md for the 5 clicks).
 GITHUB_TOKEN=""
@@ -87,6 +93,15 @@ $SITE {
 	encode gzip
 }
 CADDY
+if [ -n "$ADMIN_DOMAIN" ]; then
+  cat >> /etc/caddy/Caddyfile <<CADDY
+
+$ADMIN_DOMAIN {
+	reverse_proxy localhost:8787
+	encode gzip
+}
+CADDY
+fi
 systemctl enable caddy
 systemctl restart caddy
 

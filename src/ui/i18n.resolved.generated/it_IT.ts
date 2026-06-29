@@ -820,6 +820,9 @@ export const it_IT: EnTranslations = {
         "nature": "Natura"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} si erge sulle Alture di Thornpeak!"
+    },
     "loot": {
       "chestTitle": "Scrigno"
     },
@@ -5380,6 +5383,18 @@ export const it_IT: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Avanguardia cromo"
+      },
+      "crownforged_gauntlets": {
+        "name": "Manopole Forgiacorona"
+      },
+      "nighttalon_grips": {
+        "name": "Prese Artiglio Notturno"
+      },
+      "soulflame_gloves": {
+        "name": "Guanti Fiammanima"
+      },
+      "stormcallers_handguards": {
+        "name": "Paramani del Chiamatempeste"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const it_IT: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Accolita Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, il Picco Risvegliato"
+      },
+      "thunzharr_stormling": {
+        "name": "Elementale di tempesta ridestato"
       },
       "ironvein_foreman": {
         "name": "Caposquadra Venaferrata"

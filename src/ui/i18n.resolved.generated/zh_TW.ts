@@ -820,6 +820,9 @@ export const zh_TW: EnTranslations = {
         "nature": "自然"
       }
     },
+    "worldBoss": {
+      "spawn": "{name}在荊峰高地崛起！"
+    },
     "loot": {
       "chestTitle": "寶箱"
     },
@@ -5380,6 +5383,18 @@ export const zh_TW: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "先鋒鉻銀"
+      },
+      "crownforged_gauntlets": {
+        "name": "鑄冠護手"
+      },
+      "nighttalon_grips": {
+        "name": "夜爪握套"
+      },
+      "soulflame_gloves": {
+        "name": "魂焰手套"
+      },
+      "stormcallers_handguards": {
+        "name": "喚雷者手甲"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const zh_TW: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "侍僧泰莎"
+      },
+      "thunzharr_waking_peak": {
+        "name": "桑扎爾，覺醒之峰"
+      },
+      "thunzharr_stormling": {
+        "name": "被驚醒的風暴元素"
       },
       "ironvein_foreman": {
         "name": "鐵脈工頭"

@@ -820,6 +820,9 @@ export const ja_JP: EnTranslations = {
         "nature": "自然"
       }
     },
+    "worldBoss": {
+      "spawn": "{name}がソーンピーク高地に立ち上がった！"
+    },
     "loot": {
       "chestTitle": "宝箱"
     },
@@ -5380,6 +5383,18 @@ export const ja_JP: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "ヴァンガードクローム"
+      },
+      "crownforged_gauntlets": {
+        "name": "冠鍛えのガントレット"
+      },
+      "nighttalon_grips": {
+        "name": "夜爪の握り"
+      },
+      "soulflame_gloves": {
+        "name": "魂炎のグローブ"
+      },
+      "stormcallers_handguards": {
+        "name": "嵐呼びの手甲"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const ja_JP: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "侍祭テッサ"
+      },
+      "thunzharr_waking_peak": {
+        "name": "サンザール、目覚めし峰"
+      },
+      "thunzharr_stormling": {
+        "name": "目覚めた嵐の精"
       },
       "ironvein_foreman": {
         "name": "鉄脈の現場監督"

@@ -471,6 +471,11 @@ export interface MobTemplate {
   color: number; // render hint
   boss?: boolean;
   rare?: boolean;
+  // World boss: a server-wide elite that spawns on a fixed cadence (not from a
+  // CAMP), announces itself when it rises, and drops PERSONAL loot to every player
+  // who damaged it (gated to once per day per boss). The spawn schedule + location
+  // live in src/sim/world_boss.ts; the loot roll runs through rollWorldBossLoot.
+  worldBoss?: boolean;
   // Elite scaling, vanilla-style: ~2.3x health, ~1.5x damage, double XP.
   elite?: boolean;
   // Rare/miniboss controls.

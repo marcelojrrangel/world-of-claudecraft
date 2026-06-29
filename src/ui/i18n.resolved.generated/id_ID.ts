@@ -820,6 +820,9 @@ export const id_ID: EnTranslations = {
         "nature": "Alam"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Peti"
     },
@@ -5380,6 +5383,18 @@ export const id_ID: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vanguard Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Sarung Tangan Tempaan Mahkota"
+      },
+      "nighttalon_grips": {
+        "name": "Cengkeraman Cakar Malam"
+      },
+      "soulflame_gloves": {
+        "name": "Sarung Tangan Api Jiwa"
+      },
+      "stormcallers_handguards": {
+        "name": "Pelindung Tangan Pemanggil Badai"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const id_ID: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolit Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Mandor Ironvein"

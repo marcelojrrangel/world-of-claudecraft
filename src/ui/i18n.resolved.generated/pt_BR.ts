@@ -820,6 +820,9 @@ export const pt_BR: EnTranslations = {
         "nature": "Natureza"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} ergue-se sobre as Alturas de Thornpeak!"
+    },
     "loot": {
       "chestTitle": "Baú"
     },
@@ -5380,6 +5383,18 @@ export const pt_BR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vanguarda Cromada"
+      },
+      "crownforged_gauntlets": {
+        "name": "Manoplas Forjacoroa"
+      },
+      "nighttalon_grips": {
+        "name": "Pegas Garra Noturna"
+      },
+      "soulflame_gloves": {
+        "name": "Luvas Chama d'Alma"
+      },
+      "stormcallers_handguards": {
+        "name": "Protetores de mão do Chamatormenta"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const pt_BR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Acólita Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, o Pico Desperto"
+      },
+      "thunzharr_stormling": {
+        "name": "Elemental de tormenta desperto"
       },
       "ironvein_foreman": {
         "name": "Capataz Veio de Ferro"

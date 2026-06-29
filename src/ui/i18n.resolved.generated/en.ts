@@ -820,6 +820,9 @@ export const en: EnTranslations = {
         "nature": "Nature"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Chest"
     },
@@ -5380,6 +5383,18 @@ export const en: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vanguard Chrome"
+      },
+      "crownforged_gauntlets": {
+        "name": "Crownforged Gauntlets"
+      },
+      "nighttalon_grips": {
+        "name": "Nighttalon Grips"
+      },
+      "soulflame_gloves": {
+        "name": "Soulflame Gloves"
+      },
+      "stormcallers_handguards": {
+        "name": "Stormcaller's Handguards"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const en: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Acolyte Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Ironvein Foreman"

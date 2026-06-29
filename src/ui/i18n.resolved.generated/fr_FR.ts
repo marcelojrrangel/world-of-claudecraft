@@ -820,6 +820,9 @@ export const fr_FR: EnTranslations = {
         "nature": "Nature"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} se dresse sur les Hauteurs de Thornpeak !"
+    },
     "loot": {
       "chestTitle": "Coffre"
     },
@@ -5380,6 +5383,18 @@ export const fr_FR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Avant-garde chrome"
+      },
+      "crownforged_gauntlets": {
+        "name": "Gantelets Forgécouronne"
+      },
+      "nighttalon_grips": {
+        "name": "Poignes Serre-de-nuit"
+      },
+      "soulflame_gloves": {
+        "name": "Gants Flamme-d'âme"
+      },
+      "stormcallers_handguards": {
+        "name": "Protège-mains d'Appel-tempête"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const fr_FR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Acolyte Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, le Pic Éveillé"
+      },
+      "thunzharr_stormling": {
+        "name": "Élémentaire de tempête éveillé"
       },
       "ironvein_foreman": {
         "name": "Contremaître Veinefer"

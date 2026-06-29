@@ -787,6 +787,102 @@ export const ZONE3_MOBS: Record<string, MobTemplate> = {
     scale: 1.3,
     color: 0xe8702a,
   },
+  // Thunzharr, the Waking Peak — the world boss of Thornpeak Heights. The
+  // mountain at Stormcrag is no mountain at all: a primordial storm elemental the
+  // Gravecallers' chanting keeps stirring loose. It rises on a fixed cadence (see
+  // src/sim/world_boss.ts), bellows a server-wide warning, and rewards every player
+  // who helps bring it down with personal loot (once per day). A genuine raid-tier
+  // overworld fight: Thunderclap nova, a quaking stomp, summoned stormlings, a
+  // crushing heave, a mountain-hide barrier, and a hard enrage in the last fifth.
+  thunzharr_waking_peak: {
+    id: 'thunzharr_waking_peak',
+    name: 'Thunzharr, the Waking Peak',
+    minLevel: 20,
+    maxLevel: 20,
+    family: 'elemental',
+    worldBoss: true,
+    boss: true,
+    elite: true,
+    canSwim: false,
+    ccImmune: true,
+    // Raid-tier health (~20k at level 20): a sustained fight for a gathered raid,
+    // far above the solo/small-group rares (Varkas ~2k, Bound Guardian ~1.3k).
+    hpBase: 4000,
+    hpPerLevel: 800,
+    dmgBase: 24,
+    dmgPerLevel: 5.0,
+    attackSpeed: 2.4,
+    armorPerLevel: 46,
+    moveSpeed: 5.8,
+    aggroRadius: 18,
+    aoePulse: {
+      min: 36,
+      max: 50,
+      radius: 12,
+      every: 8,
+      name: 'Thunderclap',
+      school: 'nature',
+      fx: 'nova',
+    },
+    stomp: {
+      radius: 11,
+      every: 16,
+      duration: 3,
+      min: 18,
+      max: 28,
+      name: 'Seismic Stomp',
+      school: 'nature',
+    },
+    summonAdds: { mobId: 'thunzharr_stormling', count: 2, atHpPct: [0.66, 0.33] },
+    knockback: { chance: 0.3, distance: 7, name: 'Tectonic Heave' },
+    stoneskin: { amount: 500, every: 18, duration: 9, name: 'Mountainhide', school: 'nature' },
+    enrage: { belowHpPct: 0.2, dmgMult: 1.5, hasteMult: 1.25 },
+    // Personal loot table: rolled INDEPENDENTLY for every contributor (see
+    // rollWorldBossLoot). A guaranteed storm trophy plus one rare Tier-2 set GLOVE
+    // from a mutually-exclusive group (~32% chance any drops).
+    //
+    // INTERDEPENDENT PRs (the loot/obtainability content pass #980 deferred):
+    //  - The four gloves below are NEW third pieces for the Tier-2 armor families
+    //    defined by the item-set-bonus PR (#980, feature/item-set-bonuses):
+    //    crownforged (plate), nighttalon (leather), soulflame (cloth), stormcallers
+    //    (cloth/shaman). Those families currently ship only two pieces (helm +
+    //    shoulder), so they can reach only the 2-piece bonus; a third piece is what
+    //    unlocks each set's 3-piece bonus. The gloves carry `set: '<family>'` so the
+    //    bonus applies once #980's resolver lands.
+    //  - Their Tier-2 item level is derived from THIS drop source by the item-level
+    //    PR (#998, feature/item-level-system): a level-20 world boss + the rare
+    //    rarity bonus. So this placement is interdependent with #980 and #998 and
+    //    should land together with (or after) them.
+    loot: [
+      { itemId: 'inert_storm_shard', chance: 1 },
+      { itemId: 'crownforged_gauntlets', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'nighttalon_grips', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'soulflame_gloves', chance: 0.08, rollGroup: 'thunzharr_t2' },
+      { itemId: 'stormcallers_handguards', chance: 0.08, rollGroup: 'thunzharr_t2' },
+    ],
+    scale: 1.7,
+    color: 0x7d8a99,
+  },
+  // Stormlings — lesser storm elementals Thunzharr tears loose from itself at the
+  // health thresholds above. Fast, fragile, and meant to split a raid's attention.
+  thunzharr_stormling: {
+    id: 'thunzharr_stormling',
+    name: 'Roused Stormling',
+    minLevel: 19,
+    maxLevel: 20,
+    family: 'elemental',
+    hpBase: 70,
+    hpPerLevel: 24,
+    dmgBase: 13,
+    dmgPerLevel: 2.9,
+    attackSpeed: 2.0,
+    armorPerLevel: 22,
+    moveSpeed: 7.4,
+    aggroRadius: 12,
+    loot: [],
+    scale: 0.95,
+    color: 0x9fb3c8,
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -2410,6 +2506,58 @@ export const ZONE3_ITEMS: Record<string, ItemDef> = {
     stats: { armor: 110, agi: 9, sta: 4 },
     sellValue: 9000,
     requiredClass: ['rogue', 'hunter'],
+  },
+  // --- Thunzharr, the Waking Peak (world boss): new rare GLOVES that extend the
+  // Tier-2 set families to a third piece (see the boss loot comment + PRs #980/#998).
+  // Named and stat-shaped to match each family's existing helm/shoulder. The `set`
+  // tag wires each into its family so it counts toward #980's set bonus. ---
+  crownforged_gauntlets: {
+    id: 'crownforged_gauntlets',
+    name: 'Crownforged Gauntlets',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'mail',
+    quality: 'rare',
+    stats: { armor: 180, str: 8, sta: 9 },
+    sellValue: 2400,
+    requiredClass: ['warrior', 'paladin'],
+    set: 'crownforged', // 3rd Crownforged piece (PR #980); unlocks the set's 3-piece bonus
+  },
+  nighttalon_grips: {
+    id: 'nighttalon_grips',
+    name: 'Nighttalon Grips',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'leather',
+    quality: 'rare',
+    stats: { armor: 110, agi: 11, sta: 6 },
+    sellValue: 2400,
+    requiredClass: ['rogue', 'hunter', 'druid'],
+    set: 'nighttalon', // 3rd Nighttalon piece (PR #980); unlocks the set's 3-piece bonus
+  },
+  soulflame_gloves: {
+    id: 'soulflame_gloves',
+    name: 'Soulflame Gloves',
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'cloth',
+    quality: 'rare',
+    stats: { armor: 60, int: 11, sta: 6 },
+    sellValue: 2400,
+    requiredClass: ['mage', 'priest', 'warlock', 'druid'],
+    set: 'soulflame', // 3rd Soulflame piece (PR #980); unlocks the set's 3-piece bonus
+  },
+  stormcallers_handguards: {
+    id: 'stormcallers_handguards',
+    name: "Stormcaller's Handguards",
+    kind: 'armor',
+    slot: 'gloves',
+    armorType: 'mail',
+    quality: 'rare',
+    stats: { armor: 130, int: 11, sta: 8 },
+    sellValue: 2400,
+    requiredClass: ['shaman'],
+    set: 'stormcallers', // 3rd Stormcaller's piece (PR #980); unlocks the set's 3-piece bonus
   },
   deathless_heartwood: {
     id: 'deathless_heartwood',

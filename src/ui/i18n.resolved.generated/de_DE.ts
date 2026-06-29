@@ -820,6 +820,9 @@ export const de_DE: EnTranslations = {
         "nature": "Natur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} erhebt sich über den Thornpeak-Höhen!"
+    },
     "loot": {
       "chestTitle": "Truhe"
     },
@@ -5380,6 +5383,18 @@ export const de_DE: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Vorhut-Chrom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kronengeschmiedete Stulpen"
+      },
+      "nighttalon_grips": {
+        "name": "Nachtklauengriffe"
+      },
+      "soulflame_gloves": {
+        "name": "Seelenflammenhandschuhe"
+      },
+      "stormcallers_handguards": {
+        "name": "Handschützer des Sturmrufers"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const de_DE: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolythin Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, der Erwachende Gipfel"
+      },
+      "thunzharr_stormling": {
+        "name": "Geweckter Sturmling"
       },
       "ironvein_foreman": {
         "name": "Eisenader-Vorarbeiter"

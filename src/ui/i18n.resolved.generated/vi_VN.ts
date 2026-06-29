@@ -820,6 +820,9 @@ export const vi_VN: EnTranslations = {
         "nature": "Tự nhiên"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Rương"
     },
@@ -5380,6 +5383,18 @@ export const vi_VN: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Crôm Tiên Phong"
+      },
+      "crownforged_gauntlets": {
+        "name": "Găng Tay Rèn Vương Miện"
+      },
+      "nighttalon_grips": {
+        "name": "Bao Tay Dạ Trảo"
+      },
+      "soulflame_gloves": {
+        "name": "Găng Tay Hồn Hỏa"
+      },
+      "stormcallers_handguards": {
+        "name": "Hộ Thủ của Triệu Bão Sư"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const vi_VN: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Tế Đồ Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Quản Đốc Mạch Sắt"

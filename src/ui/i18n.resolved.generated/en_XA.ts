@@ -820,6 +820,9 @@ export const en_XA: EnTranslations = {
         "nature": "[Ñáţúŕé]"
       }
     },
+    "worldBoss": {
+      "spawn": "[{name} ŕíšéš óʋéŕ Ţĥóŕñþéáķ Ĥéíĝĥţš!]"
+    },
     "loot": {
       "chestTitle": "[Çĥéšţ]"
     },
@@ -5380,6 +5383,18 @@ export const en_XA: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "[Ʋáñĝúáŕð Çĥŕóɱé]"
+      },
+      "crownforged_gauntlets": {
+        "name": "[Çŕóŵñƒóŕĝéð Ĝáúñţļéţš]"
+      },
+      "nighttalon_grips": {
+        "name": "[Ñíĝĥţţáļóñ Ĝŕíþš]"
+      },
+      "soulflame_gloves": {
+        "name": "[Šóúļƒļáɱé Ĝļóʋéš]"
+      },
+      "stormcallers_handguards": {
+        "name": "[Šţóŕɱçáļļéŕ'š Ĥáñðĝúáŕðš]"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const en_XA: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "[Áçóļýţé Ţéššá]"
+      },
+      "thunzharr_waking_peak": {
+        "name": "[Ţĥúñžĥáŕŕ, ţĥé Ŵáķíñĝ Þéáķ]"
+      },
+      "thunzharr_stormling": {
+        "name": "[Ŕóúšéð Šţóŕɱļíñĝ]"
       },
       "ironvein_foreman": {
         "name": "[Íŕóñʋéíñ Ƒóŕéɱáñ]"

@@ -820,6 +820,9 @@ export const nl_NL: EnTranslations = {
         "nature": "Natuur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Kist"
     },
@@ -5380,6 +5383,18 @@ export const nl_NL: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Voorhoede-Chroom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kroongesmede Handschoenen"
+      },
+      "nighttalon_grips": {
+        "name": "Nachtklauw-Grepen"
+      },
+      "soulflame_gloves": {
+        "name": "Zielsvlam-Handschoenen"
+      },
+      "stormcallers_handguards": {
+        "name": "Handbeschermers van de Stormroeper"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const nl_NL: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Acoliet Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "IJzerader-Voorman"

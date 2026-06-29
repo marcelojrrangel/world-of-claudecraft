@@ -820,6 +820,9 @@ export const da_DK: EnTranslations = {
         "nature": "Natur"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Kiste"
     },
@@ -5380,6 +5383,18 @@ export const da_DK: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Fortrops Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Kronesmedede Handsker"
+      },
+      "nighttalon_grips": {
+        "name": "Natteklo-Greb"
+      },
+      "soulflame_gloves": {
+        "name": "Sjæleflamme-Handsker"
+      },
+      "stormcallers_handguards": {
+        "name": "Stormkalderens Håndværn"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const da_DK: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Akolyt Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Jernåre-Formand"

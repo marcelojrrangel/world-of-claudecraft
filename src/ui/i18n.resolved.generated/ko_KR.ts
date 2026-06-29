@@ -820,6 +820,9 @@ export const ko_KR: EnTranslations = {
         "nature": "자연"
       }
     },
+    "worldBoss": {
+      "spawn": "{name}이(가) 쏜피크 고지에 솟아올랐습니다!"
+    },
     "loot": {
       "chestTitle": "상자"
     },
@@ -5380,6 +5383,18 @@ export const ko_KR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "선봉대 크롬"
+      },
+      "crownforged_gauntlets": {
+        "name": "왕관벼림 건틀릿"
+      },
+      "nighttalon_grips": {
+        "name": "밤발톱 손아귀"
+      },
+      "soulflame_gloves": {
+        "name": "영혼불꽃 장갑"
+      },
+      "stormcallers_handguards": {
+        "name": "폭풍소환사의 손보호구"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const ko_KR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "수련사제 테사"
+      },
+      "thunzharr_waking_peak": {
+        "name": "천자르, 깨어나는 봉우리"
+      },
+      "thunzharr_stormling": {
+        "name": "깨어난 폭풍 정령"
       },
       "ironvein_foreman": {
         "name": "철맥 감독관"

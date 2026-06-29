@@ -820,6 +820,9 @@ export const ru_RU: EnTranslations = {
         "nature": "Природа"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} поднимается над Терновыми высотами!"
+    },
     "loot": {
       "chestTitle": "Сундук"
     },
@@ -5380,6 +5383,18 @@ export const ru_RU: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Хромированный авангард"
+      },
+      "crownforged_gauntlets": {
+        "name": "Короннокованые рукавицы"
+      },
+      "nighttalon_grips": {
+        "name": "Захваты Ночного Когтя"
+      },
+      "soulflame_gloves": {
+        "name": "Перчатки Пламени души"
+      },
+      "stormcallers_handguards": {
+        "name": "Рукавицы призывателя бурь"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const ru_RU: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Послушница Тесса"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Тунзарр, Пробуждающийся пик"
+      },
+      "thunzharr_stormling": {
+        "name": "Пробуждённый элементаль бури"
       },
       "ironvein_foreman": {
         "name": "Прораб Железной жилы"

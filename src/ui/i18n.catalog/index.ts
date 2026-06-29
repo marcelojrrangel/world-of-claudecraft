@@ -902,6 +902,11 @@ export const en = {
       imperial_gold_armor_plate: { name: 'Imperial Gold' },
       vanguard_azure_armor_plate: { name: 'Vanguard Azure' },
       vanguard_chrome_armor_plate: { name: 'Vanguard Chrome' },
+      // Thunzharr, the Waking Peak (world boss): new rare Tier-2 set gloves (see PR #980)
+      crownforged_gauntlets: { name: 'Crownforged Gauntlets' },
+      nighttalon_grips: { name: 'Nighttalon Grips' },
+      soulflame_gloves: { name: 'Soulflame Gloves' },
+      stormcallers_handguards: { name: "Stormcaller's Handguards" },
     },
     itemSets: itemSetEntityText,
     mobs: { ...worldNames.en.entities.mobs, ...mergeEntities.en.mobs, ...mergeExtra.en.mobs },

@@ -820,6 +820,9 @@ export const tr_TR: EnTranslations = {
         "nature": "Doğa"
       }
     },
+    "worldBoss": {
+      "spawn": "{name} rises over Thornpeak Heights!"
+    },
     "loot": {
       "chestTitle": "Sandık"
     },
@@ -5380,6 +5383,18 @@ export const tr_TR: EnTranslations = {
       },
       "vanguard_chrome_armor_plate": {
         "name": "Öncü Birlik Krom"
+      },
+      "crownforged_gauntlets": {
+        "name": "Taçdövme Eldivenleri"
+      },
+      "nighttalon_grips": {
+        "name": "Gecepençe Kavrayıcıları"
+      },
+      "soulflame_gloves": {
+        "name": "Ruhalevi Eldivenleri"
+      },
+      "stormcallers_handguards": {
+        "name": "Fırtınaçağıranın El Koruyucuları"
       }
     },
     "mobs": {
@@ -5571,6 +5586,12 @@ export const tr_TR: EnTranslations = {
       },
       "acolyte_tessa": {
         "name": "Çömez Tessa"
+      },
+      "thunzharr_waking_peak": {
+        "name": "Thunzharr, the Waking Peak"
+      },
+      "thunzharr_stormling": {
+        "name": "Roused Stormling"
       },
       "ironvein_foreman": {
         "name": "Demirdamar Ustabaşı"

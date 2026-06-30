@@ -332,6 +332,7 @@ export const ru_RU: EnTranslations = {
       "showWalletOnPlayerCard": "Показывать кошелек на карточке игрока",
       "uiScale": "Масштаб интерфейса",
       "highContrastBackground": "Фон высокой контрастности",
+      "startAttackOnAbility": "Автоатака при использовании способности",
       "showItemLevel": "Показывать уровень предмета",
       "itemLevelLine": "Уровень предмета {level}",
       "itemScoreLine": "Оценка {score}",

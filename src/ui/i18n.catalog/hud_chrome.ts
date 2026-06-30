@@ -295,6 +295,9 @@ export const hudChromeStrings = {
     // page's high-contrast backdrop toggle.
     uiScale: 'UI Scale',
     highContrastBackground: 'High-Contrast Background',
+    // Interface panel toggle: also engage auto-attack when using an offensive
+    // ability, so white swings start without a separate Attack press (on by default).
+    startAttackOnAbility: 'Auto-Attack on Ability Use',
     // Interface panel toggle + the item-tooltip lines it reveals (off by default).
     showItemLevel: 'Show Item Level',
     itemLevelLine: 'Item Level {level}',

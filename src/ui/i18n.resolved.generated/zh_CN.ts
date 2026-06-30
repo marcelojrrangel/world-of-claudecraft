@@ -332,6 +332,7 @@ export const zh_CN: EnTranslations = {
       "showWalletOnPlayerCard": "在玩家卡片显示钱包",
       "uiScale": "界面缩放",
       "highContrastBackground": "高对比度背景",
+      "startAttackOnAbility": "使用技能时自动攻击",
       "showItemLevel": "显示物品等级",
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",

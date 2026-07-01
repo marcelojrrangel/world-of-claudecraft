@@ -109,6 +109,7 @@ import {
   ITEM_ICON_PREFIX,
 } from './action_bar_view';
 import { ArenaWindow } from './arena_window';
+import { abilityStartsAutoAttack, hasAutoAttackTarget } from './attack_on_ability';
 import { type AuraEffectInput, auraEffectDescriptor } from './aura_effect';
 import { AurasPainter, type AurasPainterDeps } from './auras_painter';
 import { type AurasDeps, createAurasView } from './auras_view';
@@ -3515,8 +3516,27 @@ export class Hud {
     if (action?.type === 'ability') {
       // cast by ability id: the server validates against its own known list,
       // so the client-side slot remap never desyncs slot semantics
-      if (this.abilityForSlot(barSlot)) {
+      const resolved = this.abilityForSlot(barSlot);
+      if (resolved) {
         this.sim.castAbility(action.id);
+        // Optional QoL: also engage auto-attack when the ability is an offensive
+        // attack, so white swings start without a separate Attack press. Gated on
+        // the player setting; abilityStartsAutoAttack skips heals/buffs and any
+        // damage-breakable CC (gouge/sap/sheep) the swing would shatter. We MUST also
+        // gate on hasAutoAttackTarget: many damaging abilities are requiresTarget:false
+        // AOEs (Arcane Explosion, Frost Nova, Thunder Clap, ...) cast with no hostile
+        // target, where startAutoAttack does NOT no-op but errors "Invalid attack
+        // target." (sim/combat/auto_attack.ts). The explicit Attack button keeps that
+        // error feedback; this convenience path must not trip it.
+        const tid = this.sim.player.targetId;
+        const target = tid !== null ? (this.sim.entities.get(tid) ?? null) : null;
+        if (
+          this.optionsHooks?.settings.get('startAttackOnAbilityUse') &&
+          abilityStartsAutoAttack(resolved.effects) &&
+          hasAutoAttackTarget(target)
+        ) {
+          this.sim.startAutoAttack();
+        }
         this.flashActionSlot(barSlot);
       }
     } else if (action?.type === 'item' && this.isHotbarItemId(action.id)) {

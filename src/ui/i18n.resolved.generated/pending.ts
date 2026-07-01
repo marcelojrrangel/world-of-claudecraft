@@ -10,22 +10,28 @@
 
 export const pending: Record<string, readonly string[]> = {
   "es": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "es_ES": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "fr_FR": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "fr_CA": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "en_CA": [],
   "it_IT": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "de_DE": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "zh_CN": [],
@@ -33,28 +39,36 @@ export const pending: Record<string, readonly string[]> = {
   "ko_KR": [],
   "ja_JP": [],
   "pt_BR": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "ru_RU": [],
   "nl_NL": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "pl_PL": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "id_ID": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "tr_TR": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "sv_SE": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "vi_VN": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ],
   "da_DK": [
+    "hudChrome.options.startAttackOnAbility",
     "hudChrome.party.promoteLeader"
   ]
 };

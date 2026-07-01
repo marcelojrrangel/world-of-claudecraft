@@ -332,6 +332,7 @@ export const id_ID: EnTranslations = {
       "showWalletOnPlayerCard": "Tampilkan Dompet di Kartu Pemain",
       "uiScale": "Skala UI",
       "highContrastBackground": "Latar Kontras Tinggi",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",

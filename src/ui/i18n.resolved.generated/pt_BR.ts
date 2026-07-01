@@ -332,6 +332,7 @@ export const pt_BR: EnTranslations = {
       "showWalletOnPlayerCard": "Mostrar carteira no cartão de jogador",
       "uiScale": "Escala da interface",
       "highContrastBackground": "Fundo de alto contraste",
+      "startAttackOnAbility": "Auto-Attack on Ability Use",
       "showItemLevel": "Mostrar nível do item",
       "itemLevelLine": "Nível do item {level}",
       "itemScoreLine": "Pontuação {score}",

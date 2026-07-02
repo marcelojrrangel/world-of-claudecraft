@@ -19,6 +19,7 @@ import {
   MAP_MAX_ZOOM,
   mapWindowMode,
   type OverworldMapInput,
+  questAreaObjectivesAt,
 } from '../src/ui/map_window_view';
 import type { IWorld } from '../src/world_api';
 
@@ -316,5 +317,20 @@ describe('active-quest objective areas (the classic POI blobs)', () => {
     const z1 = buildOverworldMapModel(input(makeOverworldWorld('sim', activeLog()), 1));
     const z2 = buildOverworldMapModel(input(makeOverworldWorld('sim', activeLog()), 2));
     expect(z2.questAreas[0].radius).toBeCloseTo(z1.questAreas[0].radius * 2, 5);
+  });
+
+  it('hit-tests a hovered point to the objective identities under it (deduped)', () => {
+    const model = buildOverworldMapModel(input(makeOverworldWorld('sim', activeLog()), 1));
+    const a = model.questAreas[0];
+    // the blob carries its objective identity for the tooltip
+    expect(a.objectives.length).toBeGreaterThan(0);
+    const inside = questAreaObjectivesAt(model.questAreas, a.mx, a.my);
+    expect(inside.length).toBeGreaterThan(0);
+    expect(inside.some((r) => r.questId === quest.id)).toBe(true);
+    // far outside every blob: nothing under the cursor
+    expect(questAreaObjectivesAt(model.questAreas, -10_000, -10_000)).toEqual([]);
+    // overlapping duplicates never repeat a ref
+    const dup = questAreaObjectivesAt([...model.questAreas, ...model.questAreas], a.mx, a.my);
+    expect(dup).toEqual(inside);
   });
 });

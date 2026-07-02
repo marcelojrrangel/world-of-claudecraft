@@ -25,6 +25,7 @@ import { dungeonDisplayName, zoneDisplayName, zonePoiLabel } from './entity_i18n
 import {
   buildOverworldMapModel,
   type MapDetail,
+  type MapQuestAreaMarker,
   type MapViewRect,
   type OverworldMapModel,
 } from './map_window_view';
@@ -95,10 +96,12 @@ export interface MapPaintOptions {
   center: { x: number; z: number } | null;
 }
 
-/** What the painter reports back so Hud can update its drag state + cursor. */
+/** What the painter reports back so Hud can update its drag state + cursor,
+ *  plus the painted quest areas for the hover tooltip's hit-test. */
 export interface MapPaintResult {
   view: MapViewRect;
   cursor: 'grab' | 'default';
+  questAreas: MapQuestAreaMarker[];
 }
 
 /**
@@ -140,7 +143,7 @@ export class MapWindowPainter {
     });
     const colors = this.resolveColors();
     this.draw(ctx, model, opts.bg, opts.canvasSize, colors);
-    return { view: model.view, cursor: model.cursor };
+    return { view: model.view, cursor: model.cursor, questAreas: model.questAreas };
   }
 
   private draw(

@@ -63,6 +63,7 @@ import { isItemLevelEligible, itemLevel, itemScore } from '../sim/item_level';
 import { requiredLevelFor } from '../sim/item_level_req';
 import type { Ante, PickAction } from '../sim/lockpick';
 import { PICK_ACTIONS } from '../sim/lockpick';
+import type { QuestObjectiveRef } from '../sim/quest_targets';
 import type { ResolvedAbility } from '../sim/sim';
 import type {
   AbilityDef,
@@ -211,7 +212,12 @@ import { lowHealthVignette } from './low_health';
 import { lowResourceView } from './low_resource';
 import { type MapRegion, mapCanvasHeight, paintTerrainRows } from './map_terrain';
 import { MapWindowPainter } from './map_window_painter';
-import { MAP_MAX_ZOOM, mapWindowMode } from './map_window_view';
+import {
+  MAP_MAX_ZOOM,
+  type MapQuestAreaMarker,
+  mapWindowMode,
+  questAreaObjectivesAt,
+} from './map_window_view';
 import { MarketWindow } from './market_window';
 import { Meters } from './meters';
 import { minimapMode } from './minimap_markers';
@@ -934,6 +940,9 @@ export class Hud {
     minZ: number;
     maxZ: number;
   } | null = null;
+  // The quest-objective areas of the last overworld map paint (canvas-pixel
+  // space), kept for the hover tooltip's hit-test. Empty in delve mode.
+  private mapQuestAreas: MapQuestAreaMarker[] = [];
   private windowDrag: {
     el: HTMLElement;
     pointerId: number;
@@ -1269,6 +1278,46 @@ export class Hud {
     };
     mapCanvas.addEventListener('pointerup', endDrag);
     mapCanvas.addEventListener('pointercancel', endDrag);
+    // Hovering a quest-objective area shows the objectives it stands for with
+    // their live tracker progress (mouse only: touch pans the map, no hover).
+    // The hit-test runs against the areas of the last paint (mapQuestAreas),
+    // scaled from CSS px to the canvas backing space the model projects into.
+    let mapAreaTipShown = false;
+    const hideMapAreaTip = (): void => {
+      if (!mapAreaTipShown) return;
+      mapAreaTipShown = false;
+      this.hideTooltip();
+    };
+    mapCanvas.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'mouse' || this.mapDrag || this.mapQuestAreas.length === 0) {
+        hideMapAreaTip();
+        return;
+      }
+      const rect = mapCanvas.getBoundingClientRect();
+      const refs = questAreaObjectivesAt(
+        this.mapQuestAreas,
+        ((ev.clientX - rect.left) * mapCanvas.width) / rect.width,
+        ((ev.clientY - rect.top) * mapCanvas.height) / rect.height,
+      );
+      const html = this.questAreaTooltipHtml(refs);
+      if (!html) {
+        hideMapAreaTip();
+        return;
+      }
+      // Paint the shared #tooltip beside the cursor (the attachTooltip
+      // mousemove idiom: map visual-space x/y into author space, then clamp
+      // the author-space tooltip box against the viewport).
+      this.tooltipEl.innerHTML = html;
+      this.tooltipEl.style.display = 'block';
+      const z = getUiScale();
+      const tw = this.tooltipEl.offsetWidth;
+      const th = this.tooltipEl.offsetHeight;
+      this.tooltipEl.style.left = `${Math.max(8, Math.min(window.innerWidth / z - tw - 8, ev.clientX / z + 14))}px`;
+      this.tooltipEl.style.top = `${Math.max(8, ev.clientY / z - th - 10)}px`;
+      mapAreaTipShown = true;
+    });
+    mapCanvas.addEventListener('pointerleave', hideMapAreaTip);
+    mapCanvas.addEventListener('pointerdown', hideMapAreaTip);
     $('#mm-bag').addEventListener('click', () => this.toggleBags());
     // Drop an equipped piece dragged out of the paperdoll onto the bags window.
     const bagsEl = $('#bags');
@@ -5808,6 +5857,7 @@ export class Hud {
     if (mapWindowMode(this.sim) === 'delve') {
       // The delve painter owns the full world-map schematic render (the area
       // title is drawn on-canvas, since the world map has no DOM zone label).
+      this.mapQuestAreas = [];
       this.delvePainter.paintWorldMapDelve(ctx, this.sim, S);
       const run = this.sim.delveRun;
       const area = run ? delveDisplayName(run.delveId) : '';
@@ -5830,8 +5880,37 @@ export class Hud {
       center: this.mapCenter,
     });
     this.mapView = result.view;
+    this.mapQuestAreas = result.questAreas;
     if (!this.mapDrag) canvas.style.cursor = result.cursor;
     this.setText(summaryEl, t('hud.core.mapSummary', { zone: zoneDisplayName(zone.id) }));
+  }
+
+  // Tooltip body for hovered quest-objective areas on the world map: per quest,
+  // its title plus each hovered objective's tracker-style "label current/total"
+  // line, all through the existing questUi keys + formatters (no new i18n
+  // surface). Empty string when nothing under the cursor resolves.
+  private questAreaTooltipHtml(refs: readonly QuestObjectiveRef[]): string {
+    const byQuest = new Map<string, number[]>();
+    for (const ref of refs) {
+      const list = byQuest.get(ref.questId);
+      if (list) list.push(ref.objectiveIndex);
+      else byQuest.set(ref.questId, [ref.objectiveIndex]);
+    }
+    let html = '';
+    for (const [questId, objectiveIndexes] of byQuest) {
+      const quest = QUESTS[questId];
+      const qp = this.sim.questLog.get(questId);
+      if (!quest || !qp) continue;
+      let lines = '';
+      for (const i of objectiveIndexes) {
+        const obj = quest.objectives[i];
+        if (!obj) continue;
+        const current = Math.min(qp.counts[i] ?? 0, obj.count);
+        lines += `<div>${esc(this.questProgressText(questObjectiveLabel(questId, i), current, obj.count))}</div>`;
+      }
+      if (lines) html += `<div class="tt-title">${esc(questTitle(questId))}</div>${lines}`;
+    }
+    return html;
   }
 
   // -------------------------------------------------------------------------

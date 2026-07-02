@@ -11,11 +11,20 @@
 import { CAMPS, GROUND_OBJECTS, MOBS, NPCS, QUESTS } from './data';
 import type { QuestObjective, QuestProgress } from './types';
 
-/** One circular "this objective happens here" area, in world coords. */
-export interface QuestObjectiveArea {
+/** Identity of one quest objective (the map tooltip resolves its localized
+ *  label + live counts from this; the pure layers never carry text). */
+export interface QuestObjectiveRef {
   questId: string;
+  objectiveIndex: number;
+}
+
+/** One circular "this objective happens here" area, in world coords. When
+ *  several objectives share the exact circle (two quests hunting one camp),
+ *  their refs merge onto one area instead of stacking translucent fills. */
+export interface QuestObjectiveArea {
   center: { x: number; z: number };
   radius: number;
+  objectives: QuestObjectiveRef[];
 }
 
 // Padding added around a camp's spawn radius so the drawn area comfortably
@@ -28,14 +37,15 @@ const POINT_AREA_RADIUS = 6;
 // and 'done' quests contribute nothing (the '?' turn-in marker guides those).
 function incompleteObjectives(
   questLog: ReadonlyMap<string, QuestProgress>,
-): { questId: string; obj: QuestObjective }[] {
-  const out: { questId: string; obj: QuestObjective }[] = [];
+): { questId: string; objectiveIndex: number; obj: QuestObjective }[] {
+  const out: { questId: string; objectiveIndex: number; obj: QuestObjective }[] = [];
   for (const qp of questLog.values()) {
     if (qp.state !== 'active') continue;
     const quest = QUESTS[qp.questId];
     if (!quest) continue;
     quest.objectives.forEach((obj, i) => {
-      if ((qp.counts[i] ?? 0) < obj.count) out.push({ questId: qp.questId, obj });
+      if ((qp.counts[i] ?? 0) < obj.count)
+        out.push({ questId: qp.questId, objectiveIndex: i, obj });
     });
   }
   return out;
@@ -76,21 +86,32 @@ export function questObjectiveAreas(
   questLog: ReadonlyMap<string, QuestProgress>,
 ): QuestObjectiveArea[] {
   const out: QuestObjectiveArea[] = [];
-  const seen = new Set<string>();
-  const push = (questId: string, center: { x: number; z: number }, radius: number): void => {
+  const byCircle = new Map<string, QuestObjectiveArea>();
+  const push = (ref: QuestObjectiveRef, center: { x: number; z: number }, radius: number): void => {
     const key = `${center.x},${center.z},${radius}`;
-    if (seen.has(key)) return;
-    seen.add(key);
-    out.push({ questId, center, radius });
+    const existing = byCircle.get(key);
+    if (existing) {
+      // Same circle again: merge the objective identity instead of a second fill.
+      if (
+        !existing.objectives.some(
+          (o) => o.questId === ref.questId && o.objectiveIndex === ref.objectiveIndex,
+        )
+      )
+        existing.objectives.push(ref);
+      return;
+    }
+    const area: QuestObjectiveArea = { center, radius, objectives: [ref] };
+    byCircle.set(key, area);
+    out.push(area);
   };
-  const pushMobCamps = (questId: string, mobId: string): void => {
+  const pushMobCamps = (ref: QuestObjectiveRef, mobId: string): void => {
     for (const camp of CAMPS) {
-      if (camp.mobId === mobId) push(questId, camp.center, camp.radius + CAMP_AREA_PAD);
+      if (camp.mobId === mobId) push(ref, camp.center, camp.radius + CAMP_AREA_PAD);
     }
   };
   // One enclosing circle per ground-object definition: centroid of its spawn
   // positions plus the farthest point (a simple bound is plenty at map scale).
-  const pushObjectCluster = (questId: string, itemId: string): void => {
+  const pushObjectCluster = (ref: QuestObjectiveRef, itemId: string): void => {
     for (const def of GROUND_OBJECTS) {
       if (def.itemId !== itemId || def.positions.length === 0) continue;
       let cx = 0;
@@ -103,18 +124,19 @@ export function questObjectiveAreas(
       cz /= def.positions.length;
       let r = 0;
       for (const p of def.positions) r = Math.max(r, Math.hypot(p.x - cx, p.z - cz));
-      push(questId, { x: cx, z: cz }, Math.max(POINT_AREA_RADIUS, r + CAMP_AREA_PAD));
+      push(ref, { x: cx, z: cz }, Math.max(POINT_AREA_RADIUS, r + CAMP_AREA_PAD));
     }
   };
-  for (const { questId, obj } of incompleteObjectives(questLog)) {
-    if (obj.type === 'kill' && obj.targetMobId) pushMobCamps(questId, obj.targetMobId);
+  for (const { questId, objectiveIndex, obj } of incompleteObjectives(questLog)) {
+    const ref: QuestObjectiveRef = { questId, objectiveIndex };
+    if (obj.type === 'kill' && obj.targetMobId) pushMobCamps(ref, obj.targetMobId);
     else if (obj.type === 'collect' && obj.itemId) {
-      for (const mobId of mobsDroppingQuestItem(obj.itemId, questId)) pushMobCamps(questId, mobId);
-      pushObjectCluster(questId, obj.itemId);
+      for (const mobId of mobsDroppingQuestItem(obj.itemId, questId)) pushMobCamps(ref, mobId);
+      pushObjectCluster(ref, obj.itemId);
     } else if (obj.type === 'interact') {
-      if (obj.targetObjectItemId) pushObjectCluster(questId, obj.targetObjectItemId);
+      if (obj.targetObjectItemId) pushObjectCluster(ref, obj.targetObjectItemId);
       const npc = obj.targetNpcId ? NPCS[obj.targetNpcId] : undefined;
-      if (npc) push(questId, npc.pos, POINT_AREA_RADIUS);
+      if (npc) push(ref, npc.pos, POINT_AREA_RADIUS);
     }
   }
   return out;

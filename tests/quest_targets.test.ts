@@ -102,13 +102,19 @@ describe('questObjectiveAreas', () => {
   });
 
   it('covers every camp of a kill target, padded past the spawn radius', () => {
-    const { quest, mobId } = requireKillQuest();
+    const { quest, mobId, objIndex } = requireKillQuest();
     const areas = questObjectiveAreas(activeLog(quest));
     const camps = CAMPS.filter((c) => c.mobId === mobId);
     for (const camp of camps) {
       const area = areas.find((a) => a.center.x === camp.center.x && a.center.z === camp.center.z);
       expect(area, `camp at ${camp.center.x},${camp.center.z} should have an area`).toBeTruthy();
-      if (area) expect(area.radius).toBeGreaterThan(camp.radius);
+      if (area) {
+        expect(area.radius).toBeGreaterThan(camp.radius);
+        // the area knows which objective it stands for (the hover tooltip's key)
+        expect(
+          area.objectives.some((o) => o.questId === quest.id && o.objectiveIndex === objIndex),
+        ).toBe(true);
+      }
     }
   });
 
@@ -137,6 +143,13 @@ describe('questObjectiveAreas', () => {
       expect(Number.isFinite(a.center.x)).toBe(true);
       expect(Number.isFinite(a.center.z)).toBe(true);
       expect(a.radius).toBeGreaterThan(0);
+      // a shared circle merges objective refs instead of duplicating them
+      expect(a.objectives.length).toBeGreaterThan(0);
+      const refKeys = new Set(a.objectives.map((o) => `${o.questId}#${o.objectiveIndex}`));
+      expect(refKeys.size).toBe(a.objectives.length);
+      // every ref points at a real objective of a real quest
+      for (const o of a.objectives)
+        expect(QUESTS[o.questId]?.objectives[o.objectiveIndex]).toBeTruthy();
     }
   });
 });

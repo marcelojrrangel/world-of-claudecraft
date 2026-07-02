@@ -24,7 +24,7 @@ import {
   WORLD_MIN_X,
   type ZoneDef,
 } from '../sim/data';
-import { questObjectiveAreas } from '../sim/quest_targets';
+import { type QuestObjectiveRef, questObjectiveAreas } from '../sim/quest_targets';
 import { isQuestTurnInNpc } from '../sim/types';
 import type { Decoration } from '../sim/world';
 import type { FriendInfo, IWorld } from '../world_api';
@@ -101,11 +101,38 @@ export interface MapNpcMarker {
 }
 
 /** A translucent active-quest objective area (the classic quest-POI blob):
- *  canvas-pixel center + radius over where the objective's targets live. */
+ *  canvas-pixel center + radius over where the objective's targets live, plus
+ *  the objective identities it stands for (the hover tooltip resolves their
+ *  localized labels + live counts; this core stays i18n-free). */
 export interface MapQuestAreaMarker {
   mx: number;
   my: number;
   radius: number;
+  objectives: QuestObjectiveRef[];
+}
+
+/** The distinct objectives under a canvas point, across every quest area that
+ *  contains it (overlapping blobs merge into one tooltip). Pure hit-test the
+ *  hover handler calls with the last painted model's areas. */
+export function questAreaObjectivesAt(
+  areas: readonly MapQuestAreaMarker[],
+  mx: number,
+  my: number,
+): QuestObjectiveRef[] {
+  const refs: QuestObjectiveRef[] = [];
+  const seen = new Set<string>();
+  for (const a of areas) {
+    const dx = mx - a.mx;
+    const dy = my - a.my;
+    if (dx * dx + dy * dy > a.radius * a.radius) continue;
+    for (const ref of a.objectives) {
+      const key = `${ref.questId}#${ref.objectiveIndex}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      refs.push(ref);
+    }
+  }
+  return refs;
 }
 
 /** The local player's facing arrow (canvas rotation matches -facing). */
@@ -263,7 +290,7 @@ export function buildOverworldMapModel(input: OverworldMapInput): OverworldMapMo
   for (const area of questObjectiveAreas(world.questLog)) {
     if (area.center.z < zone.zMin || area.center.z >= zone.zMax) continue;
     const { mx, my } = toMap(area.center.x, area.center.z);
-    questAreas.push({ mx, my, radius: (area.radius / spanX) * S });
+    questAreas.push({ mx, my, radius: (area.radius / spanX) * S, objectives: area.objectives });
   }
 
   const portals: MapPortalMarker[] = overworldDungeonPortals(

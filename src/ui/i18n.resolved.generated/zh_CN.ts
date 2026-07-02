@@ -202,6 +202,8 @@ export const zh_CN: EnTranslations = {
       "spinResult": "+{points} 积分",
       "spinButton": "转动",
       "tasks": "任务",
+      "showChestButton": "显示宝箱",
+      "hideChestButton": "隐藏宝箱",
       "leaderboard": "每日排行榜",
       "history": "往期获奖者",
       "noLeaders": "暂无积分。",
@@ -393,7 +395,8 @@ export const zh_CN: EnTranslations = {
       "showItemLevel": "显示物品等级",
       "itemLevelLine": "物品等级 {level}",
       "itemScoreLine": "评分 {score}",
-      "showSecondaryActionBar": "显示副动作条"
+      "showSecondaryActionBar": "显示副动作条",
+      "showDailyRewardsChest": "显示每日奖励宝箱"
     },
     "controller": {
       "title": "手柄",

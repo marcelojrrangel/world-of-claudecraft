@@ -202,6 +202,8 @@ export const ru_RU: EnTranslations = {
       "spinResult": "+{points} очков",
       "spinButton": "Крутить",
       "tasks": "Задания",
+      "showChestButton": "Показать сундук",
+      "hideChestButton": "Скрыть сундук",
       "leaderboard": "Ежедневная таблица лидеров",
       "history": "Прошлые победители",
       "noLeaders": "Пока нет очков.",
@@ -393,7 +395,8 @@ export const ru_RU: EnTranslations = {
       "showItemLevel": "Показывать уровень предмета",
       "itemLevelLine": "Уровень предмета {level}",
       "itemScoreLine": "Оценка {score}",
-      "showSecondaryActionBar": "Показывать вторичную панель действий"
+      "showSecondaryActionBar": "Показывать вторичную панель действий",
+      "showDailyRewardsChest": "Показывать сундук ежедневных наград"
     },
     "controller": {
       "title": "Геймпад",

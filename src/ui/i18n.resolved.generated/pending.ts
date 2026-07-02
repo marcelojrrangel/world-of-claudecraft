@@ -9,24 +9,80 @@
 // Reproducibility is checked by tests/i18n_resolved_equivalence.test.ts.
 
 export const pending: Record<string, readonly string[]> = {
-  "es": [],
-  "es_ES": [],
-  "fr_FR": [],
-  "fr_CA": [],
+  "es": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "es_ES": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "fr_FR": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "fr_CA": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
   "en_CA": [],
-  "it_IT": [],
-  "de_DE": [],
+  "it_IT": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "de_DE": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
   "zh_CN": [],
   "zh_TW": [],
   "ko_KR": [],
   "ja_JP": [],
-  "pt_BR": [],
+  "pt_BR": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
   "ru_RU": [],
-  "nl_NL": [],
-  "pl_PL": [],
-  "id_ID": [],
-  "tr_TR": [],
-  "sv_SE": [],
-  "vi_VN": [],
-  "da_DK": []
+  "nl_NL": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "pl_PL": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "id_ID": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "tr_TR": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "sv_SE": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "vi_VN": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ],
+  "da_DK": [
+    "hudChrome.dailyRewards.hideChestButton",
+    "hudChrome.dailyRewards.showChestButton",
+    "hudChrome.options.showDailyRewardsChest"
+  ]
 };

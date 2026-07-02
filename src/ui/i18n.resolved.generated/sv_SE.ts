@@ -202,6 +202,8 @@ export const sv_SE: EnTranslations = {
       "spinResult": "+{points} poäng",
       "spinButton": "Snurra",
       "tasks": "Uppgifter",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Daglig topplista",
       "history": "Tidigare vinnare",
       "noLeaders": "Inga poäng ännu.",
@@ -393,7 +395,8 @@ export const sv_SE: EnTranslations = {
       "showItemLevel": "Visa föremålsnivå",
       "itemLevelLine": "Föremålsnivå {level}",
       "itemScoreLine": "Poäng {score}",
-      "showSecondaryActionBar": "Visa sekundärt handlingsfält"
+      "showSecondaryActionBar": "Visa sekundärt handlingsfält",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Handkontroll",

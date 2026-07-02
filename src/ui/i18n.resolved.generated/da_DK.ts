@@ -202,6 +202,8 @@ export const da_DK: EnTranslations = {
       "spinResult": "+{points} point",
       "spinButton": "Drej",
       "tasks": "Opgaver",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Daglig resultattavle",
       "history": "Tidligere vindere",
       "noLeaders": "Ingen point endnu.",
@@ -393,7 +395,8 @@ export const da_DK: EnTranslations = {
       "showItemLevel": "Vis genstandsniveau",
       "itemLevelLine": "Genstandsniveau {level}",
       "itemScoreLine": "Score {score}",
-      "showSecondaryActionBar": "Vis sekundær handlingslinje"
+      "showSecondaryActionBar": "Vis sekundær handlingslinje",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Controller",

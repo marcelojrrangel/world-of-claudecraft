@@ -202,6 +202,8 @@ export const ja_JP: EnTranslations = {
       "spinResult": "+{points} ポイント",
       "spinButton": "スピン",
       "tasks": "タスク",
+      "showChestButton": "宝箱を表示",
+      "hideChestButton": "宝箱を隠す",
       "leaderboard": "デイリーランキング",
       "history": "過去の当選者",
       "noLeaders": "まだポイントがありません。",
@@ -393,7 +395,8 @@ export const ja_JP: EnTranslations = {
       "showItemLevel": "アイテムレベルを表示",
       "itemLevelLine": "アイテムレベル {level}",
       "itemScoreLine": "スコア {score}",
-      "showSecondaryActionBar": "セカンダリアクションバーを表示"
+      "showSecondaryActionBar": "セカンダリアクションバーを表示",
+      "showDailyRewardsChest": "デイリー報酬の宝箱を表示"
     },
     "controller": {
       "title": "コントローラー",

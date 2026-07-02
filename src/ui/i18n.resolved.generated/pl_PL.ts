@@ -202,6 +202,8 @@ export const pl_PL: EnTranslations = {
       "spinResult": "+{points} pkt",
       "spinButton": "Zakręć",
       "tasks": "Zadania",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Codzienna tabela wyników",
       "history": "Poprzedni zwycięzcy",
       "noLeaders": "Jeszcze brak punktów.",
@@ -393,7 +395,8 @@ export const pl_PL: EnTranslations = {
       "showItemLevel": "Pokaż poziom przedmiotu",
       "itemLevelLine": "Poziom przedmiotu {level}",
       "itemScoreLine": "Ocena {score}",
-      "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji"
+      "showSecondaryActionBar": "Pokaż dodatkowy pasek akcji",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Kontroler",

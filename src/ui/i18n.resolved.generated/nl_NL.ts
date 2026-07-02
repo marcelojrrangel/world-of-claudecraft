@@ -202,6 +202,8 @@ export const nl_NL: EnTranslations = {
       "spinResult": "+{points} punten",
       "spinButton": "Draaien",
       "tasks": "Taken",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Dagelijkse ranglijst",
       "history": "Eerdere winnaars",
       "noLeaders": "Nog geen punten.",
@@ -393,7 +395,8 @@ export const nl_NL: EnTranslations = {
       "showItemLevel": "Itemniveau tonen",
       "itemLevelLine": "Itemniveau {level}",
       "itemScoreLine": "Score {score}",
-      "showSecondaryActionBar": "Secundaire actiebalk tonen"
+      "showSecondaryActionBar": "Secundaire actiebalk tonen",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Controller",

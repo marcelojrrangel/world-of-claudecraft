@@ -202,6 +202,8 @@ export const vi_VN: EnTranslations = {
       "spinResult": "+{points} điểm",
       "spinButton": "Quay",
       "tasks": "Nhiệm Vụ",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Bảng Xếp Hạng Hằng Ngày",
       "history": "Người Thắng Trước Đây",
       "noLeaders": "Chưa có điểm nào.",
@@ -393,7 +395,8 @@ export const vi_VN: EnTranslations = {
       "showItemLevel": "Hiển Thị Cấp Vật Phẩm",
       "itemLevelLine": "Cấp Vật Phẩm {level}",
       "itemScoreLine": "Điểm {score}",
-      "showSecondaryActionBar": "Hiện Thanh Hành Động Phụ"
+      "showSecondaryActionBar": "Hiện Thanh Hành Động Phụ",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Tay Cầm",

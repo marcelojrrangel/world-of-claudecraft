@@ -202,6 +202,8 @@ export const en_XA: EnTranslations = {
       "spinResult": "[+{points} þóíñţš]",
       "spinButton": "[Šþíñ]",
       "tasks": "[Ţášķš]",
+      "showChestButton": "[Šĥóŵ Çĥéšţ]",
+      "hideChestButton": "[Ĥíðé Çĥéšţ]",
       "leaderboard": "[Ðáíļý Ļéáðéŕƀóáŕð]",
       "history": "[Þášţ Ŵíññéŕš]",
       "noLeaders": "[Ñó þóíñţš ýéţ.]",
@@ -393,7 +395,8 @@ export const en_XA: EnTranslations = {
       "showItemLevel": "[Šĥóŵ Íţéɱ Ļéʋéļ]",
       "itemLevelLine": "[Íţéɱ Ļéʋéļ {level}]",
       "itemScoreLine": "[Šçóŕé {score}]",
-      "showSecondaryActionBar": "[Šĥóŵ Šéçóñðáŕý Áçţíóñ Ɓáŕ]"
+      "showSecondaryActionBar": "[Šĥóŵ Šéçóñðáŕý Áçţíóñ Ɓáŕ]",
+      "showDailyRewardsChest": "[Šĥóŵ Ðáíļý Ŕéŵáŕðš Çĥéšţ]"
     },
     "controller": {
       "title": "[Çóñţŕóļļéŕ]",

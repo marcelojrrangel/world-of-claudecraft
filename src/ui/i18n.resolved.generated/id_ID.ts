@@ -202,6 +202,8 @@ export const id_ID: EnTranslations = {
       "spinResult": "+{points} poin",
       "spinButton": "Putar",
       "tasks": "Tugas",
+      "showChestButton": "Show Chest",
+      "hideChestButton": "Hide Chest",
       "leaderboard": "Papan Peringkat Harian",
       "history": "Pemenang Sebelumnya",
       "noLeaders": "Belum ada poin.",
@@ -393,7 +395,8 @@ export const id_ID: EnTranslations = {
       "showItemLevel": "Tampilkan Level Item",
       "itemLevelLine": "Level Item {level}",
       "itemScoreLine": "Skor {score}",
-      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder"
+      "showSecondaryActionBar": "Tampilkan Bilah Aksi Sekunder",
+      "showDailyRewardsChest": "Show Daily Rewards Chest"
     },
     "controller": {
       "title": "Kontroler",

@@ -1092,6 +1092,21 @@ describe('chat module (direct, no Sim)', () => {
     expect(calls).toContainEqual(['bot', 'ASASAS']);
     expect(chatMod.handleDevChat(ctx, 'hello world', 1)).toBe(undefined);
   });
+
+  it('handleDevChat: the /dev help fallback advertises every dev subcommand', () => {
+    let help = '';
+    const ctx = {
+      error: (_pid: number, text: string) => {
+        help = text;
+      },
+    } as unknown as SimContext;
+    // A bare "/dev" matches no specific cheat and falls through to the usage line.
+    expect(chatMod.handleDevChat(ctx, '/dev', 1)).toBe(null);
+    // Every subcommand the parser accepts must be listed, so the help can never
+    // silently drift behind the commands again (the "/dev bot" omission this pins).
+    for (const cmd of ['level', 'tp', 'give', 'quest', 'quests', 'bot'])
+      expect(help, `help omits /dev ${cmd}`).toContain(`/dev ${cmd}`);
+  });
 });
 
 describe('dev bot: a whisperable test dummy', () => {

@@ -248,7 +248,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "es_ES": [
     "calibration.autoRefresh",
@@ -488,7 +498,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "fr_FR": [
     "calibration.autoRefresh",
@@ -728,7 +748,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "fr_CA": [
     "calibration.autoRefresh",
@@ -968,7 +998,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "en_CA": [],
   "it_IT": [
@@ -1209,7 +1249,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "de_DE": [
     "calibration.autoRefresh",
@@ -1449,7 +1499,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "zh_CN": [
     "calibration.autoRefresh",
@@ -1689,7 +1749,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "zh_TW": [
     "calibration.autoRefresh",
@@ -1929,7 +1999,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "ko_KR": [
     "calibration.autoRefresh",
@@ -2169,7 +2249,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "ja_JP": [
     "calibration.autoRefresh",
@@ -2409,7 +2499,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "pt_BR": [
     "calibration.autoRefresh",
@@ -2649,7 +2749,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "ru_RU": [
     "calibration.autoRefresh",
@@ -2889,7 +2999,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "nl_NL": [
     "calibration.autoRefresh",
@@ -3129,7 +3249,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "pl_PL": [
     "calibration.autoRefresh",
@@ -3369,7 +3499,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "id_ID": [
     "calibration.autoRefresh",
@@ -3609,7 +3749,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "tr_TR": [
     "calibration.autoRefresh",
@@ -3849,7 +3999,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "sv_SE": [
     "calibration.autoRefresh",
@@ -4089,7 +4249,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "vi_VN": [
     "calibration.autoRefresh",
@@ -4329,7 +4499,17 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ],
   "da_DK": [
     "calibration.autoRefresh",
@@ -4569,6 +4749,16 @@ export const pending: Record<string, readonly string[]> = {
     "nav.hkSpawns",
     "nav.hkWorld",
     "nav.housekeeping",
-    "nav.liveEvidence"
+    "nav.liveEvidence",
+    "suspiciousPlayers.colObserved",
+    "suspiciousPlayers.downloadJson",
+    "suspiciousPlayers.filteredEmpty",
+    "suspiciousPlayers.resultCountMany",
+    "suspiciousPlayers.resultCountOne",
+    "suspiciousPlayers.searchLabel",
+    "suspiciousPlayers.searchPlaceholder",
+    "suspiciousPlayers.sessionDescription",
+    "suspiciousPlayers.sessionEmpty",
+    "suspiciousPlayers.snapshotUnavailable"
   ]
 };

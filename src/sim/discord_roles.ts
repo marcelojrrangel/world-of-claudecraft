@@ -1,5 +1,5 @@
 // Shared, host-agnostic catalog of the staff/special Discord roles that get a
-// colored name + a tag in game. Only these four are surfaced (everyone else has
+// colored name + a tag in game. Only these five are surfaced (everyone else has
 // the default name color and no tag). Pure data so the server, the renderer, and
 // the bot all agree on the key set without crossing host boundaries.
 //

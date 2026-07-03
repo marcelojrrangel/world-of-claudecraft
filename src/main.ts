@@ -4847,7 +4847,7 @@ function showWalletPicker(
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-modal', 'true');
     panel.setAttribute('aria-labelledby', 'wallet-picker-title');
-    panel.setAttribute('aria-describedby', 'wallet-picker-help');
+    panel.setAttribute('aria-describedby', 'wallet-picker-help wallet-picker-extension-help');
 
     const titleRow = document.createElement('div');
     titleRow.className = 'panel-title';
@@ -4865,6 +4865,11 @@ function showWalletPicker(
     help.className = 'wallet-picker-help';
     help.id = 'wallet-picker-help';
     help.textContent = t('wallet.flowConnect');
+
+    const extensionHelp = document.createElement('p');
+    extensionHelp.className = 'wallet-picker-help wallet-picker-extension-help';
+    extensionHelp.id = 'wallet-picker-extension-help';
+    extensionHelp.textContent = t('wallet.extensionHelp');
 
     const list = document.createElement('div');
     list.className = 'wallet-picker-list';
@@ -4904,7 +4909,7 @@ function showWalletPicker(
       }
     }
 
-    panel.append(titleRow, help, list);
+    panel.append(titleRow, help, extensionHelp, list);
     back.appendChild(panel);
     document.body.appendChild(back);
     walletPickerModal = back;

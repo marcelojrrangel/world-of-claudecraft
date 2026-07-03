@@ -9,8 +9,8 @@
 // keep resolving to THIS file, never the sibling directory.
 //
 // ---------------------------------------------------------------------------
-// FACET MAP: the 22 domain facets (each IWorld member assigned exactly once).
-// One interface per file under ./world_api/; aux types travel with their
+// FACET MAP: the 23 domain facets (each IWorld member assigned exactly once; 158
+// total). One interface per file under ./world_api/; aux types travel with their
 // facet. The authoritative member-per-facet split is the W0c parity test.
 //
 //   entity_roster.ts    IWorldEntityRoster   cfg/entities/player/moveInput/realm reads
@@ -35,15 +35,16 @@
 //   delves.ts           IWorldDelves         delve runs, lockpick, companion
 //   daily_rewards.ts    IWorldDailyRewards   daily WOC-holder rewards
 //   telemetry.ts        IWorldTelemetry      fire-and-forget metrics sink
+//   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (stub, #1164)
 //
 // THREE GATES pin this seam (run before any facet edit):
 //   tests/snapshots.test.ts        (W0a)  selfWireJson <-> applySnapshot round-trip;
 //                                          ALL_DELTA_KEYS (25) + TERSE_TO_IWORLD mapping.
 //   tests/command_schema.test.ts   (W0b)  COMMAND_NAMES universe; ClientWorld send-set
 //                                          subset-of dispatch-set; DISPATCH_ONLY (7).
-//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (145) present + same-kind on
+//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (158) present + same-kind on
 //                                          Sim + ClientWorld; aggregate == disjoint
-//                                          union of the 21 facets.
+//                                          union of the 22 facets.
 // ---------------------------------------------------------------------------
 
 import type { IWorldChat } from './world_api/chat';
@@ -61,6 +62,7 @@ import type { IWorldMail } from './world_api/mail';
 import type { IWorldMarket } from './world_api/market';
 import type { IWorldParty } from './world_api/party';
 import type { IWorldPet } from './world_api/pet';
+import type { IWorldProfessions } from './world_api/professions';
 import type { IWorldProgressionXp } from './world_api/progression_xp';
 import type { IWorldQuests } from './world_api/quests';
 import type { IWorldSocialGraph } from './world_api/social_graph';
@@ -84,6 +86,7 @@ export type {
   DailyRewardEligibilityView,
   DailyRewardHistory,
   DailyRewardLeaderboardEntry,
+  DailyRewardLeaderboardPage,
   DailyRewardPayoutLogEntry,
   DailyRewardSpinResult,
   DailyRewardSpinView,
@@ -110,6 +113,7 @@ export type { RaidLockout } from './world_api/dungeons';
 export type { MailInfo, MailKindView, MailMessageView } from './world_api/mail';
 export type { MarketInfo, MarketListingView } from './world_api/market';
 export type { PartyInfo, PartyMemberInfo } from './world_api/party';
+export type { PlayerProfessionsView } from './world_api/professions';
 export type {
   DevLeaderboardEntry,
   GuildLeaderboardEntry,
@@ -152,7 +156,8 @@ export interface IWorld
     IWorldDungeons,
     IWorldDelves,
     IWorldDailyRewards,
-    IWorldTelemetry {}
+    IWorldTelemetry,
+    IWorldProfessions {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.

@@ -48,6 +48,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -92,6 +96,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "es_ES": [
@@ -133,6 +138,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -177,6 +186,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "fr_FR": [
@@ -218,6 +228,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -262,6 +276,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "fr_CA": [
@@ -303,6 +318,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -347,6 +366,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "en_CA": [],
@@ -389,6 +409,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -433,6 +457,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "de_DE": [
@@ -474,6 +499,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -518,6 +547,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "zh_CN": [
@@ -579,6 +609,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -623,6 +657,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "ru_RU": [
@@ -669,6 +704,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -713,6 +752,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "pl_PL": [
@@ -754,6 +794,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -798,6 +842,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "id_ID": [
@@ -839,6 +884,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -883,6 +932,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "tr_TR": [
@@ -924,6 +974,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -968,6 +1022,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "sv_SE": [
@@ -1009,6 +1064,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -1053,6 +1112,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "vi_VN": [
@@ -1094,6 +1154,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -1138,6 +1202,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ],
   "da_DK": [
@@ -1179,6 +1244,10 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.calendar.result.removed",
     "hudChrome.calendar.title",
     "hudChrome.calendar.titlePlaceholder",
+    "hudChrome.dailyRewards.pointsGained",
+    "hudChrome.dailyRewards.taskMultiplier",
+    "hudChrome.dailyRewards.totalPlayer",
+    "hudChrome.dailyRewards.totalPlayers",
     "hudChrome.mailbox.arrivedBanner",
     "hudChrome.mailbox.arrivedLog",
     "hudChrome.mailbox.attachmentsBadge",
@@ -1223,6 +1292,7 @@ export const pending: Record<string, readonly string[]> = {
     "hudChrome.mailbox.toPlaceholder",
     "hudChrome.mailbox.truncated",
     "hudChrome.mailbox.unreadBadge",
+    "wallet.extensionHelp",
     "worldContent.mailboxName"
   ]
 };

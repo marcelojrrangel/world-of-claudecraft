@@ -14,6 +14,19 @@ export const MAX_ASSETS_PER_ACCOUNT = 20;
 export const MAX_ASSET_TOTAL_BYTES = 24 * 1024 * 1024;
 export const MAX_ASSET_NAME_LENGTH = 80;
 
+// The optional display label, allowlisted like normalizeMapName (maps.ts) but
+// widened with underscore and dot so filenames ("well.glb") survive. Anything
+// outside the allowlist is stripped, not rejected: the name is a convenience
+// label, never an identity, and a fully-stripped name falls back to null (the
+// client shows a hash prefix).
+const ASSET_NAME_ALLOWED_RE = /[^A-Za-z0-9' ._-]+/g;
+
+export function normalizeAssetName(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const cleaned = raw.replace(ASSET_NAME_ALLOWED_RE, '').replace(/\s+/g, ' ').trim();
+  return cleaned ? cleaned.slice(0, MAX_ASSET_NAME_LENGTH) : null;
+}
+
 export type AssetStatus = 'active' | 'blocked';
 
 export interface UserAssetRecord {
@@ -102,10 +115,7 @@ export class UserAssetsService {
       return { ok: false, error: 'invalid_glb' };
     }
     if (!parseGlbInfo(bytes)) return { ok: false, error: 'invalid_glb' };
-    const name =
-      typeof rawName === 'string' && rawName.trim()
-        ? rawName.trim().slice(0, MAX_ASSET_NAME_LENGTH)
-        : null;
+    const name = normalizeAssetName(rawName);
     const sha256 = createHash('sha256').update(bytes).digest('hex');
     // Content-addressed dedupe: the same bytes are one row, whoever uploads
     // them; a blocked hash stays blocked no matter who re-uploads it.

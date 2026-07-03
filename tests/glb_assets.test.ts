@@ -354,6 +354,23 @@ describe('UserAssetsService', () => {
     expect(await service.bytesForSha(result.asset.sha256)).toEqual(bytes);
   });
 
+  it('strips markup and control characters from the display name', async () => {
+    const db = new FakeUserAssetsDb();
+    const service = new UserAssetsService(db);
+    const result = await service.upload(
+      1,
+      validGlb(),
+      "<script>alert('x')</script> my  rock_1.glb ",
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.asset.name).toBe("scriptalert'x'script my rock_1.glb");
+    const stripped = await service.upload(2, distinctGlb('all-symbols'), '<<>>&&');
+    expect(stripped.ok).toBe(true);
+    if (!stripped.ok) return;
+    expect(stripped.asset.name).toBe(null);
+  });
+
   it('rejects invalid bytes before touching storage', async () => {
     const db = new FakeUserAssetsDb();
     const service = new UserAssetsService(db);

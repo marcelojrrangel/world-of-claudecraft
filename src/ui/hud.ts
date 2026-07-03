@@ -2889,7 +2889,8 @@ export class Hud {
   private readonly mapPainter = new MapWindowPainter();
   // The aura strips are the keyed-pool aura painter, two instances of the
   // auras_view core + AurasPainter: the player buff bar (#buff-bar, mode
-  // 'all') and the target debuffs (#tf-debuffs, mode 'debuffs'). The shared deps fire
+  // 'all') and the target strip (#tf-debuffs, mode 'all' too: a target's buffs AND
+  // debuffs, classic target-frame behavior). The shared deps fire
   // the i18n lookups every frame (so a language switch lands on the next tick) and the
   // painter's tooltip closure reads the pool's LIVE record (Top risk 3, never a captured
   // aura). All closures are lazy, so these field initializers are safe.
@@ -2922,7 +2923,11 @@ export class Hud {
   // #debuff-bar, so a fresh debuff is never buried under a wall of long-lived buffs.
   private readonly buffBarView = createAurasView('buffs', this.aurasViewDeps);
   private readonly debuffBarView = createAurasView('debuffs', this.aurasViewDeps);
-  private readonly targetDebuffsView = createAurasView('debuffs', this.aurasViewDeps);
+  // The target strip shows EVERY aura (classic target-frame behavior): a friendly
+  // target's buffs (the shield you just cast on an ally) alongside its debuffs, and
+  // an enemy's buffs (a mob's frenzy) alongside the DoTs you keep on it. The element
+  // keeps its historical #tf-debuffs id; only the view mode widened.
+  private readonly targetDebuffsView = createAurasView('all', this.aurasViewDeps);
   // The buff-bar painter alone gets attachCancel: right-clicking one of the local player's
   // own helpful buffs cancels it (classic convention). The debuff / target painters reuse
   // the shared deps (no cancel: a debuff or another entity's aura is never cancelable).

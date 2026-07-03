@@ -54,13 +54,13 @@ describe('/invite — global party invite by name', () => {
     expect(sim.tick().some((e) => e.type === 'partyInvite' && e.pid === b)).toBe(true);
   });
 
-  it('supports the /inv alias', () => {
+  it('keeps /inv as the inventory readout, never an invite alias', () => {
     const sim = makeWorld();
     const a = sim.addPlayer('warrior', 'Aleph');
     const b = sim.addPlayer('mage', 'Bet');
     sim.tick();
     sim.chat('/inv Bet', a);
-    expect(sim.tick().some((e) => e.type === 'partyInvite' && e.pid === b)).toBe(true);
+    expect(sim.tick().some((e) => e.type === 'partyInvite' && e.pid === b)).toBe(false);
   });
 
   it('errors on an unknown name (recognized "no player named" toast)', () => {

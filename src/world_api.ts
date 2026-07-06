@@ -9,9 +9,10 @@
 // keep resolving to THIS file, never the sibling directory.
 //
 // ---------------------------------------------------------------------------
-// FACET MAP: the 22 domain facets (each IWorld member assigned exactly once; 169
-// total). One interface per file under ./world_api/; aux types travel with their
-// facet. The authoritative member-per-facet split is the W0c parity test.
+// FACET MAP: the 23 domain facets (each IWorld member assigned exactly once; 171
+// total after adding constructionSkill in Phase 1). One interface per file under
+// ./world_api/; aux types travel with their facet. The authoritative member-per-facet
+// split is the W0c parity test.
 //
 //   entity_roster.ts    IWorldEntityRoster   cfg/entities/player/moveInput/realm reads
 //   combat.ts           IWorldCombat         ability casts, auto-attack, spirit release
@@ -37,19 +38,21 @@
 //   telemetry.ts        IWorldTelemetry      fire-and-forget metrics sink
 //   professions.ts      IWorldProfessions    skill/craft/recipe/node read surface (#1164; node
 //                                            harvest read + action landed in #1121)
+//   construction.ts     IWorldConstruction   construction secondary profession read surface
 //
 // THREE GATES pin this seam (run before any facet edit):
 //   tests/snapshots.test.ts        (W0a)  selfWireJson <-> applySnapshot round-trip;
-//                                          ALL_DELTA_KEYS (25) + TERSE_TO_IWORLD mapping.
+//                                          ALL_DELTA_KEYS (30) + TERSE_TO_IWORLD mapping.
 //   tests/command_schema.test.ts   (W0b)  COMMAND_NAMES universe; ClientWorld send-set
 //                                          subset-of dispatch-set; DISPATCH_ONLY (7).
-//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (169) present + same-kind on
+//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (171) present + same-kind on
 //                                          Sim + ClientWorld; aggregate == disjoint
-//                                          union of the 22 facets.
+//                                          union of the 23 facets.
 // ---------------------------------------------------------------------------
 
 import type { IWorldChat } from './world_api/chat';
 import type { IWorldCombat } from './world_api/combat';
+import type { IWorldConstruction } from './world_api/construction';
 import type { IWorldCosmetics } from './world_api/cosmetics';
 import type { IWorldDailyRewards } from './world_api/daily_rewards';
 import type { IWorldDelves } from './world_api/delves';
@@ -82,6 +85,7 @@ export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
+export type { ConstructionView } from './world_api/construction';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
   DailyRewardEligibilityView,
@@ -158,7 +162,8 @@ export interface IWorld
     IWorldDelves,
     IWorldDailyRewards,
     IWorldTelemetry,
-    IWorldProfessions {}
+    IWorldProfessions,
+    IWorldConstruction {}
 
 // ---------------------------------------------------------------------------
 // Command schema (W0b): the shared wire-token vocabulary.
@@ -369,7 +374,8 @@ export type WorldFacet =
   | 'IWorldDungeons'
   | 'IWorldDelves'
   | 'IWorldDailyRewards'
-  | 'IWorldTelemetry';
+  | 'IWorldTelemetry'
+  | 'IWorldConstruction';
 
 export const COMMAND_FACETS = {
   // IWorldCombat: ability casts, auto-attack, spirit release.

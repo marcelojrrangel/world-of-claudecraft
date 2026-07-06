@@ -1,5 +1,6 @@
 import type {
   AccountCosmetics,
+  ConstructionView,
   DailyRewardHistory,
   DailyRewardLeaderboardPage,
   DailyRewardSpinResult,
@@ -23,7 +24,6 @@ import {
 } from './combat/auras';
 import {
   meleeSwing as meleeSwingImpl,
-  rangedSwing as rangedSwingImpl,
   startAutoAttack as startAutoAttackImpl,
   stopAutoAttack as stopAutoAttackImpl,
   updatePlayerAutoAttack as updatePlayerAutoAttackImpl,
@@ -45,7 +45,6 @@ import {
 import { runEffects as runEffectsImpl } from './combat/effect_dispatch';
 import {
   applyHeal as applyHealImpl,
-  consumeHealAbsorb as consumeHealAbsorbImpl,
   critVulnBonus as critVulnBonusImpl,
   healingTakenMult as healingTakenMultImpl,
   healingThreat as healingThreatImpl,
@@ -158,7 +157,6 @@ import {
   activeLootRolls as activeLootRollsImpl,
   assignMasterLoot as assignMasterLootImpl,
   type PendingLootRoll,
-  partyLootCandidatesForMob as partyLootCandidatesForMobImpl,
   resolveLootRoll as resolveLootRollImpl,
   rollLoot as rollLootImpl,
   setPartyLootMaster as setPartyLootMasterImpl,
@@ -184,6 +182,7 @@ import {
 } from './pathfind';
 import * as petAi from './pet/pet_ai';
 import * as petCommands from './pet/pet_commands';
+import { emptyConstructionSystem, normalizeConstructionSystem } from './professions/construction';
 import {
   drainGatheringGrants,
   emptyGatheringProficiency,
@@ -305,6 +304,7 @@ import {
   type AuraKind,
   angleTo,
   armorReduction,
+  type ConstructionSystem,
   type CrowdControlDrCategory,
   cloneInvSlot,
   DELVE_COMPANION_HEAL_INTERVAL,
@@ -794,6 +794,10 @@ export interface PlayerMeta {
   // value per craft on the ten-craft ring (see professions/wheel.ts). Persisted
   // in CharacterState.
   craftSkills: Record<string, number>;
+  // Construction secondary profession state. The full ConstructionSystem shape
+  // including plot/house/blueprints/furniture; only skill is used in Phase 1,
+  // the rest fill in later phases. Persisted in CharacterState under key `building`.
+  construction: ConstructionSystem;
   // One-time Ravenpost welcome letter sent (persisted in CharacterState, so
   // existing characters get the service announcement exactly once).
   mailWelcomed: boolean;
@@ -911,6 +915,10 @@ export interface CharacterState {
   // Flat per-craft skill tracking (#1126; JSONB, additive back-compat: absent or
   // partial on older saves loads the missing crafts as 0, see normalizeCraftSkills).
   craftSkills?: Record<string, number>;
+  // Construction secondary profession state (JSONB; optional so pre-construction
+  // saves load cleanly, defaulting to empty ConstructionSystem). Key is `building`
+  // (the settled persistence key, see src/sim/professions/CLAUDE.md note).
+  building?: ConstructionSystem;
 }
 
 export interface PetState {
@@ -1454,6 +1462,7 @@ export class Sim {
       away: null,
       marketQuery: defaultMarketQuery(),
       craftSkills: emptyCraftSkills(),
+      construction: emptyConstructionSystem(),
       mailWelcomed: false,
       delveMarks: 0,
       delveClears: {},
@@ -1547,6 +1556,7 @@ export class Sim {
         }
       }
       meta.craftSkills = normalizeCraftSkills(s.craftSkills);
+      meta.construction = normalizeConstructionSystem(s.building);
       meta.mailWelcomed = s.mailWelcomed === true;
       meta.delveMarks = s.delveMarks ?? 0;
       meta.delveClears = { ...(s.delveClears ?? {}) };
@@ -1802,6 +1812,7 @@ export class Sim {
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,
       craftSkills: { ...meta.craftSkills },
+      building: { ...meta.construction, furniture: [...meta.construction.furniture] },
       delveMarks: meta.delveMarks,
       delveClears: { ...meta.delveClears },
       companionUpgrades: { ...meta.companionUpgrades },
@@ -2937,12 +2948,6 @@ export class Sim {
   private isNythraxisScriptedControl(target: Entity, aura: Aura): boolean {
     return nythraxis.isNythraxisScriptedControl(target, aura);
   }
-  // L1 loot distribution moved to loot/loot_roll.ts (behind SimContext). Sim keeps a
-  // thin delegate for partyLootCandidatesForMob because dead_party_loot.test.ts reaches
-  // it via cast; the strategy resolvers it used have no other caller and moved fully.
-  private partyLootCandidatesForMob(mob: Entity): PlayerMeta[] {
-    return partyLootCandidatesForMobImpl(this.ctx, mob);
-  }
   moveSpeedMult(e: Entity): number {
     // A released spirit runs at a fixed boosted speed and is immune to snares (a ghost
     // cannot be slowed): short-circuit the aura scan with the ghost-run multiplier.
@@ -3547,10 +3552,6 @@ export class Sim {
     return hexOutputMultImpl(this.ctx, source);
   }
 
-  private consumeHealAbsorb(target: Entity, healed: number): number {
-    return consumeHealAbsorbImpl(this.ctx, target, healed);
-  }
-
   private critVulnBonus(target: Entity): number {
     return critVulnBonusImpl(this.ctx, target);
   }
@@ -3902,14 +3903,6 @@ export class Sim {
 
   private updatePlayerAutoAttack(p: Entity, meta: PlayerMeta): void {
     updatePlayerAutoAttackImpl(this.ctx, p, meta);
-  }
-
-  private rangedSwing(
-    attacker: Entity,
-    target: Entity,
-    ranged: { min: number; max: number; speed: number; wand?: boolean; school?: string },
-  ): void {
-    rangedSwingImpl(this.ctx, attacker, target, ranged);
   }
 
   private meleeSwing(
@@ -6596,6 +6589,19 @@ export class Sim {
 
   get professionsState(): PlayerProfessionsView {
     return this.professionsStateFor(this.primaryId);
+  }
+
+  // Construction secondary profession (Phase 1): exposes skill and maxSkill
+  // for the IWorldConstruction facet. Later phases extend this surface.
+  constructionSkillFor(pid: number): ConstructionView {
+    const construction = this.players.get(pid)?.construction;
+    return construction
+      ? { skill: construction.skill, maxSkill: 300 }
+      : { skill: 0, maxSkill: 300 };
+  }
+
+  get constructionSkill(): ConstructionView {
+    return this.constructionSkillFor(this.primaryId);
   }
 }
 

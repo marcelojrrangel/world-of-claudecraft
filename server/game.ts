@@ -3445,6 +3445,8 @@ export class GameServer {
     // key `prof` and IWorld member `professionsState` are the settled names
     // for the professions facet (#1164, src/sim/professions/CLAUDE.md).
     maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
+    // Construction secondary profession (Phase 1): skill view, delta-guarded.
+    maybe('const', this.sim.constructionSkillFor(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir
     // wear-off, a buff cast on you by someone else), none of which mark this
@@ -3703,7 +3705,7 @@ export class GameServer {
         }
         const mine: SimEvent[] = [];
         for (const ev of events) {
-          if (suppressedInvites !== null && suppressedInvites.has(ev)) continue;
+          if (suppressedInvites?.has(ev)) continue;
           // ignore list: drop chat originating from a character this player has
           // blocked, before it ever reaches their client
           if (

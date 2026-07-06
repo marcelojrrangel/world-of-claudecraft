@@ -48,6 +48,7 @@ import {
   type ArenaInfo,
   type CharacterSearchResult,
   type ClientCommand,
+  type ConstructionView,
   type DailyRewardHistory,
   type DailyRewardLeaderboardPage,
   type DailyRewardSpinResult,
@@ -946,6 +947,8 @@ export class ClientWorld implements IWorld {
   // Crafting/secondary professions still contribute nothing until later
   // issues (#1120/#1125/#1126/#1140) land.
   professionsState: PlayerProfessionsView = { skills: [] };
+  // Construction secondary profession (Phase 1): mirrored from the `const` wire delta.
+  constructionSkill: ConstructionView = { skill: 0, maxSkill: 300 };
   // Stub for #1121: per-node respawn state is server-authoritative and not yet
   // wired onto the snapshot (see src/sim/professions/CLAUDE.md), so the client
   // cannot know another player's, or even its own, real per-node timer yet.
@@ -1640,6 +1643,7 @@ export class ClientWorld implements IWorld {
       if (s.dclears !== undefined) this.delveClears = s.dclears ?? {};
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
+      if (s.const !== undefined) this.constructionSkill = s.const ?? { skill: 0, maxSkill: 300 };
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;

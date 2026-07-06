@@ -58,6 +58,7 @@ import {
   insertChatLogs,
   loadMailState,
   loadMarketState,
+  loadPlotRegistry,
   markAccountQuestComplete,
   openPlaySession,
   pool,
@@ -66,6 +67,7 @@ import {
   saveCharacterState,
   saveMailState,
   saveMarketState,
+  savePlotRegistry,
   touchCharacterLogin,
   walletForAccount,
 } from './db';
@@ -1108,6 +1110,7 @@ export class GameServer {
             void this.saveAll('autosave');
             void this.saveMarket();
             void this.saveMail();
+            void this.savePlotRegistry();
           }
         },
         (err) => console.error('[tick] guarded tick body threw, skipping this tick:', err),
@@ -1842,6 +1845,23 @@ export class GameServer {
     }
   }
 
+  // Realm-wide plot ownership registry (Phase 3): persisted like market/mail.
+  async loadPlotRegistry(): Promise<void> {
+    try {
+      this.sim.loadPlotRegistry(await loadPlotRegistry());
+    } catch (err) {
+      console.error('failed to load plot registry:', err);
+    }
+  }
+
+  async savePlotRegistry(): Promise<void> {
+    try {
+      await this.enqueueMarketWrite(() => savePlotRegistry(this.sim.serializePlotRegistry()));
+    } catch (err) {
+      console.error('failed to save plot registry:', err);
+    }
+  }
+
   rekeyMarketSeller(characterId: number, oldName: string, newName: string): boolean {
     return this.sim.rekeyMarketSeller(characterId, oldName, newName);
   }
@@ -2527,6 +2547,15 @@ export class GameServer {
         break;
       case 'resurrect_healer':
         sim.resurrectAtSpiritHealer(pid);
+        break;
+      case 'buy_plot':
+        if (typeof msg.plot === 'string') sim.buyPlot(msg.plot);
+        break;
+      case 'enter_house':
+        sim.enterHouse();
+        break;
+      case 'leave_house':
+        sim.leaveHouse();
         break;
       case 'challengeResponse':
         if (typeof msg.n === 'string' && typeof msg.r === 'string' && typeof msg.sig === 'string') {

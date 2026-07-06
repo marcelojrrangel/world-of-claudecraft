@@ -13,6 +13,8 @@ import {
 } from './data';
 import { type DelveModuleId, delveModuleColliders } from './delve_layout';
 import { isLitanyModuleId, litanyModuleLosColliders } from './delve_litany_layout';
+import { isHousePos, houseOrigin, houseSlotAt } from './professions/construction';
+import { getHouseColliders } from './professions/construction/house_layouts';
 import {
   ARENA_LAYOUT,
   CRYPT_LAYOUT,
@@ -419,6 +421,14 @@ export function resolvePosition(
   ignoreFences = false,
   delveModules?: readonly string[],
 ): { x: number; z: number } {
+  if (isHousePos(x)) {
+    const slot = houseSlotAt(z);
+    const origin = houseOrigin(slot);
+    const tier = 1; // default to tier 1 colliders for runtime position resolution
+    const colliders = getHouseColliders()[`house_t${tier}`] ?? [];
+    const local = resolveAgainst(colliders, x - origin.x, z - origin.z, r);
+    return { x: local.x + origin.x, z: local.z + origin.z };
+  }
   if (isDelvePos(x)) {
     const delve = delveAt(x);
     const mods = delveModules?.length ? delveModules : delve ? defaultDelveModules(delve.id) : [];
@@ -663,6 +673,12 @@ export function cameraOcclusion(
   pad = 0.35,
   delveModules?: readonly string[],
 ): number {
+  if (isHousePos(ax)) {
+    const slot = houseSlotAt(az);
+    const origin = houseOrigin(slot);
+    const colliders = getHouseColliders()['house_t1'] ?? [];
+    return sweepColliders(colliders, ax - origin.x, ay, az - origin.z, bx - origin.x, by, bz - origin.z, pad, true);
+  }
   if (isDelvePos(ax)) {
     const delve = delveAt(ax);
     const mods = delveModules?.length ? delveModules : delve ? defaultDelveModules(delve.id) : [];
@@ -735,6 +751,11 @@ function sightBlockedAt(seed: number, x: number, z: number, r: number, sightY: n
     }
     return false;
   };
+  if (isHousePos(x)) {
+    const slot = houseSlotAt(z);
+    const origin = houseOrigin(slot);
+    return overlapsAny(getHouseColliders()['house_t1'] ?? [], x - origin.x, z - origin.z, false);
+  }
   if (isDelvePos(x)) {
     const delve = delveAt(x);
     const mods = delve ? defaultDelveModules(delve.id) : [];

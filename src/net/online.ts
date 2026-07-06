@@ -38,6 +38,7 @@ import {
   type MasterLootThreshold,
   type MoveInput,
   type PlayerClass,
+  type PlotDef,
   type QuestProgress,
   type QuestState,
   type RiteIntensity,
@@ -51,6 +52,7 @@ import {
   type ConstructionView,
   type DailyRewardHistory,
   type DailyRewardLeaderboardPage,
+  type HouseView,
   type DailyRewardSpinResult,
   type DailyRewardStatus,
   type DelveCompanionInfo,
@@ -949,6 +951,9 @@ export class ClientWorld implements IWorld {
   professionsState: PlayerProfessionsView = { skills: [] };
   // Construction secondary profession (Phase 1): mirrored from the `const` wire delta.
   constructionSkill: ConstructionView = { skill: 0, maxSkill: 300 };
+  // Phase 3: plot and house state (stubs for now; wired via commands/log events).
+  myPlot: PlotDef | null = null;
+  houseState: HouseView = { plotId: null, houseTier: 0 };
   // Stub for #1121: per-node respawn state is server-authoritative and not yet
   // wired onto the snapshot (see src/sim/professions/CLAUDE.md), so the client
   // cannot know another player's, or even its own, real per-node timer yet.
@@ -2477,5 +2482,15 @@ export class ClientWorld implements IWorld {
   }
   leaveCrypt(): void {
     this.leaveDungeon();
+  }
+  // Phase 3: house plot commands
+  buyPlot(plotId: string): void {
+    this.cmd({ cmd: 'buy_plot', plot: plotId });
+  }
+  enterHouse(): void {
+    this.cmd({ cmd: 'enter_house' });
+  }
+  leaveHouse(): void {
+    this.cmd({ cmd: 'leave_house' });
   }
 }

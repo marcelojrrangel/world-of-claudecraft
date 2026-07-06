@@ -1,6 +1,4 @@
 // Construction secondary profession: data shapes and helpers.
-// Phase 1 only: skill tracking and normalize. Gameplay building mechanics
-// land in later phases.
 import type { ConstructionSystem } from '../../types';
 
 export function emptyConstructionSystem(): ConstructionSystem {
@@ -58,3 +56,6 @@ export function normalizeConstructionSystem(
       : [],
   };
 }
+
+export { buyPlot, enterHouse, leaveHouse, updateHouseInstances, isHousePos } from './housing';
+export { houseOrigin, houseSlotAt } from './housing';

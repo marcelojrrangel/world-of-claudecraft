@@ -195,6 +195,19 @@ const baseEnTable = {
   'aura.feedingFrenzy': 'Feeding Frenzy',
   'aura.demoralized': 'Demoralized',
   'aura.resurrectionSickness': "The Keeper's Toll",
+  // Construction / housing (Phase 3)
+  'house.error.alreadyOwnPlot': 'You already own a building plot.',
+  'house.error.plotNotFound': 'That plot does not exist.',
+  'house.error.plotTaken': 'This plot is already taken.',
+  'house.error.cannotAffordPlot': 'You do not have enough gold to buy this plot.',
+  'house.error.noPlot': 'You do not own a building plot.',
+  'house.error.noHouse': 'You have not built a house on your plot yet.',
+  'house.error.instancesBusy': 'All house instances are busy. Try again soon.',
+  'house.error.notInside': 'You are not inside a house.',
+  'house.error.plotLost': 'Your plot could not be found.',
+  'house.entered': 'You enter your house.',
+  'house.left': 'You leave your house.',
+  'house.purchasedPlot': 'You purchased {plotId}!',
 } as const;
 
 const petEnTable = {
@@ -410,6 +423,19 @@ const BASE_DICT: Record<SupportedLanguage, Partial<Record<BaseSimMessageKey, str
     'mechanic.siltHide': 'Silt Hide',
     'aura.demoralized': 'Demoralized',
     'aura.resurrectionSickness': "The Keeper's Toll",
+    // Construction / housing (Phase 3)
+    'house.error.alreadyOwnPlot': 'You already own a building plot.',
+    'house.error.plotNotFound': 'That plot does not exist.',
+    'house.error.plotTaken': 'This plot is already taken.',
+    'house.error.cannotAffordPlot': 'You do not have enough gold to buy this plot.',
+    'house.error.noPlot': 'You do not own a building plot.',
+    'house.error.noHouse': 'You have not built a house on your plot yet.',
+    'house.error.instancesBusy': 'All house instances are busy. Try again soon.',
+    'house.error.notInside': 'You are not inside a house.',
+    'house.error.plotLost': 'Your plot could not be found.',
+    'house.entered': 'You enter your house.',
+    'house.left': 'You leave your house.',
+    'house.purchasedPlot': 'You purchased {plotId}!',
   },
   es: {
     'log.learnedAbility': 'Has aprendido una nueva habilidad: {name}.',
@@ -4388,6 +4414,7 @@ const RULES: Rule[] = [
     re: /^(.+) could not be restored and has been lost\.$/,
     build: (m) => tSim('log.petRestoreLost', { name: locMob(m[1]) }),
   },
+  { re: /^You purchased (.+)!$/, build: (m) => tSim('house.purchasedPlot', { plotId: m[1] }) },
   { re: /^You feed (.+)\.$/, build: (m) => tSim('log.feedPet', { name: locMob(m[1]) }) },
   {
     re: /^You channel healing into (.+)\.$/,

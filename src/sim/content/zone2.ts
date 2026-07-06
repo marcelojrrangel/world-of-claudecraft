@@ -654,6 +654,11 @@ export const ZONE2_NPCS: Record<string, NpcDef> = {
       'reedwoven_jerkin',
       'fenwalker_boots',
       'reedwoven_trousers',
+      'frame_saw_t3',
+      'builder_level_t4',
+      'master_mallet_t5',
+      'blueprint_stone_house',
+      'blueprint_manor',
     ],
     greeting:
       'Dry boots, dry bread, dry powder — at Fenbridge you get two of the three on a good day.',

@@ -111,6 +111,7 @@ export {
   resolveDelveShopOffers,
 } from './content/delves';
 
+import { CONSTRUCTION_ITEMS } from './content/construction_items';
 import { DELVE_ITEMS } from './content/delves/items';
 import { DELVE_MODULE_LAYOUTS, type DelveModuleId, delveModuleSpan } from './delve_layout';
 
@@ -152,6 +153,7 @@ export const ITEMS: Record<string, ItemDef> = mergeItems(
   ZONE3_ITEMS,
   TEMPLE_ITEMS,
   DELVE_ITEMS,
+  CONSTRUCTION_ITEMS,
 );
 
 export type { AggregatedSetEffect } from './content/item_sets';

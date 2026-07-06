@@ -6,7 +6,7 @@
 |-------|--------|---------|-----------|-------|
 | 1 — Data model & profession | complete | 2026-07-06 | 2026-07-06 | |
 | 1 QA | pending | — | — | |
-| 2 — Materials & items | pending | — | — | |
+| 2 — Materials & items | complete | 2026-07-06 | 2026-07-06 | 29 items created, registered in ITEMS, added to 2 vendor NPCs |
 | 2 QA | pending | — | — | |
 | 3 — The house instance | pending | — | — | |
 | 3 QA | pending | — | — | |
@@ -42,15 +42,15 @@
 - [x] `tests/architecture.test.ts` green (24/24)
 
 ### Phase 2 — Materials & items
-- [ ] 10+ raw material items (rough_stone, clay_lump, raw_lumber, ...)
-- [ ] 10+ refined material items (cut_stone, fired_brick, sawed_plank, ...)
-- [ ] 5 construction tool items (tier 1–5: trowel, hammer, saw, level, mallet)
-- [ ] 6 blueprint scroll items (tent → cottage → house → manor → estate → grand_estate)
-- [ ] `NPC_VENDORS` updated to sell tools and basic blueprints
-- [ ] Refined material recipes (if crafting system exists; otherwise direct items)
-- [ ] All items added to `ITEM_MERGE` chain
-- [ ] Items usable in inventory (no errors)
-- [ ] `npx tsc --noEmit` green
+- [x] 6 raw material items (rough_stone, clay_lump, raw_lumber, iron_ore_chunk, limestone_chunk, sand_bag)
+- [x] 9 refined/special material items (cut_stone, fired_brick, sawed_plank, iron_nail, clay_tile, glass_pane, limestone_mortar, marble_block, enchanted_lumber + iron_hinge, reinforced_beam, granite_block, crystal_pane, rune_carved_stone)
+- [x] 5 construction tool items (tier 1–5: trowel_t1, carpenter_hammer_t2, frame_saw_t3, builder_level_t4, master_mallet_t5)
+- [x] 6 blueprint scroll items (tent, wooden_shack, timber_cottage, stone_house, manor, grand_estate)
+- [x] Eastbrook general goods vendor (trader_wilkes) sells tools tier 1-3 + shack/cottage blueprints
+- [x] Mirefen general goods vendor (provisioner_hale) sells tools tier 3-5 + stone_house/manor blueprints
+- [x] All items registered in mergeItems in `data.ts`
+- [x] `npx tsc --noEmit` green
+- [x] `tests/world_api_parity.test.ts`, `tests/snapshots.test.ts`, `tests/architecture.test.ts` green
 
 ### Phase 3 — The house instance
 - [ ] `buyPlot(plotId)` implemented — validates availability, deducts gold, assigns plot

@@ -72,7 +72,7 @@ interface IWorldMember {
 }
 
 // The 170 members of `interface IWorld`, in interface order (world_api.ts).
-// Partition: 42 `data` + 128 `method` (read-returning + command-void + async).
+// Partition: 43 `data` + 128 `method` (read-returning + command-void + async).
 // biome-ignore lint/suspicious/noExportsInTest: IWORLD_MEMBERS is the W0c pinned structural-parity contract (the authoritative IWorld member list)
 export const IWORLD_MEMBERS = [
   // --- core world / player roster + economy reads (data) ---
@@ -230,6 +230,7 @@ export const IWORLD_MEMBERS = [
   { name: 'delveRiteChoose', kind: 'method' },
   { name: 'delveRun', kind: 'data' },
   { name: 'companionState', kind: 'data' },
+  { name: 'constructionSkill', kind: 'data' },
   { name: 'delveMarks', kind: 'data' },
   { name: 'companionUpgrades', kind: 'data' },
   { name: 'delveDaily', kind: 'data' },
@@ -355,8 +356,8 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(170);
-    expect(DATA_MEMBERS.length).toBe(42);
+    expect(IWORLD_MEMBERS.length).toBe(171);
+    expect(DATA_MEMBERS.length).toBe(43);
     expect(METHOD_MEMBERS.length).toBe(128);
   });
 
@@ -402,6 +403,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'companionState',
       'companionUpgrade',
       'companionUpgrades',
+      'constructionSkill',
       'convertPartyToRaid',
       'convertRaidToParty',
       'copper',
@@ -552,6 +554,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'cfg',
       'companionState',
       'companionUpgrades',
+      'constructionSkill',
       'copper',
       'craftSkills',
       'delveDaily',
@@ -1048,7 +1051,15 @@ type _ExhaustProfessions = AssertNever<
   Exclude<keyof IWorldProfessions, (typeof FACET_PROFESSIONS)[number]>
 >;
 
-// The 21-facet partition, keyed by facet for legible failure messages.
+import type { IWorldConstruction } from '../src/world_api/construction';
+const FACET_CONSTRUCTION = [
+  'constructionSkill',
+] as const satisfies readonly (keyof IWorldConstruction)[];
+type _ExhaustConstruction = AssertNever<
+  Exclude<keyof IWorldConstruction, (typeof FACET_CONSTRUCTION)[number]>
+>;
+
+// The 23-facet partition, keyed by facet for legible failure messages.
 const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   entityRoster: FACET_ENTITY_ROSTER,
   combat: FACET_COMBAT,
@@ -1072,11 +1083,12 @@ const FACET_MEMBER_ARRAYS: Readonly<Record<string, readonly string[]>> = {
   delves: FACET_DELVES,
   telemetry: FACET_TELEMETRY,
   professions: FACET_PROFESSIONS,
+  construction: FACET_CONSTRUCTION,
 };
 
-describe('W1: aggregate IWorld member set equals the disjoint union of the 22 facets', () => {
-  it('pins the facet count at 22', () => {
-    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(22);
+describe('W1: aggregate IWorld member set equals the disjoint union of the 23 facets', () => {
+  it('pins the facet count at 23', () => {
+    expect(Object.keys(FACET_MEMBER_ARRAYS).length).toBe(23);
   });
 
   it('each facet array is non-empty and internally duplicate-free', () => {
@@ -1102,10 +1114,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 22 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 22 facets equals the pinned 170-member IWORLD_MEMBERS set', () => {
+  it('the union of the 23 facets equals the pinned 171-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(170);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(170);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(171);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(171);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

@@ -1,24 +1,23 @@
 # State — Construction System
 
-## Current phase: 1 — Data model & profession (complete)
+## Current phase: 3 — The house instance (complete)
 
 ### What was delivered
-- `CONSTRUCTION_PROFESSION` (`id: 'construction'`, `category: 'secondary'`, `maxSkill: 300`) in `src/sim/content/professions.ts`
-- `ConstructionSystem` + `PlacedFurniture` types in `src/sim/types.ts`
-- `PlayerMeta.construction: ConstructionSystem` field
-- `IWorldConstruction` facet (`ConstructionView` + `constructionSkill` getter) in `src/world_api/construction.ts`, aggregated in `src/world_api.ts`
-- `Sim.constructionSkill` / `Sim.constructionSkillFor(pid)` delegates
-- `ClientWorld.constructionSkill` field with `applySnapshot` delta decode from `const` wire key
-- `maybe('const', ...)` in `server/game.ts` `selfWireJson`
-- `normalizeConstructionSystem()` in `src/sim/professions/construction/index.ts`
-- Persistence: `building?: ConstructionSystem` in `CharacterState`, serialize/deserialize in `sim.ts`
-- Wire: `ALL_DELTA_KEYS` +1 (`const`, now 31), `TERSE_TO_IWORLD` entry (`const → constructionSkill`)
-- IWorld: `IWORLD_MEMBERS` +1 (`constructionSkill`, now 171: 43 data + 128 method)
-- All registries/parity/snapshot/command-schema/architecture tests green
+- 8 `PlotDef`s in `src/sim/content/housing_plots.ts` (Builder's Row near Eastbrook)
+- `HouseSlot` runtime slot pool on `Sim`, initialized in `Sim` ctor, exposed through `SimContext`
+- `buyPlot`/`enterHouse`/`leaveHouse` in `src/sim/professions/construction/housing.ts`, wired as `Sim` delegates and `IWorld` commands
+- Interior colliders per tier in `src/sim/professions/construction/house_layouts.ts`, integrated into `src/sim/colliders.ts`
+- `myPlot` + `houseState` added to `IWorldConstruction`; implemented in both `Sim` and `ClientWorld`
+- Server command dispatch for `buy_plot`, `enter_house`, `leave_house` in `server/game.ts`
+- Realm-wide plot registry persisted via `loadPlotRegistry`/`savePlotRegistry` in `server/db.ts`, loaded/saved by `GameServer`
+- `tests/housing.test.ts` covering buy, enter, leave, persistence, and interior collision
+- `npx tsc --noEmit`, `tests/housing.test.ts`, `tests/world_api_parity.test.ts`, `tests/snapshots.test.ts`, `tests/command_schema.test.ts`, `tests/localization_fixes.test.ts` green
 
-### Phase 1 drift from the plan
-- `ConstructionView` reuses `maxSkill: number` field, not a separate constant (matches `ProfessionRecord` pattern).
-- The `construction` field name on `PlayerMeta` matches the facet name, not `building` (which is the persistence key only).
+### Phase 3 drift from the plan
+- The runtime registry uses `HouseSlot[]` rather than a separate `HouseInstance` record; slots carry `ownerPid`, `plotId`, `tier`, `partyKey`, `exitId`, and `emptyFor`.
+- Interior colliders default to tier 1 geometry for movement resolution until tier-aware house state is plumbed through `colliders.ts` (Phase 4 will wire tier from the occupied slot).
+- Exterior plot boundary collision is not yet implemented; it will land with the visual plot markers in Phase 8.
+- House enter/exit is command-driven for now; door triggers/ground objects are stubbed but not yet linked to the main movement loop.
 
 ## Locked design decisions
 

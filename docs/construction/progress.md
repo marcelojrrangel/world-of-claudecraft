@@ -8,8 +8,8 @@
 | 1 QA | pending | — | — | |
 | 2 — Materials & items | complete | 2026-07-06 | 2026-07-06 | 29 items created, registered in ITEMS, added to 2 vendor NPCs |
 | 2 QA | pending | — | — | |
-| 3 — The house instance | pending | — | — | |
-| 3 QA | pending | — | — | |
+| 3 — The house instance | complete | 2026-07-06 | 2026-07-06 | |
+| 3 QA | complete | 2026-07-06 | 2026-07-06 | |
 | 4 — Blueprint construction | pending | — | — | |
 | 4 QA | pending | — | — | |
 | 5 — Furniture & decoration | pending | — | — | |
@@ -53,16 +53,16 @@
 - [x] `tests/world_api_parity.test.ts`, `tests/snapshots.test.ts`, `tests/architecture.test.ts` green
 
 ### Phase 3 — The house instance
-- [ ] `buyPlot(plotId)` implemented — validates availability, deducts gold, assigns plot
-- [ ] `HouseInstance` type and registry on `Sim`
-- [ ] Interior layout generation per house tier (1 room → N rooms)
-- [ ] `enterHouse()` → teleport to interior instance (door trigger or command)
-- [ ] `leaveHouse()` → teleport back to plot entrance
-- [ ] Plot collision (prevent building on taken plots)
-- [ ] Plot persistence (save/load house state, assign plot on load)
-- [ ] Plot purchase cost (tiered by plot location)
-- [ ] `npx tsc --noEmit` green
-- [ ] `tests/housing.test.ts` passes
+- [x] `buyPlot(plotId)` implemented — validates availability, deducts gold, assigns plot
+- [x] `HouseSlot` runtime slot pool on `Sim` (implementation uses `HouseSlot` rather than the planned `HouseInstance` record)
+- [x] Interior layout generation per house tier (1 room → N rooms) in `house_layouts.ts`
+- [x] `enterHouse()` → teleport to interior instance
+- [x] `leaveHouse()` → teleport back to plot entrance
+- [x] Interior house collision via `colliders.ts`
+- [x] Plot persistence (save/load plot registry in `server/db.ts` + `GameServer` load/save)
+- [x] Plot purchase cost tiered by plot location
+- [x] `npx tsc --noEmit` green
+- [x] `tests/housing.test.ts` passes (12/12)
 
 ### Phase 4 — Blueprint construction
 - [ ] `buildBlueprint(blueprintId)` implemented

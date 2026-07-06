@@ -1767,6 +1767,7 @@ async function main(): Promise<void> {
     );
   await game.loadMarket();
   await game.loadMail();
+  await game.loadPlotRegistry();
   await game.loadChatFilter();
   await game.loadBlockedIps();
   void game.recordOnlineSnapshot();

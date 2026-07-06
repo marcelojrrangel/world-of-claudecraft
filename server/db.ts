@@ -2349,6 +2349,21 @@ export async function saveMailState(save: MailSave): Promise<void> {
   await saveWorldState(mailStateKey(REALM), save);
 }
 
+// Plot registry: realm-wide plot ownership, persisted as a per-realm world_state row.
+function plotRegistryKey(realm: string): string {
+  return `plots:${realm}`;
+}
+
+export async function loadPlotRegistry(): Promise<{ plotId: string; ownerPid: number }[]> {
+  const key = plotRegistryKey(REALM);
+  const saved = await loadWorldState<{ plotId: string; ownerPid: number }[]>(key);
+  return saved ?? [];
+}
+
+export async function savePlotRegistry(data: { plotId: string; ownerPid: number }[]): Promise<void> {
+  await saveWorldState(plotRegistryKey(REALM), data);
+}
+
 // ---------------------------------------------------------------------------
 // Play sessions: one row per character login, closed on logout. Powers the
 // admin dashboard's playtime / DAU / sessions-per-day metrics.

@@ -231,6 +231,11 @@ export const IWORLD_MEMBERS = [
   { name: 'delveRun', kind: 'data' },
   { name: 'companionState', kind: 'data' },
   { name: 'constructionSkill', kind: 'data' },
+  { name: 'myPlot', kind: 'data' },
+  { name: 'houseState', kind: 'data' },
+  { name: 'buyPlot', kind: 'method' },
+  { name: 'enterHouse', kind: 'method' },
+  { name: 'leaveHouse', kind: 'method' },
   { name: 'delveMarks', kind: 'data' },
   { name: 'companionUpgrades', kind: 'data' },
   { name: 'delveDaily', kind: 'data' },
@@ -356,9 +361,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(171);
-    expect(DATA_MEMBERS.length).toBe(43);
-    expect(METHOD_MEMBERS.length).toBe(128);
+    expect(IWORLD_MEMBERS.length).toBe(176);
+    expect(DATA_MEMBERS.length).toBe(45);
+    expect(METHOD_MEMBERS.length).toBe(131);
   });
 
   it('has no duplicate member names', () => {
@@ -368,7 +373,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
 
   // Sorted-name `toEqual` snapshots: a dropped, renamed, or kind-flipped member reddens
   // these deliberately, forcing a reviewed edit. NOT length-only.
-  it('the full sorted member set is exactly the pinned 170', () => {
+  it('the full sorted member set is exactly the pinned 176', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -390,6 +395,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'blockRemove',
       'buyBackItem',
       'buyItem',
+      'buyPlot',
       'cancelAura',
       'castAbility',
       'castAbilityAt',
@@ -424,6 +430,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'duelRequest',
       'enterDelve',
       'enterDungeon',
+      'enterHouse',
       'entities',
       'equipBag',
       'equipItem',
@@ -448,12 +455,14 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'harvestCorpse',
       'harvestNode',
       'healPet',
+      'houseState',
       'interact',
       'inventory',
       'known',
       'leaderboard',
       'leaveDelve',
       'leaveDungeon',
+      'leaveHouse',
       'lifetimeXp',
       'loadouts',
       'lockpickAbort',
@@ -476,6 +485,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'marketSearch',
       'moveInput',
       'moveRaidMember',
+      'myPlot',
       'nodeHarvestableByMe',
       'partyAccept',
       'partyDecline',
@@ -544,7 +554,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted data-kind set is exactly the pinned 42', () => {
+  it('the sorted data-kind set is exactly the pinned 45', () => {
     expect(DATA_MEMBERS.map((m) => m.name).sort()).toEqual([
       'accountCosmetics',
       'activeLoadout',
@@ -563,6 +573,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'duelInfo',
       'entities',
       'equipment',
+      'houseState',
       'inventory',
       'known',
       'lifetimeXp',
@@ -572,6 +583,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'mailUnread',
       'marketInfo',
       'moveInput',
+      'myPlot',
       'partyInfo',
       'player',
       'playerId',
@@ -592,7 +604,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted method-kind set is exactly the pinned 128', () => {
+  it('the sorted method-kind set is exactly the pinned 131', () => {
     expect(METHOD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -609,6 +621,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'blockRemove',
       'buyBackItem',
       'buyItem',
+      'buyPlot',
       'cancelAura',
       'castAbility',
       'castAbilityAt',
@@ -633,6 +646,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'duelRequest',
       'enterDelve',
       'enterDungeon',
+      'enterHouse',
       'equipBag',
       'equipItem',
       'feedPet',
@@ -659,6 +673,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'leaderboard',
       'leaveDelve',
       'leaveDungeon',
+      'leaveHouse',
       'lockpickAbort',
       'lockpickAction',
       'lockpickEngage',
@@ -1054,6 +1069,11 @@ type _ExhaustProfessions = AssertNever<
 import type { IWorldConstruction } from '../src/world_api/construction';
 const FACET_CONSTRUCTION = [
   'constructionSkill',
+  'myPlot',
+  'houseState',
+  'buyPlot',
+  'enterHouse',
+  'leaveHouse',
 ] as const satisfies readonly (keyof IWorldConstruction)[];
 type _ExhaustConstruction = AssertNever<
   Exclude<keyof IWorldConstruction, (typeof FACET_CONSTRUCTION)[number]>
@@ -1114,10 +1134,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 23 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 23 facets equals the pinned 171-member IWORLD_MEMBERS set', () => {
+  it('the union of the 23 facets equals the pinned 176-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(171);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(171);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(176);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(176);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

@@ -23,6 +23,7 @@ import type {
   ArenaQueueUnit,
   DuelState,
   FiestaState,
+  HouseSlot,
   InstanceSlot,
   ItemUseResult,
   JoinableChannel,
@@ -97,6 +98,12 @@ export interface SimContextPrimitives {
   // reads/finds/iterates it and mutates slot fields in place; the array identity
   // stays Sim-owned (like delayedEvents/groundAoEs), so this is a live read-only view.
   readonly instances: InstanceSlot[];
+  // House instance slot pool (Phase 3), same pattern as the dungeon slot pool.
+  // Read-write: the housing module finds free slots and mutates them in place.
+  readonly houseInstances: HouseSlot[];
+  // Realm-wide plot ownership registry: array of { plotId, ownerPid } entries.
+  // Mutated in place by buyPlot (push), never reassigned -> read-only view.
+  readonly plotRegistry: { plotId: string; ownerPid: number }[];
   // live arena bouts keyed by every participant pid (A2); release-spirit early-bails
   // when the dead player is mid-bout.
   readonly arenaMatches: Map<number, ArenaMatch>;
@@ -658,6 +665,12 @@ export function createSimContext(host: SimContextHost): SimContext {
     },
     get instances() {
       return host.instances;
+    },
+    get houseInstances() {
+      return host.houseInstances;
+    },
+    get plotRegistry() {
+      return host.plotRegistry;
     },
     get arenaMatches() {
       return host.arenaMatches;

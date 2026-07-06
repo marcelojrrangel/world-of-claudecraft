@@ -7,6 +7,7 @@ import type {
   DailyRewardStatus,
   DelveCompanionInfo,
   DelveRunInfo,
+  HouseView,
   LockpickView,
   PlayerProfessionsView,
 } from '../world_api';
@@ -57,6 +58,7 @@ import { isSpellResisted } from './combat/spell_resist';
 // the PlayerMeta interface + the power-up catalog the fiestaMatchInfo accessor reads.
 import { type AugmentSpecial, type AugmentTier, POWERUPS_BY_ID } from './content/augments';
 import { MAILBOXES } from './content/mailboxes';
+import { PLOTS } from './content/housing_plots';
 import type { GatheringProfessionId } from './content/professions';
 import {
   classHasSkin,
@@ -182,7 +184,14 @@ import {
 } from './pathfind';
 import * as petAi from './pet/pet_ai';
 import * as petCommands from './pet/pet_commands';
-import { emptyConstructionSystem, normalizeConstructionSystem } from './professions/construction';
+import {
+  buyPlot as buyPlotImpl,
+  emptyConstructionSystem,
+  enterHouse as enterHouseImpl,
+  leaveHouse as leaveHouseImpl,
+  normalizeConstructionSystem,
+  updateHouseInstances as updateHouseInstancesImpl,
+} from './professions/construction';
 import {
   drainGatheringGrants,
   emptyGatheringProficiency,
@@ -308,6 +317,8 @@ import {
   type CrowdControlDrCategory,
   cloneInvSlot,
   DELVE_COMPANION_HEAL_INTERVAL,
+  HOUSE_SLOT_COUNT,
+  type HouseSlot,
   type DelveDef,
   type DelveModuleDef,
   type DelveRun,
@@ -339,6 +350,7 @@ import {
   type OverheadEmoteId,
   PARTY_MEMBER_AURA_CAP,
   type PetMode,
+  type PlotDef,
   type PlayerClass,
   type QuestProgress,
   type QuestState,
@@ -1030,6 +1042,10 @@ export class Sim {
   private channelSubs = new Map<number, Set<JoinableChannel>>();
   // dungeon instances
   instances: InstanceSlot[] = [];
+  // house instances (Phase 3): personal instance per player
+  houseInstances: HouseSlot[] = [];
+  // plot ownership registry (Phase 3): realm-wide, populated at boot
+  plotRegistry: { plotId: string; ownerPid: number }[] = [];
   // delve instances (separate slot pool from dungeons)
   delveRuns: DelveRun[] = [];
   private delvePetStash = new Map<number, PetState>();
@@ -1211,6 +1227,19 @@ export class Sim {
           emptyFor: 0,
         });
       }
+    }
+
+    // House instances (Phase 3): personal instance slot per player
+    for (let i = 0; i < HOUSE_SLOT_COUNT; i++) {
+      this.houseInstances.push({
+        ownerPid: 0,
+        plotId: '',
+        tier: 0,
+        slot: i,
+        partyKey: null,
+        emptyFor: 0,
+        exitId: null,
+      });
     }
 
     // Spirit Healers (the angels): one hovering at every overworld graveyard.
@@ -2259,6 +2288,12 @@ export class Sim {
       get instances() {
         return sim.instances;
       },
+      get houseInstances() {
+        return sim.houseInstances;
+      },
+      get plotRegistry() {
+        return sim.plotRegistry;
+      },
       get arenaMatches() {
         return sim.arenaMatches;
       },
@@ -2881,6 +2916,7 @@ export class Sim {
     this.updateTradesAndInvites();
     this.updateLootRolls();
     this.updateInstances();
+    updateHouseInstancesImpl(this.ctx);
     this.updateDelveRuns();
     this.market.update();
     this.postOffice.update();
@@ -5986,7 +6022,16 @@ export class Sim {
     this.postOffice.loadMail(save);
   }
 
-  // -------------------------------------------------------------------------
+  // Plot registry serialization (Phase 3).
+  serializePlotRegistry(): { plotId: string; ownerPid: number }[] {
+    return [...this.plotRegistry];
+  }
+
+  loadPlotRegistry(save: { plotId: string; ownerPid: number }[] | null | undefined): void {
+    this.plotRegistry = save ?? [];
+  }
+
+  // ---------------------------------------------------------------------------
   // Dungeons: party-instanced elite content (the Hollow Crypt and friends)
   // -------------------------------------------------------------------------
 
@@ -6603,9 +6648,37 @@ export class Sim {
   get constructionSkill(): ConstructionView {
     return this.constructionSkillFor(this.primaryId);
   }
+
+  // Phase 3: plot and house access
+  get myPlot(): PlotDef | null {
+    const meta = this.primary;
+    return meta?.construction.plotId
+      ? PLOTS.find((p) => p.id === meta.construction.plotId) ?? null
+      : null;
+  }
+
+  get houseState(): HouseView {
+    const meta = this.primary;
+    if (!meta) return { plotId: null, houseTier: 0 };
+    return { plotId: meta.construction.plotId, houseTier: meta.construction.houseTier };
+  }
+
+  buyPlot(plotId: string): void {
+    buyPlotImpl(this.ctx, plotId, this.primaryId);
+  }
+
+  enterHouse(): void {
+    enterHouseImpl(this.ctx, this.primaryId);
+  }
+
+  leaveHouse(): void {
+    leaveHouseImpl(this.ctx, this.primaryId);
+  }
 }
 
 // formatMoney now lives in ./format_money (a leaf module, to break the value-cycle
 // with market.ts and loot/loot_roll.ts). Re-exported here so existing importers
 // (e.g. tests/gold_command.test.ts) that import it from './sim' keep working.
 export { formatMoney };
+// Re-export HouseSlot so SimContext can import it from './sim' without a cycle.
+export type { HouseSlot };

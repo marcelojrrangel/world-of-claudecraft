@@ -45,7 +45,7 @@
 //                                          ALL_DELTA_KEYS (30) + TERSE_TO_IWORLD mapping.
 //   tests/command_schema.test.ts   (W0b)  COMMAND_NAMES universe; ClientWorld send-set
 //                                          subset-of dispatch-set; DISPATCH_ONLY (7).
-//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (171) present + same-kind on
+//   tests/world_api_parity.test.ts (W0c)  IWORLD_MEMBERS (176) present + same-kind on
 //                                          Sim + ClientWorld; aggregate == disjoint
 //                                          union of the 23 facets.
 // ---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
-export type { ConstructionView } from './world_api/construction';
+export type { ConstructionView, HouseView } from './world_api/construction';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
   DailyRewardEligibilityView,
@@ -311,6 +311,9 @@ export const COMMAND_NAMES = [
   'autoloot',
   'resurrect_corpse',
   'resurrect_healer',
+  'buy_plot',
+  'enter_house',
+  'leave_house',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch

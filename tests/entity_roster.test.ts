@@ -74,6 +74,8 @@ function makeCtx() {
     get playerGrid() {
       return playerGrid;
     },
+    houseInstances: [],
+    plotRegistry: [],
     get delayedEvents() {
       return delayedEvents;
     },

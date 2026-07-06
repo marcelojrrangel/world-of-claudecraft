@@ -1378,6 +1378,33 @@ export interface ConstructionSystem {
   furniture: PlacedFurniture[];
 }
 
+// Plot definition for the open-world housing system (Phase 3).
+export interface PlotDef {
+  id: string;
+  zoneId: string;
+  x: number;
+  z: number;
+  price: number;
+  maxTier: number;
+}
+
+// Runtime house instance slot (parallels InstanceSlot for dungeons).
+export interface HouseSlot {
+  ownerPid: number;
+  plotId: string;
+  tier: number;
+  slot: number;
+  partyKey: string | null;
+  emptyFor: number;
+  exitId: number | null;
+}
+
+// Coordinate band for house instances (past all dungeons/arena/delves).
+export const HOUSE_X = 15000;
+export const HOUSE_SLOT_COUNT = 50;
+export const HOUSE_Z0 = -1250;
+export const HOUSE_SLOT_SPACING = 200;
+
 // Static prop placement per zone — the renderer builds meshes from these and
 // the collider grid blocks movement against them, so they must stay in sync.
 export interface ZonePropsDef {

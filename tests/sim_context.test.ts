@@ -240,6 +240,8 @@ function makeFakeHost() {
     groundAoEs: [],
     dungeonDoorIds: null,
     instances: [],
+    houseInstances: [],
+    plotRegistry: [],
     arenaMatches: new Map(),
     duels: new Map(),
     cfg: { seed: 1 } as unknown as SimContextHost['cfg'],

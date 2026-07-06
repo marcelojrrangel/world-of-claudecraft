@@ -1358,6 +1358,26 @@ export interface BuildingDef {
   rot: number;
 }
 
+// Construction system types (Phase 1 datamodel). These are the shared shapes
+// for the Construction secondary profession. All fields are initialized by
+// normalizeConstructionSystem so old saves load cleanly.
+export interface PlacedFurniture {
+  id: string;
+  itemId: string;
+  x: number;
+  z: number;
+  rotY: number;
+}
+
+export interface ConstructionSystem {
+  skill: number;
+  plotId: string | null;
+  houseTier: number;
+  knownBlueprints: string[];
+  phasesBuilt: Record<string, number>;
+  furniture: PlacedFurniture[];
+}
+
 // Static prop placement per zone — the renderer builds meshes from these and
 // the collider grid blocks movement against them, so they must stay in sync.
 export interface ZonePropsDef {

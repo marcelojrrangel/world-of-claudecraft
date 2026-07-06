@@ -51,6 +51,33 @@ export const GATHERING_PROFESSIONS: Record<GatheringProfessionId, GatheringProfe
 // Stable iteration order, used for defaulting/normalizing a per-player
 // proficiency record. Keep in sync with GATHERING_PROFESSIONS above.
 export const GATHERING_PROFESSION_IDS: GatheringProfessionId[] = ['mining', 'logging', 'herbalism'];
+
+// Secondary profession content (data-as-code). Construction is the first
+// secondary profession; more (fishing, cooking, etc.) may follow. Each def
+// extends the settled ProfessionRecord shape with display metadata. category
+// is 'secondary' so the professions system distinguishes them from gathering
+// and crafting. maxSkill follows the classic 1-300 scale.
+export type SecondaryProfessionId = 'construction';
+
+export interface SecondaryProfessionDef extends ProfessionRecord {
+  id: SecondaryProfessionId;
+  name: string;
+  icon: string;
+  description: string;
+}
+
+export const SECONDARY_PROFESSIONS: Record<SecondaryProfessionId, SecondaryProfessionDef> = {
+  construction: {
+    id: 'construction',
+    category: 'secondary',
+    maxSkill: 300,
+    name: 'Construction',
+    icon: 'construction',
+    description: 'Building and furnishing homes and structures.',
+  },
+};
+
+export const SECONDARY_PROFESSION_IDS: SecondaryProfessionId[] = ['construction'];
 // Ten-craft ring content: pure data plus pure helper functions. No engine logic,
 // no mechanic wiring: this file only defines the ring geometry (order, pole tags)
 // and the adjacency/opposite lookups derived from it. See issue #1125.

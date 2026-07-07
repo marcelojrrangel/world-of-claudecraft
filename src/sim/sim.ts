@@ -6846,10 +6846,10 @@ export class Sim {
     return this.houseRestedBonusFor(this.primaryId);
   }
 
-  get houseStations(): import('../../world_api/construction').StationView[] {
+  get houseStations(): import('../world_api/construction').StationView[] {
     const meta = this.primary;
     if (!meta) return [];
-    const out: import('../../world_api/construction').StationView[] = [];
+    const out: import('../world_api/construction').StationView[] = [];
     for (const f of placedFurnitureFor({ construction: meta.construction })) {
       const kind = stationKindFor(f.itemId);
       if (kind) {
@@ -6867,7 +6867,7 @@ export class Sim {
     visitHouseImpl(this.ctx, this.primaryId, targetPid);
   }
 
-  setHousePermission(permission: import('../types').HousePermission): void {
+  setHousePermission(permission: import('./types').HousePermission): void {
     setHousePermissionImpl(this.ctx, this.primaryId, permission);
   }
 }

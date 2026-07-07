@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Sim } from '../src/sim/sim';
 import type { SimEvent } from '../src/sim/types';
 
-function makeSim(cls = 'warrior', seed = 42): Sim {
+function makeSim(cls: import('../src/sim/types').PlayerClass = 'warrior', seed = 42): Sim {
   return new Sim({ seed, playerClass: cls, autoEquip: true });
 }
 

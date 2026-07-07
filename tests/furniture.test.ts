@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { PLOTS } from '../src/sim/content/housing_plots';
 import { houseOrigin } from '../src/sim/professions/construction';
-import type { PlayerMeta } from '../src/sim/sim';
+import type { CharacterState, PlayerMeta } from '../src/sim/sim';
 import { Sim } from '../src/sim/sim';
-import type { CharacterState, PlacedFurniture, SimEvent } from '../src/sim/types';
+import type { PlacedFurniture, SimEvent } from '../src/sim/types';
 
 function makeSim(seed = 42) {
   return new Sim({ seed, playerClass: 'warrior', autoEquip: true });

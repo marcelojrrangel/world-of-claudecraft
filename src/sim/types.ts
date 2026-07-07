@@ -193,7 +193,8 @@ export type AuraKind =
   // 2v2 Fiesta power-up buffs: `buff_scale` value = body-size multiplier (also
   // boosts max-hp when >1); `buff_jump` value = jump-height multiplier.
   | 'buff_scale'
-  | 'buff_jump';
+  | 'buff_jump'
+  | 'crafting_boost';
 
 export interface Aura {
   id: string; // ability id that applied it

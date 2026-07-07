@@ -15,7 +15,7 @@
 | 5 — Furniture & decoration | complete | 2026-07-06 | 2026-07-06 | |
 | 5 QA | complete | 2026-07-06 | 2026-07-06 | |
 | 6 — Benefits & social | complete | 2026-07-06 | 2026-07-07 | chests, stations, rested XP, visit, permissions |
-| 6 QA | pending | — | — | |
+| 6 QA | complete | 2026-07-07 | 2026-07-07 | tsc clean, 434 tests green, 2 commits |
 | 7 — UI & HUD | pending | — | — | |
 | 7 QA | pending | — | — | |
 | 8 — Polish & balance | pending | — | — | |

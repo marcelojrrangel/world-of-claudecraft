@@ -1,44 +1,25 @@
 # State — Construction System
 
-## Current phase: 5 — Furniture & decoration (complete)
+## Current phase: 6 — Benefits & social (complete)
 
-### What was delivered (Phase 5)
-- 28 furniture item definitions in `src/sim/content/construction_items.ts` (5 tiers x 7 categories: chair, table, bed, shelf, rug, lamp, cabinet)
-- `src/sim/professions/construction/furniture.ts` with `placeFurniture`, `moveFurniture`, `removeFurniture`, grid snapping (0.5yd), 45-degree rotation, OBB overlap detection, tier-dependent z-bounds
-- `FURNITURE_CATALOG` mapping itemId to {hw, hd} for collision checks
-- `placedFurniture`, `placeFurniture`, `moveFurniture`, `removeFurniture` added to `IWorldConstruction`; implemented in both `Sim` and `ClientWorld`
-- Server command dispatch for `place_furniture`/`move_furniture`/`remove_furniture` in `server/game.ts`
-- Wire delta key `furn` (placed furniture) registered in `selfWireJson`
-- All registries updated: `COMMAND_NAMES` (+3), `ALL_DELTA_KEYS` (+1, now 34), `TERSE_TO_IWORLD`, `COMMAND_FACETS`, `IWORLD_MEMBERS`, `FACET_CONSTRUCTION`
-- 16 tests in `tests/furniture.test.ts` covering place, reject conditions, item consumption, grid snap, overlap, move, remove-and-return, serialization, multi-type
-- 387 tests green across 9 affected test files (including existing housing, blueprints, snapshots, command_schema, etc.)
+### What was delivered (Phase 6)
+- **Storage chest persistence**: `StoredChestItem` type, `chests` field on `ConstructionSystem`, `chestSlotCount(itemId)` returns 6/12/24, `removeFurniture` blocks non-empty chest removal, `storeInChest`/`retrieveFromChest` atomic inventory transfer via SimContext, wire delta key `chests`, server dispatch `store_chest`/`retrieve_chest`
+- **Crafting station interaction**: `stations.ts` module with `useStation(ctx, pid, placedId)`, 5 station kinds (workbench, anvil, alchemy, cooking_fire, loom), `stationKindFor(itemId)` helper, applies `crafting_boost` aura (30 min, value 0.10-0.35 scaling by house tier 1-6), wire command `use_station`
+- **House rested XP bonus**: `updateRested` multiplies accrual rate by `houseRestedTierMultiplier` when `isHousePos`, `HOUSE_RESTED_TIER_MULT = [0, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5]`
+- **Visit house + permission system**: `HousePermission` type (`'owner' | 'friends' | 'public'`), `permission` field on `ConstructionSystem` (default `'owner'` via `normalizeConstructionSystem`), `visitHouse(ctx, pid, targetPid)` with permission gating, `setHousePermission(ctx, pid, level)`, `house_visit` SimEvent, wire commands `visit_house`/`set_permission`
+- All phase 6 registries updated: `COMMAND_NAMES` (+3, now 140), `ALL_DELTA_KEYS` (+1 `chests`, now 36), `COMMAND_FACETS`, `IWORLD_MEMBERS` (+6, now 192, 50 data + 142 method), `FACET_CONSTRUCTION`
+- Wire delta key `hben` registered in `selfWireJson` for rested bonus
+- Persistence: `building.chests` JSONB key via `serializeCharacter` deep-copy
+- 16 new tests across `tests/stations.test.ts` (8) and `tests/visithouse.test.ts` (8)
+- 434 tests green across 11 affected test files, `npx tsc --noEmit` green
 
-### Phase 4 drift from the plan
-- Exterior visual tier progression is represented by `houseTier` on `PlayerMeta.construction`; actual exterior rendering/collider updates are deferred to Phase 8.
-- Interior colliders still default to tier 1 geometry for movement resolution until tier-aware house state is plumbed through `colliders.ts` (Phase 8).
-- `currentHouseProgress` returns the active blueprint (current tier) and how many of its phases are built; tier advancement happens when the first phase of a higher-tier blueprint is built.
-- Skill gains are queued on `pendingConstructionGrants` and drained once per tick, matching the gathering proficiency grant pattern.
+### Phase 6 drift from the plan
+- Visit house wire uses `visit_house` (not `house/visit` as originally planned) to match snake_case convention of other construction commands.
+- The house_visit SimEvent carries `hostPid` and `visitorPid` for social tracking.
+- Rested XP bonus applies multiplicatively to the base accrual rate (not a flat bonus).
+- Permission 'friends' level is accepted but not yet wired to a friends/guild system; it behaves like 'public' until that integration lands.
 
-### Phase 5 drift from the plan
-- Furniture rendering in the interior instance is deferred to Phase 7 (UI/HUD) or Phase 8 (Polish). The sim stores placed furniture data; visual rendering will be handled when the interior 3D scene is built out.
-- The furniture catalog uses hard-coded hw/hd dimensions per itemId rather than a full FurnitureDef type — kept as a simple lookup map to avoid premature abstraction.
-
-## Next phase: 6 — Benefits & social
-
-### Planned scope
-- Rested XP accumulation inside owned house (bonus scales by house tier, 1.0x–2.5x)
-- Crafting station furniture items (workbench, anvil, alchemy station, cooking fire, loom)
-- Station usage grants skill/crafting-time bonus when clicked
-- Storage chest furniture items (6–24 slots per tier, persist contents in `building.chests`)
-- `visitHouse(pid)` — teleport to friend's house interior
-- House permission system (owner / friend / public)
-- Wire delta key `hben` for rested bonus; new server commands `visit_house`, `set_permission`
-- Persistence: `building.chests` JSONB key
-
-### New IWorld members
-- `houseRestedBonus` (read: `number`)
-- `houseStations` (read: `StationView[]`)
-- `visitHouse` (command: `(pid: number) => void`)
+## Next phase: 7 — UI & HUD
 
 ## Locked design decisions
 

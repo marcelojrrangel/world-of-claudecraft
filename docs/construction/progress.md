@@ -14,7 +14,7 @@
 | 4 QA | complete | 2026-07-06 | 2026-07-06 | |
 | 5 — Furniture & decoration | complete | 2026-07-06 | 2026-07-06 | |
 | 5 QA | complete | 2026-07-06 | 2026-07-06 | |
-| 6 — Benefits & social | pending | — | — | |
+| 6 — Benefits & social | complete | 2026-07-06 | 2026-07-07 | chests, stations, rested XP, visit, permissions |
 | 6 QA | pending | — | — | |
 | 7 — UI & HUD | pending | — | — | |
 | 7 QA | pending | — | — | |
@@ -91,13 +91,13 @@
 - [x] `npx tsc --noEmit` green (pending — verify before PR)
 
 ### Phase 6 — Benefits & social
-- [ ] Rested XP accumulation in house (bonus scales by house tier)
-- [ ] Crafting station items (workbench, anvil, alchemy station, cooking fire, loom)
-- [ ] Station usage grants skill/crafting-time bonus
-- [ ] Storage chest items (6–24 slots, persist contents)
-- [ ] `visitHouse(pid)` — teleport to friend's house interior
-- [ ] House permission system (owner, friend, public)
-- [ ] `npx tsc --noEmit` green
+- [x] Rested XP accumulation in house (bonus scales by house tier, 1.0x–2.5x)
+- [x] Crafting station furniture items (workbench, anvil, alchemy station, cooking fire, loom)
+- [x] Station usage grants `crafting_boost` aura (30 min, bonus scales by house tier)
+- [x] Storage chest items (6–24 slots, persist contents in `building.chests`)
+- [x] `visitHouse(pid)` — teleport to friend's house interior (gated by permission)
+- [x] House permission system (`owner` / `friends` / `public`, defaults to `owner`)
+- [x] `npx tsc --noEmit` green
 
 ### Phase 7 — UI & HUD
 - [ ] Build mode HUD panel (blueprint list, phase progress, material requirements)

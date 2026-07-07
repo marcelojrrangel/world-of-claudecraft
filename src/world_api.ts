@@ -85,7 +85,7 @@ export type { ArenaCombatant, ArenaFormat, ArenaStanding, OverheadEmoteId } from
 
 // --- facet aux-type + value re-exports (each travels with its facet file) ---
 export { isOverheadEmoteId, OVERHEAD_EMOTES } from './world_api/chat';
-export type { ConstructionView, HouseView } from './world_api/construction';
+export type { ConstructionView, HouseView, StationView } from './world_api/construction';
 export type { AccountCosmetics } from './world_api/cosmetics';
 export type {
   DailyRewardEligibilityView,
@@ -314,6 +314,16 @@ export const COMMAND_NAMES = [
   'buy_plot',
   'enter_house',
   'leave_house',
+  'build_blueprint',
+  'learn_blueprint',
+  'place_furniture',
+  'move_furniture',
+  'remove_furniture',
+  'store_chest',
+  'retrieve_chest',
+  'use_station',
+  'visit_house',
+  'set_permission',
 ] as const;
 
 // The union both the send path (`online.ts`) and the dispatch switch
@@ -515,4 +525,19 @@ export const COMMAND_FACETS = {
   lockpick_abort: 'IWorldDelves',
   collect_delve_chest_loot: 'IWorldDelves',
   delve_rite_choose: 'IWorldDelves',
+  // IWorldConstruction: plot/house + blueprint construction. constructionSkill,
+  // myPlot, houseState, knownBlueprints, currentHouseProgress are snapshot reads.
+  buy_plot: 'IWorldConstruction',
+  enter_house: 'IWorldConstruction',
+  leave_house: 'IWorldConstruction',
+  build_blueprint: 'IWorldConstruction',
+  learn_blueprint: 'IWorldConstruction',
+  place_furniture: 'IWorldConstruction',
+  move_furniture: 'IWorldConstruction',
+  remove_furniture: 'IWorldConstruction',
+  store_chest: 'IWorldConstruction',
+  retrieve_chest: 'IWorldConstruction',
+  use_station: 'IWorldConstruction',
+  visit_house: 'IWorldConstruction',
+  set_permission: 'IWorldConstruction',
 } as const satisfies Partial<Record<ClientCommand, WorldFacet>>;

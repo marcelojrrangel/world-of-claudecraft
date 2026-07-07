@@ -185,11 +185,23 @@ import {
 import * as petAi from './pet/pet_ai';
 import * as petCommands from './pet/pet_commands';
 import {
+  buildPhase as buildPhaseImpl,
   buyPlot as buyPlotImpl,
+  chestSlotCount,
+  currentHouseProgressFor,
+  drainConstructionGrants,
   emptyConstructionSystem,
   enterHouse as enterHouseImpl,
+  isChestItem,
+  knownBlueprintsFor,
+  learnBlueprint as learnBlueprintImpl,
   leaveHouse as leaveHouseImpl,
+  moveFurniture as moveFurnitureImpl,
   normalizeConstructionSystem,
+  placeFurniture as placeFurnitureImpl,
+  placedFurnitureFor,
+  removeFurniture as removeFurnitureImpl,
+  stationKindFor,
   updateHouseInstances as updateHouseInstancesImpl,
 } from './professions/construction';
 import {
@@ -217,7 +229,18 @@ import {
   switchTalentLoadout,
   talentPointBudget,
 } from './progression/talents';
-import { prestige as prestigeImpl, updateRested } from './progression/xp';
+import {
+  houseRestedTierMultiplier,
+  prestige as prestigeImpl,
+  updateRested,
+} from './progression/xp';
+import {
+  useStation as useStationImpl,
+} from './professions/construction/stations';
+import {
+  setHousePermission as setHousePermissionImpl,
+  visitHouse as visitHouseImpl,
+} from './professions/construction/housing';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
@@ -311,58 +334,58 @@ import {
   type ArenaStanding,
   type Aura,
   type AuraKind,
-  angleTo,
-  armorReduction,
   type ConstructionSystem,
   type CrowdControlDrCategory,
-  cloneInvSlot,
-  DELVE_COMPANION_HEAL_INTERVAL,
-  HOUSE_SLOT_COUNT,
-  type HouseSlot,
   type DelveDef,
   type DelveModuleDef,
   type DelveRun,
-  DT,
-  DUNGEON_LEASH_DISTANCE,
-  dist2d,
   type Entity,
   type EquipSlot,
   type ErrorReason,
-  emptyMoveInput,
-  FISHING_CAST_ID,
-  FISHING_CAST_TIME,
-  GCD,
+  type HouseSlot,
   type InvSlot,
   type ItemInstancePayload,
-  isConsuming,
-  isPetClass,
-  isQuestTurnInNpc,
-  LEASH_DISTANCE,
   type LootRollChoice,
   type LootRollPrompt,
   type LootStrategies,
-  MAX_LEVEL,
   type MasterLootThreshold,
-  MELEE_RANGE,
   type MobFamily,
   type MoveInput,
-  normAngle,
   type OverheadEmoteId,
-  PARTY_MEMBER_AURA_CAP,
   type PetMode,
-  type PlotDef,
   type PlayerClass,
+  type PlotDef,
   type QuestProgress,
   type QuestState,
   type RiteIntensity,
-  RUN_SPEED,
   type SimConfig,
   type SimEvent,
   type SkinCatalog,
   type SkinRank,
+  type Vec3,
+  angleTo,
+  armorReduction,
+  cloneInvSlot,
+  DELVE_COMPANION_HEAL_INTERVAL,
+  dist2d,
+  DT,
+  DUNGEON_LEASH_DISTANCE,
+  emptyMoveInput,
+  FISHING_CAST_ID,
+  FISHING_CAST_TIME,
+  GCD,
+  HOUSE_SLOT_COUNT,
+  isConsuming,
+  isPetClass,
+  isQuestTurnInNpc,
+  LEASH_DISTANCE,
+  MAX_LEVEL,
+  MELEE_RANGE,
+  normAngle,
+  PARTY_MEMBER_AURA_CAP,
+  RUN_SPEED,
   swingMissChance,
   TURN_SPEED,
-  type Vec3,
   virtualLevel,
   xpToReachLevel,
 } from './types';
@@ -744,6 +767,9 @@ export interface PlayerMeta {
   // Grants queued by the `/dev gather` cheat, drained once per player per tick
   // (see drainGatheringGrants). Session-only, never persisted.
   pendingGatherGrants: { professionId: GatheringProfessionId; amount: number }[];
+  // Grants queued by construction phase completion, drained once per player per
+  // tick (see drainConstructionGrants). Session-only, never persisted.
+  pendingConstructionGrants: { amount: number }[];
   // Per-player, per-node gather-node respawn readiness (#1121): nodeId ->
   // sim.time (seconds) at or after which THIS player may harvest that node
   // again. Absent means never harvested (always ready). Session-only, never
@@ -1465,6 +1491,7 @@ export class Sim {
       restedXp: 0,
       gatheringProficiency: emptyGatheringProficiency(),
       pendingGatherGrants: [],
+      pendingConstructionGrants: [],
       nodeHarvestReadyAt: {},
       known: [],
       questLog: new Map(),
@@ -1841,7 +1868,13 @@ export class Sim {
       pendingSkinCatalog: meta.pendingSkinCatalog,
       pendingSkinItemId: meta.pendingSkinItemId,
       craftSkills: { ...meta.craftSkills },
-      building: { ...meta.construction, furniture: [...meta.construction.furniture] },
+      building: {
+        ...meta.construction,
+        furniture: [...meta.construction.furniture],
+        chests: Object.fromEntries(
+          Object.entries(meta.construction.chests).map(([k, items]) => [k, [...items]]),
+        ),
+      },
       delveMarks: meta.delveMarks,
       delveClears: { ...meta.delveClears },
       companionUpgrades: { ...meta.companionUpgrades },
@@ -2467,6 +2500,7 @@ export class Sim {
       countFungibleItem: sim.countFungibleItem.bind(sim),
       completeQuestForDev: (questId, pid) => completeQuestForDev(sim.ctx, questId, pid),
       completeCurrentQuestsForDev: (pid) => completeCurrentQuestsForDev(sim.ctx, pid),
+      learnBlueprint: sim.learnBlueprint.bind(sim),
       // I1 dungeon instancing now lives in instances/dungeons.ts; these route through
       // the same-named Sim delegates (foreign callers use this.X). lockoutNowMs is the
       // shared raid-lockout clock that stays on Sim (N1 also writes through it);
@@ -2855,6 +2889,7 @@ export class Sim {
         updateRegen(this.ctx, p, meta);
         updateRested(p, meta);
         drainGatheringGrants(meta);
+        drainConstructionGrants(meta);
       } else if (p.ghost) {
         // A released spirit only runs (boosted speed via moveSpeedMult); it does not
         // fight, cast, or regen. It CAN walk into a dungeon/raid door to re-enter its
@@ -6653,7 +6688,7 @@ export class Sim {
   get myPlot(): PlotDef | null {
     const meta = this.primary;
     return meta?.construction.plotId
-      ? PLOTS.find((p) => p.id === meta.construction.plotId) ?? null
+      ? (PLOTS.find((p) => p.id === meta.construction.plotId) ?? null)
       : null;
   }
 
@@ -6661,6 +6696,44 @@ export class Sim {
     const meta = this.primary;
     if (!meta) return { plotId: null, houseTier: 0 };
     return { plotId: meta.construction.plotId, houseTier: meta.construction.houseTier };
+  }
+
+  // Phase 4: blueprint construction
+  knownBlueprintsFor(pid: number): string[] {
+    const meta = this.players.get(pid);
+    return meta ? knownBlueprintsFor(meta) : [];
+  }
+
+  get knownBlueprints(): string[] {
+    return this.knownBlueprintsFor(this.primaryId);
+  }
+
+  placedFurnitureFor(pid: number): import('./types').PlacedFurniture[] {
+    const meta = this.players.get(pid);
+    return meta ? placedFurnitureFor({ construction: meta.construction }) : [];
+  }
+
+  currentHouseProgressFor(
+    pid: number,
+  ): { blueprintId: string; currentPhase: number; totalPhases: number } | null {
+    const meta = this.players.get(pid);
+    return meta ? currentHouseProgressFor(meta) : null;
+  }
+
+  get currentHouseProgress(): {
+    blueprintId: string;
+    currentPhase: number;
+    totalPhases: number;
+  } | null {
+    return this.currentHouseProgressFor(this.primaryId);
+  }
+
+  buildBlueprint(blueprintId: string): void {
+    buildPhaseImpl(this.ctx, this.primaryId, blueprintId);
+  }
+
+  learnBlueprint(itemId: string): void {
+    learnBlueprintImpl(this.ctx, itemId, this.primaryId);
   }
 
   buyPlot(plotId: string): void {
@@ -6674,11 +6747,134 @@ export class Sim {
   leaveHouse(): void {
     leaveHouseImpl(this.ctx, this.primaryId);
   }
+
+  // Phase 5: furniture placement
+  get placedFurniture(): import('./types').PlacedFurniture[] {
+    const meta = this.primary;
+    return meta ? placedFurnitureFor({ construction: meta.construction }) : [];
+  }
+
+  placeFurniture(itemId: string, x: number, z: number, rotY: number): void {
+    placeFurnitureImpl(this.ctx, this.primaryId, itemId, x, z, rotY);
+  }
+
+  moveFurniture(placedId: string, x: number, z: number, rotY: number): void {
+    moveFurnitureImpl(this.ctx, this.primaryId, placedId, x, z, rotY);
+  }
+
+  removeFurniture(placedId: string): void {
+    removeFurnitureImpl(this.ctx, this.primaryId, placedId);
+  }
+
+  // Phase 6: chest operations
+  chestContentsAllFor(pid: number): Record<string, import('./types').StoredChestItem[]> {
+    const meta = this.players.get(pid);
+    if (!meta) return {};
+    return meta.construction.chests;
+  }
+
+  chestContents(placedId: string): import('./types').StoredChestItem[] {
+    const meta = this.primary;
+    if (!meta) return [];
+    return meta.construction.chests[placedId] ?? [];
+  }
+
+  storeInChest(placedId: string, itemId: string, count: number): boolean {
+    const meta = this.primary;
+    const eid = meta?.entityId;
+    if (!meta || !eid || count <= 0) return false;
+
+    // Must have the items in inventory.
+    if (this.ctx.countItem(itemId, eid) < count) return false;
+
+    const furniture = meta.construction.furniture.find((f) => f.id === placedId);
+    if (!furniture || !isChestItem(furniture.itemId)) return false;
+
+    const slots = chestSlotCount(furniture.itemId);
+    if (slots <= 0) return false;
+
+    if (!meta.construction.chests[placedId]) {
+      meta.construction.chests[placedId] = [];
+    }
+
+    const items = meta.construction.chests[placedId];
+    const existing = items.find((ci) => ci.itemId === itemId);
+    if (existing) {
+      existing.count += count;
+    } else {
+      if (items.length >= slots) return false;
+      items.push({ itemId, count });
+    }
+
+    this.ctx.removeItem(itemId, count, eid);
+    return true;
+  }
+
+  retrieveFromChest(placedId: string, itemId: string, count: number): boolean {
+    const meta = this.primary;
+    const eid = meta?.entityId;
+    if (!meta || !eid || count <= 0) return false;
+
+    const items = meta.construction.chests[placedId];
+    if (!items || items.length === 0) return false;
+
+    const idx = items.findIndex((ci) => ci.itemId === itemId);
+    if (idx < 0) return false;
+
+    const existing = items[idx];
+    if (existing.count < count) return false;
+
+    existing.count -= count;
+    if (existing.count <= 0) {
+      items.splice(idx, 1);
+    }
+    if (items.length === 0) {
+      delete meta.construction.chests[placedId];
+    }
+
+    this.ctx.addItem(itemId, count, eid);
+    return true;
+  }
+
+  // Phase 6: house benefits
+  houseRestedBonusFor(pid: number): number {
+    const meta = this.players.get(pid);
+    return meta ? houseRestedTierMultiplier(meta) : 0;
+  }
+
+  get houseRestedBonus(): number {
+    return this.houseRestedBonusFor(this.primaryId);
+  }
+
+  get houseStations(): import('../../world_api/construction').StationView[] {
+    const meta = this.primary;
+    if (!meta) return [];
+    const out: import('../../world_api/construction').StationView[] = [];
+    for (const f of placedFurnitureFor({ construction: meta.construction })) {
+      const kind = stationKindFor(f.itemId);
+      if (kind) {
+        out.push({ itemId: f.itemId, x: f.x, z: f.z, stationKind: kind });
+      }
+    }
+    return out;
+  }
+
+  useStation(placedId: string): boolean {
+    return useStationImpl(this.ctx, this.primaryId, placedId);
+  }
+
+  visitHouse(targetPid: number): void {
+    visitHouseImpl(this.ctx, this.primaryId, targetPid);
+  }
+
+  setHousePermission(permission: import('../types').HousePermission): void {
+    setHousePermissionImpl(this.ctx, this.primaryId, permission);
+  }
 }
 
+// Re-export HouseSlot so SimContext can import it from './sim' without a cycle.
+export type { HouseSlot };
 // formatMoney now lives in ./format_money (a leaf module, to break the value-cycle
 // with market.ts and loot/loot_roll.ts). Re-exported here so existing importers
 // (e.g. tests/gold_command.test.ts) that import it from './sim' keep working.
 export { formatMoney };
-// Re-export HouseSlot so SimContext can import it from './sim' without a cycle.
-export type { HouseSlot };

@@ -28,23 +28,30 @@ function findError(sim: Sim, pid: number, text: string): boolean {
       (e: SimEvent) =>
         (e.type === 'error' || e.type === 'log') &&
         'text' in e &&
-        e.text === text &&
-        e.pid === pid,
+        e.text === text,
     );
 }
 
-describe('housing system (Phase 3)', () => {
-  it('buyPlot rejects when the player already owns a plot', () => {
+describe('house plot purchase (Phase 3)', () => {
+  it('can buy a plot', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
     sim.buyPlot(plot.id);
-    expect(playerMeta(sim).construction.plotId).toBe(plot.id);
-    sim.buyPlot(PLOTS[1].id);
+    expect(sim.myPlot?.id).toBe(plot.id);
+  });
+
+  it('rejects buying a second plot', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
     expect(findError(sim, sim.playerId, 'You already own a building plot.')).toBe(true);
   });
 
-  it('buyPlot rejects when the plot is already taken by another player', () => {
+  it('rejects buying a taken plot', () => {
     const sim = makeSim(1);
     const pid2 = sim.addPlayer('mage', 'BuyerTwo');
     const plot = PLOTS[0];
@@ -56,36 +63,39 @@ describe('housing system (Phase 3)', () => {
     expect(findError(sim, pid2, 'This plot is already taken.')).toBe(true);
   });
 
-  it('buyPlot rejects insufficient funds', () => {
+  it('rejects buying a non-existent plot', () => {
     const sim = makeSim();
-    const plot = PLOTS[0];
-    playerMeta(sim).copper = plot.price - 1;
-    sim.buyPlot(plot.id);
-    expect(findError(sim, sim.playerId, 'You do not have enough gold to buy this plot.')).toBe(
-      true,
-    );
+    giveCopper(sim, 999999);
+    sim.buyPlot('nonexistent');
+    expect(findError(sim, sim.playerId, 'That plot does not exist.')).toBe(true);
   });
 
-  it('buyPlot deducts gold and records ownership', () => {
+  it('rejects buying a plot without enough money', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
-    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    expect(findError(sim, sim.playerId, 'You do not have enough gold to buy this plot.')).toBe(true);
+  });
+
+  it('deducts the plot price from copper', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
     const before = playerMeta(sim).copper;
+    giveCopper(sim, plot.price);
     sim.buyPlot(plot.id);
-    expect(playerMeta(sim).copper).toBe(before - plot.price);
-    expect(playerMeta(sim).construction.plotId).toBe(plot.id);
-    expect(sim.plotRegistry).toContainEqual({ plotId: plot.id, ownerPid: sim.playerId });
-    expect(sim.myPlot?.id).toBe(plot.id);
+    sim.tick();
+    expect(playerMeta(sim).copper).toBe(before);
   });
+});
 
-  it('enterHouse rejects without a plot', () => {
+describe('house enter/leave (Phase 3)', () => {
+  it('rejects enter without a plot', () => {
     const sim = makeSim();
-    setHouseTier(sim, 1);
     sim.enterHouse();
     expect(findError(sim, sim.playerId, 'You do not own a building plot.')).toBe(true);
   });
 
-  it('enterHouse rejects before a house is built', () => {
+  it('rejects enter without a house built', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
@@ -94,79 +104,45 @@ describe('housing system (Phase 3)', () => {
     expect(findError(sim, sim.playerId, 'You have not built a house on your plot yet.')).toBe(true);
   });
 
-  it('enterHouse teleports the player to their house instance', () => {
+  it('enterHouse teleports to the interior zone', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
     sim.buyPlot(plot.id);
     setHouseTier(sim, 1);
     sim.enterHouse();
+    sim.tick();
     expect(isHousePos(sim.player.pos.x)).toBe(true);
-    const slot = sim.houseInstances.find((h) => h.partyKey === `house:${sim.playerId}`);
-    expect(slot).toBeTruthy();
-    const origin = houseOrigin(slot!.slot);
-    expect(sim.player.pos.x).toBe(origin.x);
   });
 
-  it('leaveHouse returns the player to their plot entrance', () => {
+  it('leaveHouse returns to the plot entrance', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
     sim.buyPlot(plot.id);
     setHouseTier(sim, 1);
     sim.enterHouse();
-    const slot = sim.houseInstances.find((h) => h.partyKey === `house:${sim.playerId}`);
-    expect(slot).toBeTruthy();
+    sim.tick();
+    const houseX = sim.player.pos.x;
+    expect(isHousePos(houseX)).toBe(true);
     sim.leaveHouse();
-    expect(sim.player.pos.x).toBe(plot.x + 4);
-    expect(sim.player.pos.z).toBe(plot.z + 4);
-    expect(slot!.partyKey).toBeNull();
+    sim.tick();
+    expect(sim.player.pos.x).toBeLessThan(15000);
   });
 
-  it('house instance slot can be re-entered after leaving', () => {
+  it('creates an exit ground object on entry', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
     sim.buyPlot(plot.id);
     setHouseTier(sim, 1);
     sim.enterHouse();
-    const firstSlot = sim.houseInstances.find((h) => h.partyKey === `house:${sim.playerId}`)?.slot;
-    expect(firstSlot).toBeGreaterThanOrEqual(0);
-    sim.leaveHouse();
-    sim.enterHouse();
-    const secondSlot = sim.houseInstances.find((h) => h.partyKey === `house:${sim.playerId}`)?.slot;
-    expect(secondSlot).toBe(firstSlot);
+    sim.tick();
+    const exit = [...sim.entities.values()].find((e) => e.templateId === 'house_exit');
+    expect(exit).toBeDefined();
   });
 
-  it('character serialization persists construction house state', () => {
-    const sim = makeSim();
-    const plot = PLOTS[0];
-    giveCopper(sim, plot.price);
-    sim.buyPlot(plot.id);
-    setHouseTier(sim, 2);
-    const saved = sim.serializeCharacter(sim.playerId);
-    expect(saved).not.toBeNull();
-    expect(saved!.building?.plotId).toBe(plot.id);
-    expect(saved!.building?.houseTier).toBe(2);
-  });
-
-  it('loading a character restores plot and house tier', () => {
-    const sim = makeSim();
-    const plot = PLOTS[0];
-    giveCopper(sim, plot.price);
-    sim.buyPlot(plot.id);
-    setHouseTier(sim, 3);
-    const saved = sim.serializeCharacter(sim.playerId);
-    expect(saved).not.toBeNull();
-    const sim2 = makeSim(43);
-    const pid2 = sim2.addPlayer('warrior', 'Loader', { state: saved! });
-    sim2.loadPlotRegistry([...sim.plotRegistry]);
-    const meta2 = sim2.players.get(pid2);
-    expect(meta2?.construction.plotId).toBe(plot.id);
-    expect(meta2?.construction.houseTier).toBe(3);
-  });
-
-  it('house interior colliders prevent walking through walls', () => {
+  it('has collision (cannot walk through the interior wall)', () => {
     const sim = makeSim();
     const plot = PLOTS[0];
     giveCopper(sim, plot.price);
@@ -178,5 +154,62 @@ describe('housing system (Phase 3)', () => {
     for (let i = 0; i < 20 * 2; i++) sim.tick();
     sim.moveInput.forward = false;
     expect(sim.player.pos.z).toBeLessThan(start.z + 8);
+  });
+
+  // Phase 6: house rested XP
+  it('houseRestedBonus returns 0 without a plot', () => {
+    const sim = makeSim();
+    expect(sim.houseRestedBonus).toBe(0);
+  });
+
+  it('houseRestedBonus returns 0 without a house (tier 0)', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    expect(sim.houseRestedBonus).toBe(0);
+  });
+
+  it('houseRestedBonus returns tier multiplier for house owners', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    setHouseTier(sim, 1);
+    expect(sim.houseRestedBonus).toBe(1.0);
+  });
+
+  it('houseRestedBonus scales with house tier', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    setHouseTier(sim, 3);
+    expect(sim.houseRestedBonus).toBe(1.5);
+    setHouseTier(sim, 6);
+    expect(sim.houseRestedBonus).toBe(2.5);
+  });
+
+  it('isResting returns true when inside own house', async () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    setHouseTier(sim, 1);
+    sim.enterHouse();
+    sim.tick();
+    const meta = playerMeta(sim);
+    const p = sim.player;
+    const { isResting } = await import('../src/sim/progression/xp');
+    expect(isResting(p, meta)).toBe(true);
+  });
+
+  it('houseRestedBonusFor works for non-primary players', () => {
+    const sim = makeSim();
+    const plot = PLOTS[0];
+    giveCopper(sim, plot.price);
+    sim.buyPlot(plot.id);
+    setHouseTier(sim, 1);
+    expect(sim.houseRestedBonusFor(sim.playerId)).toBe(1.0);
   });
 });

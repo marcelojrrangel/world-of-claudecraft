@@ -208,6 +208,21 @@ const baseEnTable = {
   'house.entered': 'You enter your house.',
   'house.left': 'You leave your house.',
   'house.purchasedPlot': 'You purchased {plotId}!',
+  // Construction / blueprint (Phase 4)
+  'build.phaseComplete': 'Phase built: {phase}.',
+  'build.blueprintLearned': 'Learned blueprint: {name}.',
+  'build.houseReady': 'Your house is now ready to enter.',
+  'build.error.blueprintNotFound': 'That blueprint does not exist.',
+  'build.error.notBlueprint': 'That is not a construction blueprint.',
+  'build.error.alreadyKnown': 'You already know that blueprint.',
+  'build.error.houseComplete':
+    'Your current house is complete. Start the next tier blueprint to continue.',
+  'build.error.estateComplete': 'Your estate is fully built.',
+  'build.error.blueprintNotLearned': 'You have not learned the blueprint for this tier.',
+  'build.error.skillTooLow': 'Your construction skill is too low for this blueprint.',
+  'build.error.toolTooLow': 'Your construction tool is not high enough tier for this phase.',
+  'build.error.missingMaterials': 'You do not have the required materials.',
+  'error.playerNotFound': 'Player not found.',
 } as const;
 
 const petEnTable = {
@@ -4415,6 +4430,11 @@ const RULES: Rule[] = [
     build: (m) => tSim('log.petRestoreLost', { name: locMob(m[1]) }),
   },
   { re: /^You purchased (.+)!$/, build: (m) => tSim('house.purchasedPlot', { plotId: m[1] }) },
+  { re: /^Phase built: (.+)\.$/, build: (m) => tSim('build.phaseComplete', { phase: m[1] }) },
+  {
+    re: /^Learned blueprint: (.+)\.$/,
+    build: (m) => tSim('build.blueprintLearned', { name: m[1] }),
+  },
   { re: /^You feed (.+)\.$/, build: (m) => tSim('log.feedPet', { name: locMob(m[1]) }) },
   {
     re: /^You channel healing into (.+)\.$/,

@@ -282,3 +282,40 @@ describe('command facet tags (W10)', () => {
     }
   });
 });
+
+// W11: append the construction cluster's tags (plot/house + blueprints + furniture).
+const W11_TAGS: Readonly<Record<string, string>> = {
+  buy_plot: 'IWorldConstruction',
+  enter_house: 'IWorldConstruction',
+  leave_house: 'IWorldConstruction',
+  build_blueprint: 'IWorldConstruction',
+  learn_blueprint: 'IWorldConstruction',
+  place_furniture: 'IWorldConstruction',
+  move_furniture: 'IWorldConstruction',
+  remove_furniture: 'IWorldConstruction',
+};
+
+describe('command facet tags (W11)', () => {
+  const tags = COMMAND_FACETS as Readonly<Record<string, string>>;
+
+  it('tags every W11 construction command with its facet', () => {
+    for (const [cmd, facet] of Object.entries(W11_TAGS)) {
+      expect(tags[cmd], `facet tag for '${cmd}'`).toBe(facet);
+    }
+  });
+
+  it('preserves the snake_case plot/house/blueprint/furniture wire strings', () => {
+    expect('buy_plot' in tags).toBe(true);
+    expect('enter_house' in tags).toBe(true);
+    expect('build_blueprint' in tags).toBe(true);
+    expect('place_furniture' in tags).toBe(true);
+    expect('buyPlot' in tags).toBe(false);
+    expect('placeFurniture' in tags).toBe(false);
+  });
+
+  it('does not tag constructionSkill/myPlot/houseState/knownBlueprints/currentHouseProgress/placedFurniture (snapshot reads, no wire send)', () => {
+    for (const read of ['constructionSkill', 'myPlot', 'houseState', 'knownBlueprints', 'currentHouseProgress', 'placedFurniture']) {
+      expect(read in tags, `${read} should be untagged (no wire command)`).toBe(false);
+    }
+  });
+});

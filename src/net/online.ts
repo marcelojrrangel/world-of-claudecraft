@@ -38,6 +38,7 @@ import {
   type MasterLootThreshold,
   type MoveInput,
   type PlayerClass,
+  type PlacedFurniture,
   type PlotDef,
   type QuestProgress,
   type QuestState,
@@ -52,7 +53,6 @@ import {
   type ConstructionView,
   type DailyRewardHistory,
   type DailyRewardLeaderboardPage,
-  type HouseView,
   type DailyRewardSpinResult,
   type DailyRewardStatus,
   type DelveCompanionInfo,
@@ -63,7 +63,9 @@ import {
   type DuelInfo,
   type FriendInfo,
   type GuildLeaderboardPage,
+  type HouseView,
   type IWorld,
+  type StationView,
   isOverheadEmoteId,
   type LeaderboardEntry,
   type LeaderboardPage,
@@ -954,6 +956,17 @@ export class ClientWorld implements IWorld {
   // Phase 3: plot and house state (stubs for now; wired via commands/log events).
   myPlot: PlotDef | null = null;
   houseState: HouseView = { plotId: null, houseTier: 0 };
+  // Phase 4: blueprint construction state.
+  knownBlueprints: string[] = [];
+  currentHouseProgress: { blueprintId: string; currentPhase: number; totalPhases: number } | null =
+    null;
+  // Phase 5: placed furniture.
+  placedFurniture: PlacedFurniture[] = [];
+  // Phase 6: house benefits.
+  houseRestedBonus = 0;
+  houseStations: StationView[] = [];
+  // Phase 6: per-placedId chest contents (delta-guarded snapshot field).
+  chestContentsData: Record<string, import('../sim/types').StoredChestItem[]> = {};
   // Stub for #1121: per-node respawn state is server-authoritative and not yet
   // wired onto the snapshot (see src/sim/professions/CLAUDE.md), so the client
   // cannot know another player's, or even its own, real per-node timer yet.
@@ -1649,6 +1662,11 @@ export class ClientWorld implements IWorld {
       if (s.delveDaily !== undefined) this.delveDaily = s.delveDaily;
       if (s.prof !== undefined) this.professionsState = s.prof ?? { skills: [] };
       if (s.const !== undefined) this.constructionSkill = s.const ?? { skill: 0, maxSkill: 300 };
+      if (s.bps !== undefined) this.knownBlueprints = s.bps ?? [];
+      if (s.hprog !== undefined) this.currentHouseProgress = s.hprog ?? null;
+      if (s.furn !== undefined) this.placedFurniture = s.furn ?? [];
+      if (s.chests !== undefined) this.chestContentsData = s.chests ?? {};
+      if (s.hben !== undefined) this.houseRestedBonus = s.hben ?? 0;
       // camera follows server-side facing changes when not mouselooking
       if (prevSelfFacing !== undefined && this.mouselookFacing === null) {
         let d = e.facing - prevSelfFacing;
@@ -2492,5 +2510,46 @@ export class ClientWorld implements IWorld {
   }
   leaveHouse(): void {
     this.cmd({ cmd: 'leave_house' });
+  }
+  // Phase 4: blueprint construction commands
+  buildBlueprint(blueprintId: string): void {
+    this.cmd({ cmd: 'build_blueprint', blueprintId });
+  }
+  learnBlueprint(itemId: string): void {
+    this.cmd({ cmd: 'learn_blueprint', itemId });
+  }
+  // Phase 5: furniture placement commands
+  placeFurniture(itemId: string, x: number, z: number, rotY: number): void {
+    this.cmd({ cmd: 'place_furniture', itemId, x, z, rotY });
+  }
+  moveFurniture(placedId: string, x: number, z: number, rotY: number): void {
+    this.cmd({ cmd: 'move_furniture', placedId, x, z, rotY });
+  }
+  removeFurniture(placedId: string): void {
+    this.cmd({ cmd: 'remove_furniture', placedId });
+  }
+  // Phase 6: chest operations
+  chestContents(placedId: string): import('../sim/types').StoredChestItem[] {
+    return this.chestContentsData[placedId] ?? [];
+  }
+  storeInChest(placedId: string, itemId: string, count: number): boolean {
+    this.cmd({ cmd: 'store_chest', placedId, itemId, count });
+    return true;
+  }
+  retrieveFromChest(placedId: string, itemId: string, count: number): boolean {
+    this.cmd({ cmd: 'retrieve_chest', placedId, itemId, count });
+    return true;
+  }
+  // Phase 6: station interaction
+  useStation(placedId: string): boolean {
+    this.cmd({ cmd: 'use_station', placedId });
+    return true;
+  }
+  // Phase 6: social house features
+  visitHouse(targetPid: number): void {
+    this.cmd({ cmd: 'visit_house', targetPid });
+  }
+  setHousePermission(permission: import('../sim/types').HousePermission): void {
+    this.cmd({ cmd: 'set_permission', permission });
   }
 }

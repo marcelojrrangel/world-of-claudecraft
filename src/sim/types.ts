@@ -1,6 +1,5 @@
 // Core shared types for the simulation. The sim layer has zero DOM/rendering deps.
 
-import type { GatheringProfessionId } from './content/professions';
 import type { LockSession, LootTier, PickAction, StepResult, VisibleCell } from './lockpick';
 
 export const TICK_RATE = 20; // sim ticks per second
@@ -281,7 +280,7 @@ export type ItemUse =
   // it can gather: see src/sim/professions/tools.ts (canGatherTier). This item
   // type never carries a durability field (this repo has no durability
   // mechanic anywhere), so a base tool can never become unusable.
-  | { type: 'gatherTool'; professionId: GatheringProfessionId; tier: number };
+  | { type: 'gatherTool'; professionId: string; tier: number };
 
 // Rarity ranks for the cosmetic skin-select event, ordered low → high. A rolled
 // rank unlocks its own tier and every tier below it (epic unlocks rare+uncommon).
@@ -1369,6 +1368,13 @@ export interface PlacedFurniture {
   rotY: number;
 }
 
+export interface StoredChestItem {
+  itemId: string;
+  count: number;
+}
+
+export type HousePermission = 'owner' | 'friends' | 'public';
+
 export interface ConstructionSystem {
   skill: number;
   plotId: string | null;
@@ -1376,6 +1382,27 @@ export interface ConstructionSystem {
   knownBlueprints: string[];
   phasesBuilt: Record<string, number>;
   furniture: PlacedFurniture[];
+  chests: Record<string, StoredChestItem[]>;
+  permission: HousePermission;
+}
+
+// Blueprint definition for the Construction secondary profession (Phase 4).
+export interface BlueprintPhase {
+  index: number;
+  nameId: string;
+  materials: { itemId: string; count: number }[];
+  toolTier: number;
+  skillGain: number;
+  trivialAt: number;
+}
+
+export interface BlueprintDef {
+  id: string;
+  name: string;
+  tier: number;
+  itemId: string;
+  requiredSkill: number;
+  phases: BlueprintPhase[];
 }
 
 // Plot definition for the open-world housing system (Phase 3).
@@ -1851,6 +1878,10 @@ export type SimEvent = { pid?: number } & (
   | { type: 'questProgress'; questId: string; text: string }
   | { type: 'questReady'; questId: string }
   | { type: 'questDone'; questId: string }
+  // Construction secondary profession events (Phase 4).
+  | { type: 'construction_progress'; blueprintId: string; phase: number }
+  | { type: 'construction_milestone'; level: number }
+  | { type: 'house_visit'; hostPid: number; visitorPid: number }
   | { type: 'aura'; targetId: number; name: string; gained: boolean }
   | { type: 'castStart'; entityId: number; ability: string; time: number }
   | { type: 'castStop'; entityId: number; success: boolean }

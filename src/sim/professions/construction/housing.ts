@@ -1,4 +1,5 @@
 // House instance logic (Phase 3): buyPlot, enterHouse, leaveHouse.
+// Phase 6: visitHouse, setHousePermission.
 // Reuses the dungeon instance pattern: house interiors live at a far x-band
 // (HOUSE_X, z per slot), use INTERIOR_COLLIDERS for collision, and despawn
 // when empty. Unlike dungeons, houses are personal (one per player) and have
@@ -9,6 +10,7 @@ import {
   HOUSE_SLOT_SPACING,
   HOUSE_X,
   HOUSE_Z0,
+  type HousePermission,
   type HouseSlot,
 } from '../../types';
 import type { SimContext } from '../../sim_context';
@@ -125,6 +127,72 @@ export function leaveHouse(ctx: SimContext, pid: number): void {
   const slot = ctx.houseInstances.find((h) => h.partyKey === `house:${pid}`);
   if (slot) freeHouseInstance(ctx, slot);
   ctx.emit({ type: 'log', text: 'You leave your house.', color: '#b9f', pid });
+}
+
+function permissionCheck(targetMeta: { construction: { permission: HousePermission } }, visitorPid: number, targetPid: number): boolean {
+  if (visitorPid === targetPid) return true;
+  const perm = targetMeta.construction.permission;
+  if (perm === 'public') return true;
+  if (perm === 'friends') return true; // Friends system not wired yet; allow for now.
+  return false;
+}
+
+export function visitHouse(ctx: SimContext, pid: number, targetPid: number): void {
+  const meta = ctx.players.get(pid);
+  if (!meta) return;
+  const targetMeta = ctx.players.get(targetPid);
+  if (!targetMeta) {
+    ctx.error(pid, 'That player does not exist.');
+    return;
+  }
+  const targetPlotId = targetMeta.construction.plotId;
+  if (!targetPlotId || targetMeta.construction.houseTier < 1) {
+    ctx.error(pid, 'That player does not have a house.');
+    return;
+  }
+  // Permission check
+  if (!permissionCheck(targetMeta, pid, targetPid)) {
+    ctx.error(pid, 'You do not have permission to visit this house.');
+    return;
+  }
+  const p = ctx.entities.get(meta.entityId);
+  if (!p || p.dead) return;
+  // Find or claim the target player's house instance
+  let slot = ctx.houseInstances.find((h) => h.partyKey === `house:${targetPid}`);
+  if (!slot) {
+    const free = ctx.houseInstances.find((h) => h.partyKey === null);
+    if (!free) {
+      ctx.error(pid, 'All house instances are busy. Try again soon.');
+      return;
+    }
+    claimHouseInstance(ctx, free, targetPid, targetPlotId, targetMeta.construction.houseTier);
+    slot = free;
+  }
+  const origin = houseOrigin(slot.slot);
+  p.pos = ctx.groundPos(origin.x, origin.z + 2);
+  p.prevPos = { ...p.pos };
+  ctx.rebucket(p);
+  p.facing = 0;
+  p.targetId = null;
+  p.autoAttack = false;
+  slot.emptyFor = 0;
+  ctx.emit({ type: 'log', text: `You visit the house.`, color: '#b9f', pid });
+  ctx.emit({ type: 'house_visit', hostPid: targetPid, visitorPid: pid });
+}
+
+export function setHousePermission(ctx: SimContext, pid: number, permission: HousePermission): void {
+  const meta = ctx.players.get(pid);
+  if (!meta) return;
+  if (!meta.construction.plotId) {
+    ctx.error(pid, 'You do not own a house.');
+    return;
+  }
+  if (permission !== 'owner' && permission !== 'friends' && permission !== 'public') {
+    ctx.error(pid, 'Invalid permission level. Use: owner, friends, or public.');
+    return;
+  }
+  meta.construction.permission = permission;
+  ctx.emit({ type: 'log', text: `House permission set to ${permission}.`, color: '#5f5', pid });
 }
 
 export function updateHouseInstances(ctx: SimContext): void {

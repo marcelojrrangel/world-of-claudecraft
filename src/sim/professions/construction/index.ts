@@ -9,6 +9,8 @@ export function emptyConstructionSystem(): ConstructionSystem {
     knownBlueprints: [],
     phasesBuilt: {},
     furniture: [],
+    chests: {},
+    permission: 'owner',
   };
 }
 
@@ -54,8 +56,61 @@ export function normalizeConstructionSystem(
             typeof f.rotY === 'number',
         )
       : [],
+    chests:
+      saved.chests && typeof saved.chests === 'object' && !Array.isArray(saved.chests)
+        ? Object.fromEntries(
+            Object.entries(saved.chests).filter(
+              ([, items]) =>
+                Array.isArray(items) &&
+                items.every(
+                  (ci) =>
+                    ci &&
+                    typeof ci.itemId === 'string' &&
+                    typeof ci.count === 'number' &&
+                    Number.isFinite(ci.count) &&
+                    ci.count > 0,
+                ),
+            ),
+          )
+        : {},
+    permission: saved.permission === 'friends' || saved.permission === 'public' ? saved.permission : 'owner',
   };
 }
 
-export { buyPlot, enterHouse, leaveHouse, updateHouseInstances, isHousePos } from './housing';
-export { houseOrigin, houseSlotAt } from './housing';
+export {
+  blueprintTierById,
+  buildPhase,
+  canBuildBlueprint,
+  constructionSkillFor,
+  currentHouseProgressFor,
+  drainConstructionGrants,
+  knownBlueprintsFor,
+  learnBlueprint,
+  nextBlueprintForTier,
+  queueConstructionGrant,
+} from './blueprints';
+export {
+  buyPlot,
+  enterHouse,
+  houseOrigin,
+  houseSlotAt,
+  isHousePos,
+  leaveHouse,
+  setHousePermission,
+  updateHouseInstances,
+  visitHouse,
+} from './housing';
+export {
+  chestSlotCount,
+  isChestItem,
+  isPlaceableFurniture,
+  furnitureSize,
+  placeFurniture,
+  moveFurniture,
+  removeFurniture,
+  placedFurnitureFor,
+  stationKindFor,
+} from './furniture';
+export {
+  useStation,
+} from './stations';

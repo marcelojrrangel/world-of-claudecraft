@@ -10,12 +10,11 @@
 // become unusable from durability loss. That is a property of the item shape,
 // not something this module enforces at runtime.
 
-import type { GatheringProfessionId } from '../content/professions';
 import type { ItemDef, ItemUse } from '../types';
 
 export interface GatherToolUse {
   type: 'gatherTool';
-  professionId: GatheringProfessionId;
+  professionId: string;
   tier: number;
 }
 
@@ -27,7 +26,7 @@ export function isGatherToolUse(use: ItemUse | undefined): use is GatherToolUse 
 // gathering tool for the given profession.
 export function gatherToolTier(
   item: ItemDef | undefined,
-  professionId: GatheringProfessionId,
+  professionId: string,
 ): number | undefined {
   if (!item?.use || !isGatherToolUse(item.use)) return undefined;
   if (item.use.professionId !== professionId) return undefined;

@@ -1832,14 +1832,16 @@ describe('lockpick view rebuilds from events on the online client', () => {
 // while the prior decoded value is preserved.
 // ---------------------------------------------------------------------------
 
-// The pinned set of the 28 `maybe(...)` delta keys, sorted. Cross-checked below
+// The pinned set of the 33 `maybe(...)` delta keys, sorted. Cross-checked below
 // against the live `maybe(...)` calls scraped from server/game.ts source, so a
-// 29th unregistered delta key reddens this gate.
+// 34th unregistered delta key reddens this gate.
 const ALL_DELTA_KEYS = [
   'arena',
   'bags',
+  'bps',
   'buyback',
   'cds',
+  'chests',
   'const',
   'corpse',
   'cosmetics',
@@ -1851,6 +1853,9 @@ const ALL_DELTA_KEYS = [
   'drun',
   'duel',
   'equip',
+  'furn',
+  'hben',
+  'hprog',
   'inv',
   'lockouts',
   'lroll',
@@ -1879,8 +1884,10 @@ const ALL_DELTA_KEYS = [
 const TERSE_TO_IWORLD: Record<string, string> = {
   arena: 'arenaInfo',
   bags: 'bags',
+  bps: 'knownBlueprints',
   buyback: 'vendorBuyback',
   cds: 'cooldowns',
+  chests: 'chestContentsData',
   const: 'constructionSkill',
   cosmetics: 'accountCosmetics',
   dclears: 'delveClears',
@@ -1890,6 +1897,9 @@ const TERSE_TO_IWORLD: Record<string, string> = {
   drun: 'delveRun',
   duel: 'duelInfo',
   equip: 'equipment',
+  furn: 'placedFurniture',
+  hben: 'houseRestedBonus',
+  hprog: 'currentHouseProgress',
   inv: 'inventory',
   lockouts: 'selfLockouts',
   lroll: 'lootRollPrompts',
@@ -1914,9 +1924,9 @@ const TERSE_TO_IWORLD: Record<string, string> = {
 // filter without a wall-clock read in test scaffolding.
 const FAR_FUTURE_MS = 8_000_000_000_000;
 
-// Dirty every one of the 25 `maybe()` delta fields with a distinguishable,
+// Dirty every one of the 33 `maybe()` delta fields with a distinguishable,
 // non-default value so the round-trip + no-op-omission assertions are meaningful
-// (a fresh session carries all 25 on snapshot #1 regardless, since lastSent is
+// (a fresh session carries all 33 on snapshot #1 regardless, since lastSent is
 // empty). Most fields are set on their real PlayerMeta/Entity/session source;
 // for the few whose authentic setup is mutually exclusive in one player state we
 // poke the exact source field the encoder reads, per the brief (the gate asserts
@@ -1984,6 +1994,11 @@ function dirtyEveryDeltaField(): {
   meta.delveClears = { 'collapsed_reliquary:heroic': 1 };
   meta.companionUpgrades = { companion_tessa: 2 };
   meta.gatheringProficiency = { mining: 6, logging: 0, herbalism: 0 };
+  meta.construction.knownBlueprints = ['house_tent'];
+  meta.construction.houseTier = 1;
+  meta.construction.phasesBuilt = { house_tent: 2 };
+  meta.construction.chests = { 'chest_1': [{ itemId: 'copper_ore', count: 5 }] };
+  meta.construction.furniture = [{ id: 'chest_1', itemId: 'chest_small', x: 0, z: 0, rotY: 0 }];
   meta.delveDaily = { date: '2099-01-01', firstClearXp: new Set(['x']), markClears: 4 };
   meta.talents = { spec: 'arms', ranks: {}, choices: {} };
   meta.talentMods.spec = 'arms';
@@ -2030,7 +2045,7 @@ function dirtyEveryDeltaField(): {
 }
 
 describe('full self-state snapshot delta fixture', () => {
-  it('carries every one of the 25 dirtied delta keys on the first snapshot', () => {
+  it('carries every one of the 33 dirtied delta keys on the first snapshot', () => {
     const { server, fc } = dirtyEveryDeltaField();
     broadcast(server);
     const snap = lastSnap(fc.sent);
@@ -2097,6 +2112,7 @@ describe('full self-state snapshot delta fixture', () => {
         { professionId: 'herbalism', skill: 0, maxSkill: 300 },
       ],
     }); // prof -> professionsState
+    expect(client.chestContentsData).toEqual({ 'chest_1': [{ itemId: 'copper_ore', count: 5 }] }); // chests -> chestContentsData
     expect(client.delveClears).toEqual({ 'collapsed_reliquary:heroic': 1 }); // dclears -> delveClears
     expect(client.delveDaily).toMatchObject({ markClears: 4 }); // delveDaily
     // tal -> talents / talentSpec / loadouts / activeLoadout
@@ -2147,9 +2163,9 @@ describe('full self-state snapshot delta fixture', () => {
 });
 
 describe('delta-key contract pins (anti-drift)', () => {
-  it('ALL_DELTA_KEYS contains exactly 31 unique keys in sorted order', () => {
-    expect(ALL_DELTA_KEYS).toHaveLength(31);
-    expect(new Set(ALL_DELTA_KEYS).size).toBe(31);
+  it('ALL_DELTA_KEYS contains exactly 36 unique keys in sorted order', () => {
+    expect(ALL_DELTA_KEYS).toHaveLength(36);
+    expect(new Set(ALL_DELTA_KEYS).size).toBe(36);
     expect([...ALL_DELTA_KEYS]).toEqual([...ALL_DELTA_KEYS].sort());
   });
 
@@ -2161,7 +2177,7 @@ describe('delta-key contract pins (anti-drift)', () => {
     const scraped = new Set<string>();
     for (let m = re.exec(src); m !== null; m = re.exec(src)) scraped.add(m[1]);
     expect(scraped.has('lockouts')).toBe(true); // the multi-line call IS captured
-    expect(scraped.size).toBe(31);
+    expect(scraped.size).toBe(36);
     expect([...scraped].sort()).toEqual([...ALL_DELTA_KEYS].sort());
   });
 

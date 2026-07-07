@@ -77,6 +77,7 @@ const CALLBACK_KEYS = [
   'countItem',
   'completeQuestForDev',
   'completeCurrentQuestsForDev',
+  'learnBlueprint',
   // E1 entity-roster surface.
   'addEntity',
   'dropEntity',
@@ -323,6 +324,7 @@ function makeFakeHost() {
     countFungibleItem: vi.fn(() => 0),
     completeQuestForDev: vi.fn(() => false),
     completeCurrentQuestsForDev: vi.fn(() => 0),
+    learnBlueprint: vi.fn(),
     lockoutNowMs: vi.fn(() => 0),
     raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),

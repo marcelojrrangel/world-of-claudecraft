@@ -4,6 +4,7 @@
 // (`updateRested` / `isResting`), MOVED verbatim out of sim.ts behind SimContext
 // (move + import, not a rewrite). The XP curve formulas (xpForLevel / canPrestige)
 // stay pure in ../types and are imported here.
+import { isHousePos } from '../professions/construction';
 import { PROPS } from '../data';
 import type { PlayerMeta } from '../sim';
 import type { SimContext } from '../sim_context';
@@ -16,26 +17,40 @@ const RESTED_FILL_HOURS = 8; // accrued per this many in-game hours of resting
 const RESTED_CAP_LEVELS = 1.5; // pool clamps to 1.5 levels of XP, the classic-era cap
 const RESTED_INN_PADDING = 2; // yards of slack around the inn footprint that still counts as resting
 
-// True while the player is standing in (or just beside) an inn footprint and
-// out of combat — the classic "resting" state that accrues rested XP.
-export function isResting(p: Entity): boolean {
+// House-rested XP bonus multiplier per tier (Phase 6).
+export const HOUSE_RESTED_TIER_MULT = [0, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5];
+
+// True while the player is out of combat AND either (a) standing in/next to an
+// inn, or (b) inside their own house interior (Phase 6). `meta` is optional so
+// existing callers (inn-only check) don't need it.
+export function isResting(p: Entity, meta?: PlayerMeta): boolean {
   if (p.inCombat) return false;
+  // Check inn footprints (existing behavior).
   for (const b of PROPS.buildings) {
     if (b.kind !== 'inn') continue;
-    // Point-in-rotated-rect: bring the player into the inn's local frame.
     const dx = p.pos.x - b.x;
     const dz = p.pos.z - b.z;
     const cos = Math.cos(-b.rot);
     const sin = Math.sin(-b.rot);
     const lx = dx * cos - dz * sin;
-    const lz = dx * sin + dz * cos;
+    const lz = dz * cos + dz * sin;
     if (
       Math.abs(lx) <= b.w / 2 + RESTED_INN_PADDING &&
       Math.abs(lz) <= b.d / 2 + RESTED_INN_PADDING
     )
       return true;
   }
-  return false;
+  // Check if player is inside their own house (Phase 6).
+  if (!meta || !isHousePos(p.pos.x)) return false;
+  if (!meta.construction.plotId || meta.construction.houseTier < 1) return false;
+  return true;
+}
+
+// Rested XP bonus rate for house ownership (0 = no house / tier 0).
+export function houseRestedTierMultiplier(meta: PlayerMeta): number {
+  if (!meta.construction.plotId || meta.construction.houseTier < 1) return 0;
+  const tier = Math.min(meta.construction.houseTier, HOUSE_RESTED_TIER_MULT.length - 1);
+  return HOUSE_RESTED_TIER_MULT[tier];
 }
 
 // Accrue rested XP while resting in an inn. Classic-era rate: 5% of the level's
@@ -48,9 +63,13 @@ export function updateRested(p: Entity, meta: PlayerMeta): void {
     meta.restedXp = cap;
     return;
   }
-  if (!isResting(p)) return;
+  if (!isResting(p, meta)) return;
   const fillSeconds = RESTED_FILL_HOURS * RESTED_SECONDS_PER_GAME_HOUR;
-  const perSecond = (RESTED_FILL_FRACTION * xpForLevel(p.level)) / fillSeconds;
+  let perSecond = (RESTED_FILL_FRACTION * xpForLevel(p.level)) / fillSeconds;
+  // House rested XP bonus (Phase 6): scales accrual by house tier multiplier.
+  if (isHousePos(p.pos.x)) {
+    perSecond *= houseRestedTierMultiplier(meta);
+  }
   meta.restedXp = Math.min(cap, meta.restedXp + perSecond * DT);
 }
 

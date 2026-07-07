@@ -17,6 +17,7 @@
 // (enforced by tests/architecture.test.ts). This region draws NO rng.
 
 import { addStacked, bagsFullError, equipBag as equipBagCmd } from './bags';
+import { blueprintByItemId } from './content/blueprints';
 import { ITEMS } from './data';
 import { recalcPlayerStats } from './entity';
 import { canEquipItem } from './equipment_rules';
@@ -134,6 +135,11 @@ export function useItem(ctx: SimContext, itemId: string, pid?: number): ItemUseR
   }
   if (def.use?.type === 'skinSelect') {
     ctx.openSkinSelect(meta, def.use.catalog ?? 'class', itemId);
+    return;
+  }
+  if (blueprintByItemId(itemId)) {
+    ctx.removeItem(itemId, 1, meta.entityId);
+    ctx.learnBlueprint(itemId, meta.entityId);
     return;
   }
   if (p.castingAbility === FISHING_CAST_ID) {

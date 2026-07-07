@@ -179,6 +179,7 @@ function makeCtx() {
     countFungibleItem: vi.fn(() => 0),
     completeQuestForDev: vi.fn(() => false),
     completeCurrentQuestsForDev: vi.fn(() => 0),
+    learnBlueprint: vi.fn(),
     lockoutNowMs: vi.fn(() => 0),
     raidResetMs: vi.fn((nowMs: number) => nowMs),
     instanceKeyFor: vi.fn(() => 'solo:0'),

@@ -1,23 +1,44 @@
 # State — Construction System
 
-## Current phase: 3 — The house instance (complete)
+## Current phase: 5 — Furniture & decoration (complete)
 
-### What was delivered
-- 8 `PlotDef`s in `src/sim/content/housing_plots.ts` (Builder's Row near Eastbrook)
-- `HouseSlot` runtime slot pool on `Sim`, initialized in `Sim` ctor, exposed through `SimContext`
-- `buyPlot`/`enterHouse`/`leaveHouse` in `src/sim/professions/construction/housing.ts`, wired as `Sim` delegates and `IWorld` commands
-- Interior colliders per tier in `src/sim/professions/construction/house_layouts.ts`, integrated into `src/sim/colliders.ts`
-- `myPlot` + `houseState` added to `IWorldConstruction`; implemented in both `Sim` and `ClientWorld`
-- Server command dispatch for `buy_plot`, `enter_house`, `leave_house` in `server/game.ts`
-- Realm-wide plot registry persisted via `loadPlotRegistry`/`savePlotRegistry` in `server/db.ts`, loaded/saved by `GameServer`
-- `tests/housing.test.ts` covering buy, enter, leave, persistence, and interior collision
-- `npx tsc --noEmit`, `tests/housing.test.ts`, `tests/world_api_parity.test.ts`, `tests/snapshots.test.ts`, `tests/command_schema.test.ts`, `tests/localization_fixes.test.ts` green
+### What was delivered (Phase 5)
+- 28 furniture item definitions in `src/sim/content/construction_items.ts` (5 tiers x 7 categories: chair, table, bed, shelf, rug, lamp, cabinet)
+- `src/sim/professions/construction/furniture.ts` with `placeFurniture`, `moveFurniture`, `removeFurniture`, grid snapping (0.5yd), 45-degree rotation, OBB overlap detection, tier-dependent z-bounds
+- `FURNITURE_CATALOG` mapping itemId to {hw, hd} for collision checks
+- `placedFurniture`, `placeFurniture`, `moveFurniture`, `removeFurniture` added to `IWorldConstruction`; implemented in both `Sim` and `ClientWorld`
+- Server command dispatch for `place_furniture`/`move_furniture`/`remove_furniture` in `server/game.ts`
+- Wire delta key `furn` (placed furniture) registered in `selfWireJson`
+- All registries updated: `COMMAND_NAMES` (+3), `ALL_DELTA_KEYS` (+1, now 34), `TERSE_TO_IWORLD`, `COMMAND_FACETS`, `IWORLD_MEMBERS`, `FACET_CONSTRUCTION`
+- 16 tests in `tests/furniture.test.ts` covering place, reject conditions, item consumption, grid snap, overlap, move, remove-and-return, serialization, multi-type
+- 387 tests green across 9 affected test files (including existing housing, blueprints, snapshots, command_schema, etc.)
 
-### Phase 3 drift from the plan
-- The runtime registry uses `HouseSlot[]` rather than a separate `HouseInstance` record; slots carry `ownerPid`, `plotId`, `tier`, `partyKey`, `exitId`, and `emptyFor`.
-- Interior colliders default to tier 1 geometry for movement resolution until tier-aware house state is plumbed through `colliders.ts` (Phase 4 will wire tier from the occupied slot).
-- Exterior plot boundary collision is not yet implemented; it will land with the visual plot markers in Phase 8.
-- House enter/exit is command-driven for now; door triggers/ground objects are stubbed but not yet linked to the main movement loop.
+### Phase 4 drift from the plan
+- Exterior visual tier progression is represented by `houseTier` on `PlayerMeta.construction`; actual exterior rendering/collider updates are deferred to Phase 8.
+- Interior colliders still default to tier 1 geometry for movement resolution until tier-aware house state is plumbed through `colliders.ts` (Phase 8).
+- `currentHouseProgress` returns the active blueprint (current tier) and how many of its phases are built; tier advancement happens when the first phase of a higher-tier blueprint is built.
+- Skill gains are queued on `pendingConstructionGrants` and drained once per tick, matching the gathering proficiency grant pattern.
+
+### Phase 5 drift from the plan
+- Furniture rendering in the interior instance is deferred to Phase 7 (UI/HUD) or Phase 8 (Polish). The sim stores placed furniture data; visual rendering will be handled when the interior 3D scene is built out.
+- The furniture catalog uses hard-coded hw/hd dimensions per itemId rather than a full FurnitureDef type — kept as a simple lookup map to avoid premature abstraction.
+
+## Next phase: 6 — Benefits & social
+
+### Planned scope
+- Rested XP accumulation inside owned house (bonus scales by house tier, 1.0x–2.5x)
+- Crafting station furniture items (workbench, anvil, alchemy station, cooking fire, loom)
+- Station usage grants skill/crafting-time bonus when clicked
+- Storage chest furniture items (6–24 slots per tier, persist contents in `building.chests`)
+- `visitHouse(pid)` — teleport to friend's house interior
+- House permission system (owner / friend / public)
+- Wire delta key `hben` for rested bonus; new server commands `visit_house`, `set_permission`
+- Persistence: `building.chests` JSONB key
+
+### New IWorld members
+- `houseRestedBonus` (read: `number`)
+- `houseStations` (read: `StationView[]`)
+- `visitHouse` (command: `(pid: number) => void`)
 
 ## Locked design decisions
 

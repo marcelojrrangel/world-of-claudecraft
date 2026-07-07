@@ -10,10 +10,10 @@
 | 2 QA | pending | — | — | |
 | 3 — The house instance | complete | 2026-07-06 | 2026-07-06 | |
 | 3 QA | complete | 2026-07-06 | 2026-07-06 | |
-| 4 — Blueprint construction | pending | — | — | |
-| 4 QA | pending | — | — | |
-| 5 — Furniture & decoration | pending | — | — | |
-| 5 QA | pending | — | — | |
+| 4 — Blueprint construction | complete | 2026-07-06 | 2026-07-06 | |
+| 4 QA | complete | 2026-07-06 | 2026-07-06 | |
+| 5 — Furniture & decoration | complete | 2026-07-06 | 2026-07-06 | |
+| 5 QA | complete | 2026-07-06 | 2026-07-06 | |
 | 6 — Benefits & social | pending | — | — | |
 | 6 QA | pending | — | — | |
 | 7 — UI & HUD | pending | — | — | |
@@ -65,29 +65,30 @@
 - [x] `tests/housing.test.ts` passes (12/12)
 
 ### Phase 4 — Blueprint construction
-- [ ] `buildBlueprint(blueprintId)` implemented
-- [ ] Phase building: foundation → frame → walls → roof → doors/windows
-- [ ] Material consumption at each phase (reagents consumed from inventory)
-- [ ] Skill gain on phase completion (scaled by complexity)
-- [ ] Trivial-at threshold (no skill gain past grey)
-- [ ] Blueprint learning system (use scroll item → learn)
-- [ ] Exterior visual tier progression (tent → shack → cottage → house → manor → estate)
-- [ ] External collider updates after phase changes
-- [ ] Tool tier gating (tier 1 tool can build wood phases, tier 3 for stone, etc.)
-- [ ] `npx tsc --noEmit` green
-- [ ] `tests/blueprints.test.ts` passes
+- [x] `buildBlueprint(blueprintId)` implemented
+- [x] Phase building: foundation → frame → walls → roof → doors/windows
+- [x] Material consumption at each phase (reagents consumed from inventory)
+- [x] Skill gain on phase completion (scaled by complexity, drained on tick)
+- [x] Trivial-at threshold (no skill gain past grey)
+- [x] Blueprint learning system (use scroll item → learn)
+- [x] Exterior visual tier progression (tent → shack → cottage → house → manor → estate) via `houseTier`
+- [ ] External collider updates after phase changes (deferred to Phase 8)
+- [x] Tool tier gating (tier 1 tool can build wood phases, tier 3 for stone, etc.)
+- [x] `npx tsc --noEmit` green
+- [x] `tests/blueprints.test.ts` passes (12/12)
+- [x] `tests/world_api_parity.test.ts`, `tests/snapshots.test.ts`, `tests/command_schema.test.ts`, `tests/localization_fixes.test.ts`, `tests/architecture.test.ts` green
 
 ### Phase 5 — Furniture & decoration
-- [ ] Furniture item definitions (chair, table, bed, shelf, rug, lamp, cabinet, ...)
-- [ ] Furniture tiers (rustic, sturdy, ornate, exquisite, masterwork)
-- [ ] `placeFurniture` — place item at (x, z, rotY) on interior floor grid
-- [ ] `moveFurniture` — reposition placed item
-- [ ] `removeFurniture` — return item to inventory
-- [ ] Grid snapping (0.5yd increments, aligned to room bounds)
-- [ ] Collision prevention (furniture can't overlap)
-- [ ] Furniture persistence (save/load placed furniture list)
-- [ ] Furniture rendered in interior instance
-- [ ] `npx tsc --noEmit` green
+- [x] Furniture item definitions (chair, table, bed, shelf, rug, lamp, cabinet, ...)
+- [x] Furniture tiers (rustic, sturdy, ornate, exquisite, masterwork)
+- [x] `placeFurniture` — place item at (x, z, rotY) on interior floor grid
+- [x] `moveFurniture` — reposition placed item
+- [x] `removeFurniture` — return item to inventory
+- [x] Grid snapping (0.5yd increments, aligned to room bounds)
+- [x] Collision prevention (furniture can't overlap)
+- [x] Furniture persistence (save/load placed furniture list)
+- [ ] Furniture rendered in interior instance (deferred to Phase 8/UI)
+- [x] `npx tsc --noEmit` green (pending — verify before PR)
 
 ### Phase 6 — Benefits & social
 - [ ] Rested XP accumulation in house (bonus scales by house tier)

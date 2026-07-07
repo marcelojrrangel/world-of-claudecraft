@@ -2557,6 +2557,41 @@ export class GameServer {
       case 'leave_house':
         sim.leaveHouse();
         break;
+      case 'build_blueprint':
+        if (typeof msg.blueprintId === 'string') sim.buildBlueprint(msg.blueprintId);
+        break;
+      case 'learn_blueprint':
+        if (typeof msg.itemId === 'string') sim.learnBlueprint(msg.itemId);
+        break;
+      case 'place_furniture':
+        if (typeof msg.itemId === 'string' && typeof msg.x === 'number' && typeof msg.z === 'number' && typeof msg.rotY === 'number')
+          sim.placeFurniture(msg.itemId, msg.x, msg.z, msg.rotY);
+        break;
+      case 'move_furniture':
+        if (typeof msg.placedId === 'string' && typeof msg.x === 'number' && typeof msg.z === 'number' && typeof msg.rotY === 'number')
+          sim.moveFurniture(msg.placedId, msg.x, msg.z, msg.rotY);
+        break;
+      case 'remove_furniture':
+        if (typeof msg.placedId === 'string') sim.removeFurniture(msg.placedId);
+        break;
+      case 'store_chest':
+        if (typeof msg.placedId === 'string' && typeof msg.itemId === 'string' && typeof msg.count === 'number' && msg.count > 0)
+          sim.storeInChest(msg.placedId, msg.itemId, msg.count);
+        break;
+      case 'retrieve_chest':
+        if (typeof msg.placedId === 'string' && typeof msg.itemId === 'string' && typeof msg.count === 'number' && msg.count > 0)
+          sim.retrieveFromChest(msg.placedId, msg.itemId, msg.count);
+        break;
+      case 'use_station':
+        if (typeof msg.placedId === 'string') sim.useStation(msg.placedId);
+        break;
+      case 'visit_house':
+        if (typeof msg.targetPid === 'number') sim.visitHouse(msg.targetPid);
+        break;
+      case 'set_permission':
+        if (msg.permission === 'owner' || msg.permission === 'friends' || msg.permission === 'public')
+          sim.setHousePermission(msg.permission);
+        break;
       case 'challengeResponse':
         if (typeof msg.n === 'string' && typeof msg.r === 'string' && typeof msg.sig === 'string') {
           if (!verifyChallenge(msg.n, msg.r, msg.sig, session.clientSeed)) break;
@@ -3476,6 +3511,15 @@ export class GameServer {
     maybe('prof', this.sim.professionsStateFor(anchorSession.pid));
     // Construction secondary profession (Phase 1): skill view, delta-guarded.
     maybe('const', this.sim.constructionSkillFor(anchorSession.pid));
+    // Construction Phase 4: known blueprint ids and current house progress.
+    maybe('bps', this.sim.knownBlueprintsFor(anchorSession.pid));
+    maybe('hprog', this.sim.currentHouseProgressFor(anchorSession.pid));
+    // Phase 5: placed furniture (delta-guarded, rides only on change).
+    maybe('furn', this.sim.placedFurnitureFor(anchorSession.pid));
+    // Phase 6: house rested bonus and stations.
+    maybe('hben', this.sim.houseRestedBonusFor(anchorSession.pid));
+    // Phase 6: chest contents (delta-guarded).
+    maybe('chests', this.sim.chestContentsAllFor(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir
     // wear-off, a buff cast on you by someone else), none of which mark this

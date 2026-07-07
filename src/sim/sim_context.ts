@@ -318,6 +318,10 @@ export interface SimContextCallbacks {
   completeQuestForDev(questId: string, pid?: number): boolean;
   completeCurrentQuestsForDev(pid?: number): number;
 
+  // Construction secondary profession (Phase 4): blueprint learning is triggered
+  // from item use; phase building is driven by the IWorldConstruction command.
+  learnBlueprint(itemId: string, pid?: number): void;
+
   // T1 player target selection consumes isHostileTo/isFriendlyTo/pvpController/stopFollow;
   // all already on the seam (C4a added the first two + stopFollow, C1 added pvpController)
   // and STAY on Sim, so they are not re-declared here.
@@ -814,6 +818,7 @@ export function createSimContext(host: SimContextHost): SimContext {
     countFungibleItem: host.countFungibleItem,
     completeQuestForDev: host.completeQuestForDev,
     completeCurrentQuestsForDev: host.completeCurrentQuestsForDev,
+    learnBlueprint: host.learnBlueprint,
     addEntity: host.addEntity,
     dropEntity: host.dropEntity,
     rebucket: host.rebucket,

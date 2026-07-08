@@ -106,7 +106,7 @@
 - [x] Build mode toggle keybind (default: F3)
 - [x] i18n keys for all construction UI text (hud_chrome.ts + sim_i18n.ts)
 - [x] S3 drift guard green (`tests/localization_fixes.test.ts`)
-- [ ] Mobile touch support for build mode
+- [x] Mobile touch support for build mode
 - [ ] `npx tsc --noEmit` green
 
 ### Phase 8 — Polish & balance

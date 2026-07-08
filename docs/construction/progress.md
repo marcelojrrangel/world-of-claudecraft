@@ -18,8 +18,8 @@
 | 6 QA | complete | 2026-07-07 | 2026-07-07 | tsc clean, 434 tests green, 2 commits |
 | 7 — UI & HUD | complete | 2026-07-07 | 2026-07-07 | build panel, house window, furniture controls, keybind, i18n, mobile |
 | 7 QA | pending | — | — | |
-| 8 — Polish & balance | pending | — | — | |
-| 8 QA | pending | — | — | |
+| 8 — Polish & balance | partial | 2026-07-08 | 2026-07-08 | renderer perftasks deferred |
+| 8 QA | partial | 2026-07-08 | 2026-07-08 | tsc, builds, S3 guard, arch tests |
 
 ## Acceptance checklists
 
@@ -110,15 +110,15 @@
 - [x] `npx tsc --noEmit` green
 
 ### Phase 8 — Polish & balance
-- [ ] Recipe balance pass (material costs feel right for each tier)
-- [ ] Skill XP curve balanced (1–300: first 100 fast, 200–300 slow)
-- [ ] Tool tier costs balanced against material costs
-- [ ] Determinism tests (same seed → same build outcomes)
-- [ ] `tests/construction_i18n.test.ts` — matchers for all house text
-- [ ] `tests/construction_skill.test.ts` — skill gain and normalization
-- [ ] Performance: interior furniture chunked loading
-- [ ] Performance: exterior LOD for neighborhood rendering
-- [x] `npm test` parcial (62 construction tests green), `npx tsc --noEmit` green, `npm run build:env` green, `npm run build:server` green, `npm run build` green
-- [ ] Final QA gate passes (see `qa-checklist.md`)
+- [x] Recipe balance pass (material costs feel right for each tier)
+- [x] Skill XP curve balanced (skillGain bumped, trivialAt smoothed, reqSkill gaps closed)
+- [x] Tool tier costs balanced against material costs
+- [x] Determinism tests (`tests/construction_determinism.test.ts` — 5 tests)
+- [x] `tests/construction_i18n.test.ts` — matchers for all house text (9 tests)
+- [x] `tests/construction_skill.test.ts` — skill gain and normalization (9 tests)
+- [ ] Performance: interior furniture chunked loading (deferred — renderer work)
+- [ ] Performance: exterior LOD for neighborhood rendering (deferred — renderer work)
+- [x] `npm test` parcial (85 construction tests green), `npx tsc --noEmit` green, `npm run build:env` green, `npm run build:server` green, `npm run build` green
+- [x] Final QA gate: tsc, builds, localization fixes, architecture tests green
 
 ## Notes per phase

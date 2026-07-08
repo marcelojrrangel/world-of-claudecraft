@@ -1218,6 +1218,7 @@ async function startGame(
     onTalents: () => hud.toggleTalents(),
     onMap: () => hud.toggleMap(),
     onLeaderboard: () => hud.toggleLeaderboard(),
+    onBuildMode: () => hud.toggleBuildMode(),
     onNameplates: () => (renderer.showNameplates = !renderer.showNameplates),
     onMusic: () => {
       music.setEnabled(!music.enabled);

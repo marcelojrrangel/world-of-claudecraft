@@ -9639,14 +9639,25 @@ export class Hud {
     this.hideTooltip();
   }
 
+  private buildModeRotation = 0;
+  private buildModePrevFurnCount = 0;
+
   private renderBuildMode(): void {
     if (!this.buildModeOpen) return;
     renderBuildModeWindow($('#build-mode-window'), {
       sim: this.sim,
       hideTooltip: () => this.hideTooltip(),
       onClose: () => this.closeBuildMode(),
-      onPlaceFurniture: (itemId) => this.sim.placeFurniture(itemId, 0, 0, 0),
-      onMoveFurniture: (placedId) => this.sim.moveFurniture(placedId, 0, 0, 0),
+      placementRotation: this.buildModeRotation,
+      onRotationChange: (rot) => { this.buildModeRotation = rot; },
+      onPlaceFurniture: (itemId) => {
+        const p = this.sim.player.pos;
+        this.sim.placeFurniture(itemId, p.x, p.z, this.buildModeRotation);
+      },
+      onMoveFurniture: (placedId) => {
+        const p = this.sim.player.pos;
+        this.sim.moveFurniture(placedId, p.x, p.z, this.buildModeRotation);
+      },
       onRemoveFurniture: (placedId) => this.sim.removeFurniture(placedId),
     });
   }

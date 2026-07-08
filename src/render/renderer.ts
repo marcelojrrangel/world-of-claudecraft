@@ -3717,18 +3717,28 @@ export class Renderer {
         }
       }
     } else if (px >= HOUSE_X) {
-      // build the player's house interior
+      // build the player's house interior and furniture
       this.houseInteriors ??= new HouseInteriors(this.scene, this.lowGfx);
       const tier = this.sim.houseState.houseTier;
       if (tier >= 1) {
         for (let slot = 0; slot < HOUSE_SLOT_COUNT; slot++) {
           const key = `house:${slot}`;
-          if (this.builtInteriors.has(key)) continue;
+          const furnKey = `house_furn:${slot}`;
           const ox = HOUSE_X;
           const oz = HOUSE_Z0 + slot * HOUSE_SLOT_SPACING;
           if (Math.abs(px - ox) < 200 && Math.abs(pz - oz) < 120) {
-            this.builtInteriors.add(key);
-            this.houseInteriors.buildHouseInterior(ox, oz, tier);
+            if (!this.builtInteriors.has(key)) {
+              this.builtInteriors.add(key);
+              this.houseInteriors.buildHouseInterior(ox, oz, tier);
+            }
+            // Build furniture if not yet placed
+            if (!this.builtInteriors.has(furnKey)) {
+              this.builtInteriors.add(furnKey);
+              const furniture = this.sim.placedFurniture;
+              if (furniture.length > 0) {
+                this.houseInteriors.placeFurnitureItems(ox, oz, furniture);
+              }
+            }
           }
         }
       }

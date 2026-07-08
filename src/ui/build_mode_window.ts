@@ -10,6 +10,9 @@ export interface BuildModeWindowDeps {
   onPlaceFurniture(itemId: string): void;
   onMoveFurniture(placedId: string): void;
   onRemoveFurniture(placedId: string): void;
+  /** Current placement rotation in radians (increments of PI/4). */
+  placementRotation: number;
+  onRotationChange(rot: number): void;
 }
 
 /** Furniture items the player can place (filtered from inventory). */
@@ -65,6 +68,17 @@ export function renderBuildModeWindow(
         : ''}
       <div class="build-mode-section">
         <h3>${esc(t('hudChrome.construction.furniture.place'))}</h3>
+        <div class="build-mode-rotation">
+          <label>Rotation:</label>
+          <button type="button" class="build-mode-rot-btn" data-rot="0">0</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="1">45</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="2">90</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="3">135</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="4">180</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="5">225</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="6">270</button>
+          <button type="button" class="build-mode-rot-btn" data-rot="7">315</button>
+        </div>
         ${inventoryItems.length === 0
           ? `<p class="build-mode-empty">${esc(t('hudChrome.construction.buildMode.noSelection'))}</p>`
           : `<ul class="build-mode-furn-list">
@@ -87,6 +101,14 @@ export function renderBuildModeWindow(
 
   const closeBtn = el.querySelector('[data-close]');
   if (closeBtn) closeBtn.addEventListener('click', () => deps.onClose());
+
+  // Rotation buttons
+  for (const btn of el.querySelectorAll('.build-mode-rot-btn')) {
+    btn.addEventListener('click', () => {
+      const rot = Number((btn as HTMLElement).dataset.rot) * (Math.PI / 4);
+      deps.onRotationChange(rot);
+    });
+  }
 
   for (const btn of el.querySelectorAll('.build-mode-place-btn')) {
     btn.addEventListener('click', () => deps.onPlaceFurniture((btn as HTMLElement).dataset.item!));

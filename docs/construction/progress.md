@@ -16,7 +16,7 @@
 | 5 QA | complete | 2026-07-06 | 2026-07-06 | |
 | 6 — Benefits & social | complete | 2026-07-06 | 2026-07-07 | chests, stations, rested XP, visit, permissions |
 | 6 QA | complete | 2026-07-07 | 2026-07-07 | tsc clean, 434 tests green, 2 commits |
-| 7 — UI & HUD | pending | — | — | |
+| 7 — UI & HUD | complete | 2026-07-07 | 2026-07-07 | build panel, house window, furniture controls, keybind, i18n, mobile |
 | 7 QA | pending | — | — | |
 | 8 — Polish & balance | pending | — | — | |
 | 8 QA | pending | — | — | |
@@ -107,7 +107,7 @@
 - [x] i18n keys for all construction UI text (hud_chrome.ts + sim_i18n.ts)
 - [x] S3 drift guard green (`tests/localization_fixes.test.ts`)
 - [x] Mobile touch support for build mode
-- [ ] `npx tsc --noEmit` green
+- [x] `npx tsc --noEmit` green
 
 ### Phase 8 — Polish & balance
 - [ ] Recipe balance pass (material costs feel right for each tier)

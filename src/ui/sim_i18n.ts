@@ -238,6 +238,20 @@ const baseEnTable = {
   'house.visitEntered': 'You visit the house.',
   'house.permissionSet': 'House permission set to {permission}.',
   'house.error.invalidPermission': 'Invalid permission level. Use: owner, friends, or public.',
+  // Furniture (Phase 5): placement, move, remove
+  'furniture.placed': 'Placed {item}.',
+  'furniture.moved': 'Furniture moved.',
+  'furniture.removed': 'Furniture removed.',
+  'furniture.error.notFound': 'That furniture piece was not found.',
+  'furniture.error.notPlaceable': 'That item is not placeable furniture.',
+  'furniture.error.notInInventory': 'You do not have that furniture item.',
+  'furniture.error.mustBeInside': 'You must be inside your house to place furniture.',
+  'furniture.error.mustBeInsideMove': 'You must be inside your house to move furniture.',
+  'furniture.error.mustBeInsideRemove': 'You must be inside your house to remove furniture.',
+  'furniture.error.outsideInterior': 'That position is outside your house interior.',
+  'furniture.error.overlap': 'That position overlaps with existing furniture.',
+  'furniture.error.noHouse': 'You do not have a house.',
+  'furniture.error.cannotDoThat': 'You cannot do that right now.',
   'error.playerNotFound': 'Player not found.',
 } as const;
 
@@ -4451,6 +4465,10 @@ const RULES: Rule[] = [
     re: /^Learned blueprint: (.+)\.$/,
     build: (m) => tSim('build.blueprintLearned', { name: m[1] }),
   },
+  // Phase 5: furniture placement / move / remove
+  { re: /^Placed (.+)\.$/, build: (m) => tSim('furniture.placed', { item: locItem(m[1]) }) },
+  { re: /^Furniture moved\.$/, build: () => tSim('furniture.moved') },
+  { re: /^Furniture removed\.$/, build: () => tSim('furniture.removed') },
   // Phase 6: crafting stations
   { re: /^You use the (.+) and gain a crafting bonus\.$/, build: (m) => tSim('station.used', { kind: m[1] }) },
   // Phase 6: visit house

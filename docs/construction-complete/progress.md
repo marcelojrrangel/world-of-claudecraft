@@ -9,5 +9,5 @@
 | 3 - Furniture UI | done | 2026-07-08 | - | `feature/construction-furniture-ui` |
 | 3 QA | pending | - | - | mesma |
 | 4 - Tutorial | done | 2026-07-08 | - | `feature/construction-tutorial` |
-| 4 QA | pending | - | - | mesma |
-| 5 - Polish + merge | pending | - | - | `feature/construction-polish` |
+| 4 QA | done | 2026-07-08 | - | mesma |
+| 5 - Polish + merge | done | 2026-07-08 | - | merged to main |

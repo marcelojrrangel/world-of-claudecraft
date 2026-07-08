@@ -332,6 +332,7 @@ import { crestIdForEntity } from './unit_portrait';
 import { UnitPortraitPainter } from './unit_portrait_painter';
 import { buildVendorView } from './vendor_view';
 import { renderBuildModeWindow } from './build_mode_window';
+import { renderHouseWindow } from './house_window';
 import { renderVendorWindow } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
 import {
@@ -1959,6 +1960,9 @@ export class Hud {
         break;
       case 'build-mode-window':
         this.closeBuildMode();
+        break;
+      case 'house-window':
+        this.closeHouseWindow();
         break;
       case 'loot-window':
         this.closeLoot();
@@ -9641,6 +9645,32 @@ export class Hud {
       sim: this.sim,
       hideTooltip: () => this.hideTooltip(),
       onClose: () => this.closeBuildMode(),
+    });
+  }
+
+  toggleHouseWindow(): void {
+    if ($('#house-window').style.display === 'block') {
+      this.closeHouseWindow();
+    } else {
+      this.openHouseWindow();
+    }
+  }
+
+  private openHouseWindow(): void {
+    $('#house-window').style.display = 'block';
+    this.renderHouseWindow();
+  }
+
+  private closeHouseWindow(): void {
+    $('#house-window').style.display = 'none';
+    this.hideTooltip();
+  }
+
+  private renderHouseWindow(): void {
+    if ($('#house-window').style.display !== 'block') return;
+    renderHouseWindow($('#house-window'), {
+      sim: this.sim,
+      onClose: () => this.closeHouseWindow(),
     });
   }
 

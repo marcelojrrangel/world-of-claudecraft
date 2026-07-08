@@ -118,7 +118,7 @@
 - [ ] `tests/construction_skill.test.ts` — skill gain and normalization
 - [ ] Performance: interior furniture chunked loading
 - [ ] Performance: exterior LOD for neighborhood rendering
-- [ ] `npm test && npx tsc --noEmit && npm run build:env && npm run build:server && npm run build` green
+- [x] `npm test` parcial (62 construction tests green), `npx tsc --noEmit` green, `npm run build:env` green, `npm run build:server` green, `npm run build` green
 - [ ] Final QA gate passes (see `qa-checklist.md`)
 
 ## Notes per phase

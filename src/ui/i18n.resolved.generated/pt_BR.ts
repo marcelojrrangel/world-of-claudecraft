@@ -1231,7 +1231,7 @@ export const pt_BR: EnTranslations = {
       "quests": "Missões",
       "dungeons": "Masmorras e Raides",
       "delves": "Incursões",
-      "construction": "Housing & Construction",
+      "construction": "Habitação e Construção",
       "reference": "Referência",
       "controls": "Controles",
       "combat": "Combate",
@@ -2030,22 +2030,45 @@ export const pt_BR: EnTranslations = {
       "note": "Esta parte do guia está a caminho."
     },
     "constructionPage": {
-      "heading": "Housing & Construction",
-      "intro": "Buy a plot, raise a building, and fill it with furniture. Housing is your personal space in the world, and Construction is the crafting profession that builds it.",
-      "plotsTitle": "Getting a Plot",
-      "plotsBody": "Visit the quartermaster in any major hub to purchase a plot deed. Plots are located in the housing district and come in several sizes. Your first plot deed is earned through the building tutorial chain starting with Apprentice Builder Kael in Eastbrook.",
-      "skillTitle": "Construction Skill",
-      "skillBody": "Construction is a gathering-and-crafting profession. Gather raw materials from the world, refine them at crafting stations, then use blueprints to build structures and furniture on your plot. Higher skill lets you build finer blueprints and craft higher-tier furniture sets.",
-      "blueprintsTitle": "Blueprints",
-      "blueprintsBody": "Each blueprint represents a complete building you can erect on your plot, from a simple tent to a grand estate. Blueprints are learned from scroll items and require multiple construction phases, each consuming materials and a minimum tool tier.",
-      "furnitureTitle": "Furniture Sets",
-      "furnitureBody": "Furniture comes in quality sets from Rustic (poor) to Masterwork (epic). Higher-tier furniture requires more skill, finer materials, and better tools. Craft furniture at stations and place it inside your house.",
-      "stationsTitle": "Crafting Stations",
-      "stationsBody": "These special furniture items act as crafting stations on your plot. Place them to refine raw materials and craft higher-tier components.",
-      "chestsTitle": "Storage Chests",
-      "chestsBody": "Chests provide extra storage space inside your house. They come in small, medium, and large sizes, gated by construction skill.",
-      "materialsTitle": "Materials",
-      "materialsBody": "Raw materials are gathered from mining and forestry nodes in the world. Refine them at crafting stations into cut stone, sawed planks, fired bricks, and other building components. Higher-tier structures demand rarer materials like marble blocks and rune-carved stone."
+      "heading": "Habitação e Construção",
+      "intro": "Compre um terreno, erga uma construção e mobílie-a. Habitação é seu espaço pessoal no mundo, e Construção é a profissão de artesanato que a edifica.",
+      "plotsTitle": "Obtendo um Terreno",
+      "plotsBody": "Visite o intendente em qualquer cidade importante para comprar uma escritura de terreno. Os lotes ficam no distrito habitacional e vêm em vários tamanhos. Sua primeira escritura é ganha através da sequência de tutoriais de construção, começando com o Aprendiz Construtor Kael em Eastbrook.",
+      "skillTitle": "Perícia de Construção",
+      "skillBody": "Construção é uma profissão de coleta e artesanato. Colete materiais brutos do mundo, refine-os em estações de artesanato e use projetos para erguer estruturas e mobília em seu terreno. Quanto maior sua perícia, melhores projetos e móveis você pode criar.",
+      "blueprintsTitle": "Projetos",
+      "blueprintsBody": "Cada projeto representa uma construção completa que você pode erguer em seu terreno, de uma simples tenda a uma grande propriedade. Projetos são aprendidos de pergaminhos e exigem múltiplas fases de construção, cada uma consumindo materiais e uma ferramenta de nível mínimo.",
+      "furnitureTitle": "Conjuntos de Móveis",
+      "furnitureBody": "Móveis vêm em conjuntos de qualidade, de Rústico (ruim) a Obra-prima (épico). Móveis de nível superior exigem mais perícia, materiais mais finos e melhores ferramentas. Fabrique móveis nas estações e coloque-os dentro de sua casa.",
+      "stationsTitle": "Estações de Artesanato",
+      "stationsBody": "Estes móveis especiais funcionam como estações de artesanato em seu terreno. Coloque-os para refinar materiais brutos e fabricar componentes de nível superior.",
+      "chestsTitle": "Baús de Armazenamento",
+      "chestsBody": "Baús fornecem espaço extra de armazenamento dentro de sua casa. Vêm em tamanhos pequeno, médio e grande, liberados pela perícia de construção.",
+      "materialsTitle": "Materiais",
+      "materialsBody": "Materiais brutos são coletados de veios de mineração e nós florestais pelo mundo. Refine-os nas estações de artesanato em pedra lavrada, tábuas serradas, tijolos cozidos e outros componentes de construção. Estruturas de nível superior exigem materiais mais raros, como blocos de mármore e pedra entalhada com runas.",
+      "bpTent": "Tenda do Construtor",
+      "bpShack": "Barraco de Madeira",
+      "bpCottage": "Chalé de Madeira",
+      "bpStone": "Casa de Pedra",
+      "bpManor": "Casa de Campo",
+      "bpEstate": "Grande Propriedade",
+      "qualityPoor": "Ruim",
+      "qualityCommon": "Comum",
+      "qualityUncommon": "Incomum",
+      "qualityRare": "Raro",
+      "qualityEpic": "Épico",
+      "qualityLegendary": "Lendário",
+      "phasesCount": "{count} fases de construção",
+      "requiresSkill": "requer {skill} de perícia",
+      "minTierLabel": "nível mínimo {tier}",
+      "stationWorkbench": "Bancada",
+      "stationAnvil": "Bigorna",
+      "stationAlchemy": "Estação de Alquimia",
+      "stationCooking": "Fogueira",
+      "stationLoom": "Tear",
+      "chestSmall": "Baú Pequeno",
+      "chestMedium": "Baú Médio",
+      "chestLarge": "Baú Grande"
     },
     "notFound": {
       "title": "Não conseguimos encontrar essa página",
@@ -6300,6 +6323,231 @@ export const pt_BR: EnTranslations = {
       },
       "stormcallers_waistguard": {
         "name": "Guarda-cintura do Chamatormentas"
+      },
+      "rough_stone": {
+        "name": "Pedra Bruta"
+      },
+      "clay_lump": {
+        "name": "Torrão de Argila"
+      },
+      "raw_lumber": {
+        "name": "Madeira Bruta"
+      },
+      "iron_ore_chunk": {
+        "name": "Pedaço de Minério de Ferro"
+      },
+      "limestone_chunk": {
+        "name": "Pedaço de Calcário"
+      },
+      "sand_bag": {
+        "name": "Saco de Areia"
+      },
+      "cut_stone": {
+        "name": "Pedra Lavrada"
+      },
+      "fired_brick": {
+        "name": "Tijolo Cozido"
+      },
+      "sawed_plank": {
+        "name": "Tábua Serrada"
+      },
+      "iron_nail": {
+        "name": "Prego de Ferro"
+      },
+      "clay_tile": {
+        "name": "Telha de Argila"
+      },
+      "glass_pane": {
+        "name": "Vidraça"
+      },
+      "limestone_mortar": {
+        "name": "Argamassa de Calcário"
+      },
+      "marble_block": {
+        "name": "Bloco de Mármore"
+      },
+      "enchanted_lumber": {
+        "name": "Madeira Encantada"
+      },
+      "canvas_scrap": {
+        "name": "Retalho de Lona"
+      },
+      "iron_hinge": {
+        "name": "Dobradiça de Ferro"
+      },
+      "iron_grille": {
+        "name": "Grelha de Ferro"
+      },
+      "reinforced_beam": {
+        "name": "Viga de Madeira Reforçada"
+      },
+      "granite_block": {
+        "name": "Bloco de Granito"
+      },
+      "crystal_pane": {
+        "name": "Vidraça de Cristal"
+      },
+      "rune_carved_stone": {
+        "name": "Pedra Entalhada com Runas"
+      },
+      "trowel_t1": {
+        "name": "Colher de Pedreiro"
+      },
+      "carpenter_hammer_t2": {
+        "name": "Martelo de Carpinteiro"
+      },
+      "frame_saw_t3": {
+        "name": "Serrote de Estruturas"
+      },
+      "builder_level_t4": {
+        "name": "Nível de Construtor"
+      },
+      "master_mallet_t5": {
+        "name": "Martelo de Mestre Construtor"
+      },
+      "bedroll": {
+        "name": "Esteira"
+      },
+      "candle": {
+        "name": "Vela"
+      },
+      "door_wooden": {
+        "name": "Porta de Madeira"
+      },
+      "window_shutter": {
+        "name": "Persiana de Madeira"
+      },
+      "door_sturdy": {
+        "name": "Porta de Madeira Reforçada"
+      },
+      "door_ironbound": {
+        "name": "Porta Reforçada com Ferro"
+      },
+      "door_runic": {
+        "name": "Porta Rúnica"
+      },
+      "blueprint_tent": {
+        "name": "Projeto: Tenda"
+      },
+      "blueprint_wooden_shack": {
+        "name": "Projeto: Barraco de Madeira"
+      },
+      "blueprint_timber_cottage": {
+        "name": "Projeto: Chalé de Madeira"
+      },
+      "blueprint_stone_house": {
+        "name": "Projeto: Casa de Pedra"
+      },
+      "blueprint_manor": {
+        "name": "Projeto: Casa de Campo"
+      },
+      "blueprint_grand_estate": {
+        "name": "Projeto: Grande Propriedade"
+      },
+      "rustic_chair": {
+        "name": "Cadeira Rústica"
+      },
+      "rustic_table": {
+        "name": "Mesa Rústica"
+      },
+      "rustic_bed": {
+        "name": "Cama Rústica"
+      },
+      "rustic_shelf": {
+        "name": "Prateleira Rústica"
+      },
+      "rustic_rug": {
+        "name": "Tapete Rústico"
+      },
+      "rustic_lamp": {
+        "name": "Lampião Rústico"
+      },
+      "rustic_cabinet": {
+        "name": "Armário Rústico"
+      },
+      "sturdy_chair": {
+        "name": "Cadeira Robusta"
+      },
+      "sturdy_table": {
+        "name": "Mesa Robusta"
+      },
+      "sturdy_bed": {
+        "name": "Cama Robusta"
+      },
+      "sturdy_shelf": {
+        "name": "Prateleira Robusta"
+      },
+      "sturdy_rug": {
+        "name": "Tapete Robusto"
+      },
+      "sturdy_lamp": {
+        "name": "Lampião Robusto"
+      },
+      "ornate_chair": {
+        "name": "Cadeira Ornamentada"
+      },
+      "ornate_table": {
+        "name": "Mesa Ornamentada"
+      },
+      "ornate_bed": {
+        "name": "Cama Ornamentada"
+      },
+      "ornate_cabinet": {
+        "name": "Armário Ornamentado"
+      },
+      "ornate_lamp": {
+        "name": "Lampião Ornamentado"
+      },
+      "ornate_rug": {
+        "name": "Tapete Ornamentado"
+      },
+      "exquisite_chair": {
+        "name": "Cadeira Requintada"
+      },
+      "exquisite_table": {
+        "name": "Mesa Requintada"
+      },
+      "exquisite_bed": {
+        "name": "Cama Requintada"
+      },
+      "exquisite_lamp": {
+        "name": "Lampião Requintado"
+      },
+      "masterwork_chair": {
+        "name": "Cadeira Obra-prima"
+      },
+      "masterwork_table": {
+        "name": "Mesa Obra-prima"
+      },
+      "masterwork_bed": {
+        "name": "Cama Obra-prima"
+      },
+      "masterwork_rug": {
+        "name": "Tapete Obra-prima"
+      },
+      "station_workbench": {
+        "name": "Bancada"
+      },
+      "station_anvil": {
+        "name": "Bigorna"
+      },
+      "station_alchemy": {
+        "name": "Estação de Alquimia"
+      },
+      "station_cooking_fire": {
+        "name": "Fogueira"
+      },
+      "station_loom": {
+        "name": "Tear"
+      },
+      "chest_small": {
+        "name": "Baú Pequeno"
+      },
+      "chest_medium": {
+        "name": "Baú Médio"
+      },
+      "chest_large": {
+        "name": "Baú Grande"
       }
     },
     "mobs": {

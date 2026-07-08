@@ -1242,6 +1242,36 @@ export const guideStrings = {
     chestsBody: 'Chests provide extra storage space inside your house. They come in small, medium, and large sizes, gated by construction skill.',
     materialsTitle: 'Materials',
     materialsBody: 'Raw materials are gathered from mining and forestry nodes in the world. Refine them at crafting stations into cut stone, sawed planks, fired bricks, and other building components. Higher-tier structures demand rarer materials like marble blocks and rune-carved stone.',
+    // Blueprint names (from BLUEPRINTS data).
+    bpTent: "Builder's Tent",
+    bpShack: 'Wooden Shack',
+    bpCottage: 'Timber Cottage',
+    bpStone: 'Stone House',
+    bpManor: 'Country Manor',
+    bpEstate: 'Grand Estate',
+    // Quality labels.
+    qualityPoor: 'Poor',
+    qualityCommon: 'Common',
+    qualityUncommon: 'Uncommon',
+    qualityRare: 'Rare',
+    qualityEpic: 'Epic',
+    qualityLegendary: 'Legendary',
+    // Phase count template.
+    phasesCount: '{count} construction phases',
+    // Requirement line.
+    requiresSkill: 'requires {skill} skill',
+    // Minimum tier line.
+    minTierLabel: 'minimum tier {tier}',
+    // Station names.
+    stationWorkbench: 'Workbench',
+    stationAnvil: 'Anvil',
+    stationAlchemy: 'Alchemy Station',
+    stationCooking: 'Cooking Fire',
+    stationLoom: 'Loom',
+    // Chest names.
+    chestSmall: 'Small Chest',
+    chestMedium: 'Medium Chest',
+    chestLarge: 'Large Chest',
   },
 
   // 404 / unknown route.

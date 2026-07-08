@@ -116,6 +116,8 @@ export interface MobileControlCallbacks {
   onNameplates(): boolean;
   /** Toggle background music; returns whether music is now enabled. */
   onMusic(): boolean;
+  /** Open the build mode panel. */
+  onBuildMode(): void;
   /** Double-tap the camera joystick: snap the camera back behind the character. */
   onRecenterCamera(): void;
 }
@@ -387,6 +389,7 @@ export class MobileControls {
     this.bindButton('mobile-talents', () => this.callbacks.onTalents());
     this.bindButton('mobile-map', () => this.callbacks.onMap());
     this.bindButton('mobile-leaderboard', () => this.callbacks.onLeaderboard());
+    this.bindButton('mobile-build-mode', () => this.callbacks.onBuildMode());
     const nameplatesBtn = document.getElementById('mobile-nameplates');
     this.bindButton('mobile-nameplates', () => {
       const on = this.callbacks.onNameplates();

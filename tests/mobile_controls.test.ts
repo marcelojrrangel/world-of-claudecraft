@@ -494,6 +494,7 @@ function mobileCallbacks() {
     onTalents: noop,
     onMap: noop,
     onLeaderboard: noop,
+    onBuildMode: noop,
     onNameplates: () => false,
     onMusic: () => true,
     onRecenterCamera: noop,

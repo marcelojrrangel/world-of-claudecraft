@@ -101,7 +101,7 @@
 
 ### Phase 7 — UI & HUD
 - [x] Build mode HUD panel (blueprint list, phase progress, material requirements)
-- [ ] House overview window (tier, rooms, furniture count, rested bonus)
+- [x] House overview window (tier, rooms, furniture count, rested bonus)
 - [ ] Furniture placement controls (pick, move, rotate, remove)
 - [x] Build mode toggle keybind (default: F3)
 - [x] i18n keys for all construction UI text (hud_chrome.ts + sim_i18n.ts)

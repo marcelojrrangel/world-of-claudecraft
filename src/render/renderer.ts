@@ -28,7 +28,15 @@ import {
 } from '../sim/data';
 import type { DelveModuleId } from '../sim/delve_layout';
 import type { BiomeId } from '../sim/types';
-import { ALL_CLASSES, type Entity, type SimEvent } from '../sim/types';
+import {
+  ALL_CLASSES,
+  HOUSE_SLOT_COUNT,
+  HOUSE_SLOT_SPACING,
+  HOUSE_X,
+  HOUSE_Z0,
+  type Entity,
+  type SimEvent,
+} from '../sim/types';
 import { groundHeight, waterLevel, zoneBiomeAt } from '../sim/world';
 import { attachAvatarFallback } from '../ui/avatar_fallback';
 import { tEntity } from '../ui/entity_i18n';
@@ -48,6 +56,7 @@ import { buildCritters, type CritterField } from './critters';
 import { buildDelveModule } from './delve_interiors';
 import { buildDelveInteractable } from './delve_props';
 import { DungeonInteriors, ensureDungeonAssets } from './dungeon';
+import { HouseInteriors } from './house_interior';
 import { objectDisplayName } from './entity_labels';
 import { releaseSelfFacing, stepSelfFacing } from './facing_smooth';
 import { buildFish, type FishView } from './fish';
@@ -881,6 +890,7 @@ export class Renderer {
   }[] = [];
   private doomedIds: number[] = [];
   private dungeons: DungeonInteriors | null = null;
+  private houseInteriors: HouseInteriors | null = null;
   private envRTs = new Map<BiomeId, THREE.WebGLRenderTarget>();
   private envBiome: BiomeId = 'vale';
   private envOutdoorIntensity = ENV_INTENSITY;
@@ -3598,7 +3608,7 @@ export class Renderer {
   // Delve module interiors build asynchronously; track in-flight keys so a
   // per-frame ensureDelveInteriorsNear does not re-schedule a build mid-load.
   private pendingInteriors = new Set<string>();
-  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' =
+  private fogState: 'outdoor' | 'dungeon' | 'temple' | 'nythraxis' | 'delve' | 'underwater' | 'house' =
     'outdoor';
 
   private buildInterior(interior: string, ox: number, oz: number): void {
@@ -3706,6 +3716,22 @@ export class Renderer {
           this.buildInterior('arena', o.x, o.z);
         }
       }
+    } else if (px >= HOUSE_X) {
+      // build the player's house interior
+      this.houseInteriors ??= new HouseInteriors(this.scene, this.lowGfx);
+      const tier = this.sim.houseState.houseTier;
+      if (tier >= 1) {
+        for (let slot = 0; slot < HOUSE_SLOT_COUNT; slot++) {
+          const key = `house:${slot}`;
+          if (this.builtInteriors.has(key)) continue;
+          const ox = HOUSE_X;
+          const oz = HOUSE_Z0 + slot * HOUSE_SLOT_SPACING;
+          if (Math.abs(px - ox) < 200 && Math.abs(pz - oz) < 120) {
+            this.builtInteriors.add(key);
+            this.houseInteriors.buildHouseInterior(ox, oz, tier);
+          }
+        }
+      }
     } else if (inside) {
       void ensureDungeonAssets().catch(() => undefined);
       // build the interior copy the player is standing in
@@ -3723,21 +3749,24 @@ export class Renderer {
     }
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark
+    const inHouse = px >= HOUSE_X;
     const inDelve = inside && isDelvePos(px);
-    const interior = inside && !inDelve && !isArenaPos(px) ? dungeonAt(px)?.interior : null;
+    const interior = inside && !inDelve && !isArenaPos(px) && !inHouse ? dungeonAt(px)?.interior : null;
     const inTemple = interior === 'temple';
     const inNythraxis = interior === 'nythraxis';
-    const desired = inDelve
-      ? 'delve'
-      : inTemple
-        ? 'temple'
-        : inNythraxis
-          ? 'nythraxis'
-          : inside
-            ? 'dungeon'
-            : camY < waterLevel() - 0.05
-              ? 'underwater'
-              : 'outdoor';
+    const desired = inHouse
+      ? 'house'
+      : inDelve
+        ? 'delve'
+        : inTemple
+          ? 'temple'
+          : inNythraxis
+            ? 'nythraxis'
+            : inside
+              ? 'dungeon'
+              : camY < waterLevel() - 0.05
+                ? 'underwater'
+                : 'outdoor';
     const fog = this.scene.fog as THREE.Fog;
     if (desired !== this.fogState) {
       this.fogState = desired;
@@ -3762,6 +3791,11 @@ export class Renderer {
         fog.color.setHex(0x0e0705);
         fog.near = 14;
         fog.far = 74;
+      } else if (desired === 'house') {
+        // warm cozy interior with good visibility
+        fog.color.setHex(0x1a1410);
+        fog.near = 20;
+        fog.far = 100;
       } else if (desired === 'underwater') {
         fog.color.setHex(0x17506e);
         fog.near = 2;
@@ -3780,7 +3814,8 @@ export class Renderer {
           desired === 'dungeon' ||
           desired === 'temple' ||
           desired === 'nythraxis' ||
-          desired === 'delve';
+          desired === 'delve' ||
+          desired === 'house';
         this.sun.intensity = underground ? DUNGEON_SUN_INTENSITY : SUN_INTENSITY;
         this.hemi.intensity = underground ? DUNGEON_HEMI_INTENSITY : HEMI_INTENSITY;
         this.scene.environmentIntensity = underground

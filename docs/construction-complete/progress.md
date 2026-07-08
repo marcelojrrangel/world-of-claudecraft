@@ -4,7 +4,7 @@
 |------|--------|--------|-----|--------|
 | 1 - Fix blockers | done | 2026-07-08 | - | `feature/construction-fix-blockers` |
 | 1 QA | pending | - | - | mesma |
-| 2 - Interior renderer | pending | - | - | `feature/construction-interior` |
+| 2 - Interior renderer | done | 2026-07-08 | - | `feature/construction-interior` |
 | 2 QA | pending | - | - | mesma |
 | 3 - Furniture UI | pending | - | - | `feature/construction-furniture-ui` |
 | 3 QA | pending | - | - | mesma |

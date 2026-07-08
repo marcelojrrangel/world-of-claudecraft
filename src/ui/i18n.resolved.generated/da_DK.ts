@@ -1175,6 +1175,37 @@ export const da_DK: EnTranslations = {
       "mining": "Minedrift",
       "logging": "Skovhugst",
       "herbalism": "Urtekundskab"
+    },
+    "construction": {
+      "buildMode": {
+        "title": "Build Mode",
+        "blueprints": "Blueprints",
+        "phase": "Phase {current}/{total}",
+        "materials": "Materials Required",
+        "build": "Build",
+        "noSelection": "Select a blueprint to build."
+      },
+      "house": {
+        "title": "House",
+        "tier": "House Tier {tier}",
+        "rooms": "Rooms",
+        "furniture": "Furniture: {count}",
+        "restedBonus": "Rested Bonus: {bonus}x",
+        "permission": "Permission: {level}",
+        "visit": "Visit",
+        "setPermission": "Set Permission"
+      },
+      "furniture": {
+        "place": "Place",
+        "move": "Move",
+        "rotate": "Rotate",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      },
+      "keybind": {
+        "toggleBuildMode": "Toggle Build Mode"
+      }
     }
   },
   "guide": {

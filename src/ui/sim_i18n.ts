@@ -222,6 +222,22 @@ const baseEnTable = {
   'build.error.skillTooLow': 'Your construction skill is too low for this blueprint.',
   'build.error.toolTooLow': 'Your construction tool is not high enough tier for this phase.',
   'build.error.missingMaterials': 'You do not have the required materials.',
+  // Phase 6: storage chests
+  'house.error.chestNotEmpty': 'You must empty the chest before removing it.',
+  'house.error.noChestItem': 'That item is not a storage chest.',
+  'house.error.chestFull': 'The chest is full.',
+  'house.error.insufficientItems': 'You do not have enough of that item.',
+  // Phase 6: crafting stations
+  'station.error.outsideHouse': 'You must be inside your house to use a crafting station.',
+  'station.error.notFound': 'That station was not found.',
+  'station.error.notAStation': 'That item is not a crafting station.',
+  'station.used': 'You use the {kind} and gain a crafting bonus.',
+  // Phase 6: visit house + permissions
+  'house.error.visitNoHouse': 'That player does not have a house.',
+  'house.error.visitNoPermission': 'You do not have permission to visit this house.',
+  'house.visitEntered': 'You visit the house.',
+  'house.permissionSet': 'House permission set to {permission}.',
+  'house.error.invalidPermission': 'Invalid permission level. Use: owner, friends, or public.',
   'error.playerNotFound': 'Player not found.',
 } as const;
 
@@ -4435,6 +4451,11 @@ const RULES: Rule[] = [
     re: /^Learned blueprint: (.+)\.$/,
     build: (m) => tSim('build.blueprintLearned', { name: m[1] }),
   },
+  // Phase 6: crafting stations
+  { re: /^You use the (.+) and gain a crafting bonus\.$/, build: (m) => tSim('station.used', { kind: m[1] }) },
+  // Phase 6: visit house
+  { re: /^You visit the house\.$/, build: () => tSim('house.visitEntered') },
+  { re: /^House permission set to (.+)\.$/, build: (m) => tSim('house.permissionSet', { permission: m[1] }) },
   { re: /^You feed (.+)\.$/, build: (m) => tSim('log.feedPet', { name: locMob(m[1]) }) },
   {
     re: /^You channel healing into (.+)\.$/,

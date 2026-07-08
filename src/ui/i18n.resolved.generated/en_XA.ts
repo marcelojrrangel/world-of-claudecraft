@@ -1175,6 +1175,37 @@ export const en_XA: EnTranslations = {
       "mining": "[Ɱíñíñĝ]",
       "logging": "[Ļóĝĝíñĝ]",
       "herbalism": "[Ĥéŕƀáļíšɱ]"
+    },
+    "construction": {
+      "buildMode": {
+        "title": "[Ɓúíļð Ɱóðé]",
+        "blueprints": "[Ɓļúéþŕíñţš]",
+        "phase": "[Þĥášé {current}/{total}]",
+        "materials": "[Ɱáţéŕíáļš Ŕéɋúíŕéð]",
+        "build": "[Ɓúíļð]",
+        "noSelection": "[Šéļéçţ á ƀļúéþŕíñţ ţó ƀúíļð.]"
+      },
+      "house": {
+        "title": "[Ĥóúšé]",
+        "tier": "[Ĥóúšé Ţíéŕ {tier}]",
+        "rooms": "[Ŕóóɱš]",
+        "furniture": "[Ƒúŕñíţúŕé: {count}]",
+        "restedBonus": "[Ŕéšţéð Ɓóñúš: {bonus}ẋ]",
+        "permission": "[Þéŕɱíššíóñ: {level}]",
+        "visit": "[Ʋíšíţ]",
+        "setPermission": "[Šéţ Þéŕɱíššíóñ]"
+      },
+      "furniture": {
+        "place": "[Þļáçé]",
+        "move": "[Ɱóʋé]",
+        "rotate": "[Ŕóţáţé]",
+        "remove": "[Ŕéɱóʋé]",
+        "cancel": "[Çáñçéļ]",
+        "confirm": "[Çóñƒíŕɱ]"
+      },
+      "keybind": {
+        "toggleBuildMode": "[Ţóĝĝļé Ɓúíļð Ɱóðé]"
+      }
     }
   },
   "guide": {

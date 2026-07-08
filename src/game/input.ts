@@ -56,7 +56,8 @@ export interface InputCallbacks {
       | 'arena'
       | 'leaderboard'
       | 'calendar'
-      | 'discord',
+      | 'discord'
+      | 'buildmode',
   ): void;
   onEmoteWheel(open: boolean): void;
   onClickPick(x: number, y: number, button: number): void;
@@ -766,6 +767,9 @@ export class Input {
         return;
       case 'leaderboard':
         this.cb.onUiKey('leaderboard');
+        return;
+      case 'buildmode':
+        this.cb.onUiKey('buildmode');
         return;
       case 'calendar':
         this.cb.onUiKey('calendar');

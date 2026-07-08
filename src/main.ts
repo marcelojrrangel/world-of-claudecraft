@@ -1167,6 +1167,9 @@ async function startGame(
           case 'calendar':
             hud.toggleCalendar();
             break;
+          case 'buildmode':
+            hud.toggleBuildMode();
+            break;
           case 'discord':
             toggleDiscordPanel();
             break;

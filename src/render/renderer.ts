@@ -3717,29 +3717,21 @@ export class Renderer {
         }
       }
     } else if (px >= HOUSE_X) {
-      // build the player's house interior and furniture
       this.houseInteriors ??= new HouseInteriors(this.scene, this.lowGfx);
       const tier = this.sim.houseState.houseTier;
-      if (tier >= 1) {
-        for (let slot = 0; slot < HOUSE_SLOT_COUNT; slot++) {
-          const key = `house:${slot}`;
-          const furnKey = `house_furn:${slot}`;
-          const ox = HOUSE_X;
-          const oz = HOUSE_Z0 + slot * HOUSE_SLOT_SPACING;
-          if (Math.abs(px - ox) < 200 && Math.abs(pz - oz) < 120) {
-            if (!this.builtInteriors.has(key)) {
-              this.builtInteriors.add(key);
-              this.houseInteriors.buildHouseInterior(ox, oz, tier);
-            }
-            // Build furniture if not yet placed
-            if (!this.builtInteriors.has(furnKey)) {
-              this.builtInteriors.add(furnKey);
-              const furniture = this.sim.placedFurniture;
-              if (furniture.length > 0) {
-                this.houseInteriors.placeFurnitureItems(ox, oz, furniture);
-              }
-            }
+      for (let slot = 0; slot < HOUSE_SLOT_COUNT; slot++) {
+        const key = `house:${slot}`;
+        const ox = HOUSE_X;
+        const oz = HOUSE_Z0 + slot * HOUSE_SLOT_SPACING;
+        const inRange = tier >= 1 && Math.abs(px - ox) < 200 && Math.abs(pz - oz) < 120;
+        if (inRange) {
+          this.houseInteriors.buildHouseInterior(ox, oz, tier, key);
+          const furniture = this.sim.placedFurniture;
+          if (furniture.length > 0) {
+            this.houseInteriors.placeFurnitureItems(key, furniture);
           }
+        } else {
+          this.houseInteriors.removeInterior(key);
         }
       }
     } else if (inside) {
@@ -3756,6 +3748,10 @@ export class Renderer {
           }
         }
       }
+    }
+    // Exterior LOD: remove house interiors when outside the house zone
+    if (this.houseInteriors && px < HOUSE_X) {
+      this.houseInteriors.removeAll();
     }
     // the Drowned Temple reads as submerged: a teal murk instead of the
     // crypt's near-black, so its flooded halls feel underwater, not just dark

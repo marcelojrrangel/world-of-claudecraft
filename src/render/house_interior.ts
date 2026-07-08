@@ -15,6 +15,9 @@ export class HouseInteriors {
   private wallGeo: THREE.BoxGeometry | null = null;
   private floorGeo: THREE.BoxGeometry | null = null;
 
+  private interiorGroups = new Map<string, THREE.Group>();
+  private furnitureGroups = new Map<string, THREE.Group>();
+
   constructor(private scene: THREE.Scene, private lowGfx: boolean) {}
 
   private getWallMat(): THREE.Material {
@@ -69,7 +72,13 @@ export class HouseInteriors {
     return new THREE.BoxGeometry(4, 0.1, 4);
   }
 
-  buildHouseInterior(originX: number, originZ: number, tier: number): void {
+  buildHouseInterior(originX: number, originZ: number, tier: number, key: string): THREE.Group {
+    const existing = this.interiorGroups.get(key);
+    if (existing) {
+      existing.visible = true;
+      return existing;
+    }
+
     const group = new THREE.Group();
     const zMin = Z0;
     const zMax = Z0 + tier * 10 + 6;
@@ -122,28 +131,6 @@ export class HouseInteriors {
       }
     }
 
-    // Grid overlay: thin lines every 0.5yd on the floor
-    const gridMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
-    const gridStep = 0.5;
-    for (let z = zMin + 0.5; z < zMax; z += gridStep) {
-      const points: THREE.Vector3[] = [];
-      for (let x = -WALL_HW + 1; x <= WALL_HW - 1; x += gridStep) {
-        points.push(new THREE.Vector3(x, FLOOR_Y + 0.01, z));
-      }
-      const geo = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(geo, gridMat);
-      group.add(line);
-    }
-    for (let x = -WALL_HW + 1; x <= WALL_HW - 1; x += gridStep) {
-      const points: THREE.Vector3[] = [];
-      for (let z = zMin + 0.5; z < zMax; z += gridStep) {
-        points.push(new THREE.Vector3(x, FLOOR_Y + 0.01, z));
-      }
-      const geo = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(geo, gridMat);
-      group.add(line);
-    }
-
     // Ceiling tiles
     for (let z = zMin; z < zMax; z += 4) {
       for (let x = -WALL_HW + 1; x <= WALL_HW - 1; x += 4) {
@@ -152,6 +139,25 @@ export class HouseInteriors {
         group.add(mesh);
       }
     }
+
+    // Grid overlay: consolidated LineSegments (0.5yd spacing, 0.08 opacity)
+    const segPoints: number[] = [];
+    const gStep = 0.5;
+    const gXMin = -WALL_HW + 1;
+    const gXMax = WALL_HW - 1;
+    for (let z = zMin + 0.5; z < zMax; z += gStep) {
+      segPoints.push(gXMin, FLOOR_Y + 0.01, z, gXMax, FLOOR_Y + 0.01, z);
+    }
+    for (let x = gXMin; x <= gXMax; x += gStep) {
+      segPoints.push(x, FLOOR_Y + 0.01, zMin + 0.5, x, FLOOR_Y + 0.01, zMax);
+    }
+    const gridGeo = new THREE.BufferGeometry();
+    gridGeo.setAttribute('position', new THREE.Float32BufferAttribute(segPoints, 3));
+    const gridLine = new THREE.LineSegments(
+      gridGeo,
+      new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, depthWrite: false }),
+    );
+    group.add(gridLine);
 
     // Room dividers for tier >= 2 (interior walls with 3yd door gap)
     if (tier >= 2) {
@@ -183,30 +189,88 @@ export class HouseInteriors {
 
     group.position.set(originX, 0, originZ);
     this.scene.add(group);
+    this.interiorGroups.set(key, group);
+    return group;
   }
 
   placeFurnitureItems(
-    originX: number,
-    originZ: number,
+    key: string,
     furniture: { itemId: string; x: number; z: number; rotY: number }[],
-  ): void {
+  ): THREE.Group {
+    const existing = this.furnitureGroups.get(key);
+    if (existing) {
+      existing.visible = true;
+      return existing;
+    }
+
     const group = new THREE.Group();
+    const dummy = new THREE.Object3D();
+
+    // Group furniture by itemId for instanced rendering
+    const byType = new Map<string, typeof furniture>();
     for (const f of furniture) {
-      const lx = f.x - originX;
-      const lz = f.z - originZ;
-      const size = FURNITURE_SIZES[f.itemId] ?? { w: 0.5, h: 0.8, d: 0.5 };
-      const color = FURNITURE_COLORS[f.itemId] ?? 0x8B6914;
+      let list = byType.get(f.itemId);
+      if (!list) byType.set(f.itemId, (list = []));
+      list.push(f);
+    }
+
+    for (const [itemId, items] of byType) {
+      const size = FURNITURE_SIZES[itemId] ?? { w: 0.5, h: 0.8, d: 0.5 };
+      const color = FURNITURE_COLORS[itemId] ?? 0x8b6914;
       const geo = new THREE.BoxGeometry(size.w, size.h, size.d);
       const mat = surfaceMat({ color, roughness: 0.8, metalness: 0 });
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(lx, size.h / 2, lz);
-      mesh.rotation.y = f.rotY;
+      const mesh = new THREE.InstancedMesh(geo, mat, items.length);
       mesh.castShadow = true;
       mesh.receiveShadow = true;
+
+      for (let i = 0; i < items.length; i++) {
+        const f = items[i];
+        dummy.position.set(f.x, size.h / 2, f.z);
+        dummy.rotation.y = f.rotY;
+        dummy.updateMatrix();
+        mesh.setMatrixAt(i, dummy.matrix);
+      }
+      mesh.instanceMatrix.needsUpdate = true;
       group.add(mesh);
     }
-    group.position.set(0, 0, 0);
+
     this.scene.add(group);
+    this.furnitureGroups.set(key, group);
+    return group;
+  }
+
+  removeInterior(key: string): void {
+    const group = this.interiorGroups.get(key);
+    if (group) {
+      this.scene.remove(group);
+      this.disposeGroup(group);
+      this.interiorGroups.delete(key);
+    }
+    const furnGroup = this.furnitureGroups.get(key);
+    if (furnGroup) {
+      this.scene.remove(furnGroup);
+      this.disposeGroup(furnGroup);
+      this.furnitureGroups.delete(key);
+    }
+  }
+
+  removeAll(): void {
+    for (const [key] of this.interiorGroups) {
+      this.removeInterior(key);
+    }
+  }
+
+  private disposeGroup(group: THREE.Group): void {
+    group.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.dispose();
+        if (Array.isArray(child.material)) {
+          for (const m of child.material) m.dispose();
+        } else {
+          child.material.dispose();
+        }
+      }
+    });
   }
 }
 
@@ -249,17 +313,17 @@ const FURNITURE_SIZES: Record<string, { w: number; h: number; d: number }> = {
 };
 
 const FURNITURE_COLORS: Record<string, number> = {
-  rustic_chair: 0x8B6914,
-  rustic_table: 0x8B6914,
+  rustic_chair: 0x8b6914,
+  rustic_table: 0x8b6914,
   rustic_bed: 0xa0724a,
-  rustic_shelf: 0x8B6914,
-  rustic_rug: 0x6B4E2E,
+  rustic_shelf: 0x8b6914,
+  rustic_rug: 0x6b4e2e,
   rustic_lamp: 0xc4a040,
-  rustic_cabinet: 0x6B3A1F,
-  sturdy_chair: 0x6B4E2E,
-  sturdy_table: 0x6B4E2E,
+  rustic_cabinet: 0x6b3a1f,
+  sturdy_chair: 0x6b4e2e,
+  sturdy_table: 0x6b4e2e,
   sturdy_bed: 0x7a5a3a,
-  sturdy_shelf: 0x6B4E2E,
+  sturdy_shelf: 0x6b4e2e,
   sturdy_rug: 0x4a3520,
   sturdy_lamp: 0xb8943a,
   ornate_chair: 0x4a2080,

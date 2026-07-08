@@ -26,17 +26,15 @@ export type GatheringProficiency = Record<GatheringProfessionId, number>;
 // Per-node harvest tuning (#1121). Each node type grants one fixed material item
 // and one point of the matching gathering profession's proficiency; no rng draw,
 // so the outcome is fully deterministic given the same sequence of harvests (the
-// item's RARITY roll is explicitly out of scope, see issue #1122). The items
-// reused below are existing generic junk entries (src/sim/content/items.ts): a
-// placeholder grant that avoids expanding the positional per-locale item-name
-// arrays in src/ui/i18n.catalog/items.ts for this issue; dedicated ore/wood/herb
-// items are future content work.
+// item's RARITY roll is explicitly out of scope, see issue #1122). Items come
+// from src/sim/content/construction_items.ts (rough_stone, raw_lumber) and
+// src/sim/content/items.ts (spider_leg).
 export const NODE_HARVEST_TABLE: Record<
   GatherNodeType,
   { professionId: GatheringProfessionId; itemId: string; respawnSeconds: number }
 > = {
-  ore: { professionId: 'mining', itemId: 'bone_fragments', respawnSeconds: 120 },
-  wood: { professionId: 'logging', itemId: 'linen_scrap', respawnSeconds: 120 },
+  ore: { professionId: 'mining', itemId: 'rough_stone', respawnSeconds: 120 },
+  wood: { professionId: 'logging', itemId: 'raw_lumber', respawnSeconds: 120 },
   herb: { professionId: 'herbalism', itemId: 'spider_leg', respawnSeconds: 120 },
 };
 
@@ -122,12 +120,9 @@ export interface HarvestResolution {
   itemId?: string;
   professionId?: GatheringProfessionId;
   // The rolled material rarity (#1122), scaled by the player's proficiency in the
-  // node's matching profession at the moment of harvest. Informational for now:
-  // NODE_HARVEST_TABLE still grants one fixed placeholder item id regardless of
-  // rarity (dedicated per-rarity ore/wood/herb items are future content work, same
-  // as the NODE_HARVEST_TABLE comment above), so this does not yet change what
-  // gets granted; it settles the roll contract callers (loot text, future content)
-  // build against.
+  // node's matching profession at the moment of harvest. The grant always gives
+  // the NODE_HARVEST_TABLE base item; rarity is informational for now and does not
+  // yet select a different-quality version of the same material.
   rarity?: MaterialRarity;
 }
 

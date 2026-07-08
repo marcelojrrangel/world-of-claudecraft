@@ -640,6 +640,16 @@ export const ZONE1_NPCS: Record<string, NpcDef> = {
     questIds: ['q_mine'],
     greeting: "Whole dig's crawling with those dirt-caked vermin!",
   },
+  builder_kael: {
+    id: 'builder_kael',
+    name: 'Apprentice Builder Kael',
+    title: 'Construction Tutor',
+    pos: { x: -3, z: 8 },
+    facing: Math.PI,
+    color: 0xd4a574,
+    questIds: ['q_building_intro', 'q_building_tools', 'q_building_shelter'],
+    greeting: 'New to the Vale, $N? Every homestead needs a strong foundation. Let me teach you the basics of construction.',
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -953,6 +963,56 @@ export const ZONE1_QUESTS: Record<string, QuestDef> = {
     minLevel: 6,
     suggestedPlayers: 3,
   },
+  // Construction tutorial chain (Phase 4)
+  q_building_intro: {
+    id: 'q_building_intro',
+    name: 'A Foundation to Build On',
+    giverNpcId: 'builder_kael',
+    turnInNpcId: 'builder_kael',
+    text: 'Welcome to Eastbrook, $N. I am Kael, the apprentice builder. The town needs new homesteads. Gather 4 Rough Stone and 4 Raw Lumber from the world, and I will show you the basics of construction.',
+    completionText: 'Good eye, $N. You can spot usable material. Now let us put them to work.',
+    objectives: [
+      { type: 'collect', itemId: 'rough_stone', count: 4, label: 'Rough Stone gathered' },
+      { type: 'collect', itemId: 'raw_lumber', count: 4, label: 'Raw Lumber gathered' },
+    ],
+    xpReward: 300,
+    copperReward: 100,
+    itemRewards: {},
+  },
+  q_building_tools: {
+    id: 'q_building_tools',
+    name: 'The Right Tool for the Job',
+    giverNpcId: 'builder_kael',
+    turnInNpcId: 'builder_kael',
+    text: 'No builder works with bare hands. Speak to Trader Wilkes in the market square — he carries a Builder Trowel that will help you shape stone and mortar. Buy one from him and bring it to me.',
+    completionText: 'A fine trowel. Trader Wilkes always stocks the best. Now — let us build something real.',
+    objectives: [
+      { type: 'collect', itemId: 'trowel_t1', count: 1, label: "Builder's Trowel obtained" },
+    ],
+    xpReward: 250,
+    copperReward: 50,
+    itemRewards: {},
+    requiresQuest: 'q_building_intro',
+  },
+  q_building_shelter: {
+    id: 'q_building_shelter',
+    name: 'A Roof Over Your Head',
+    giverNpcId: 'builder_kael',
+    turnInNpcId: 'builder_kael',
+    text: 'You have your materials and your tools. Now learn to build. Visit the building authority at the edge of town and purchase a plot of land. Use your trowel to raise a humble tent. Once it stands, enter your new shelter and claim a well-earned rest.',
+    completionText: 'Look at that, $N. You built something that will last. Eastbrook needs more folks like you.',
+    objectives: [
+      { type: 'interact', targetObjectItemId: 'plot_deed', count: 1, label: 'Purchase a building plot' },
+    ],
+    xpReward: 600,
+    copperReward: 300,
+    itemRewards: {
+      warrior: 'blueprint_tent',
+      mage: 'blueprint_tent',
+      rogue: 'blueprint_tent',
+    },
+    requiresQuest: 'q_building_tools',
+  },
 };
 
 export const ZONE1_QUEST_ORDER = [
@@ -964,6 +1024,9 @@ export const ZONE1_QUEST_ORDER = [
   'q_supplies',
   'q_bandits',
   'q_mine',
+  'q_building_intro',
+  'q_building_tools',
+  'q_building_shelter',
   'q_bones',
   'q_ringleader',
   'q_whispers',

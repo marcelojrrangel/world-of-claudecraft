@@ -108,6 +108,7 @@ const NPC_IDS = [
   'smith_haldren',
   'fisherman_brandt',
   'foreman_odell',
+  'builder_kael',
   'warden_fenwick',
   'brother_aldric_fen',
   'provisioner_hale',
@@ -219,6 +220,9 @@ const LETTER_IDS = [
   'letter_q_wolves',
   'letter_q_greyjaw',
   'letter_q_hollow',
+  'q_building_intro',
+  'q_building_tools',
+  'q_building_shelter',
 ] as const;
 
 type MobId = (typeof MOB_IDS)[number];

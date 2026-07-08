@@ -9645,6 +9645,9 @@ export class Hud {
       sim: this.sim,
       hideTooltip: () => this.hideTooltip(),
       onClose: () => this.closeBuildMode(),
+      onPlaceFurniture: (itemId) => this.sim.placeFurniture(itemId, 0, 0, 0),
+      onMoveFurniture: (placedId) => this.sim.moveFurniture(placedId, 0, 0, 0),
+      onRemoveFurniture: (placedId) => this.sim.removeFurniture(placedId),
     });
   }
 

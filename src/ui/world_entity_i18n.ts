@@ -202,6 +202,9 @@ const QUEST_IDS = [
   'q_nythraxis_bound_guardian',
   'q_nythraxis_scourges_end',
   'q_mogger',
+  'q_building_intro',
+  'q_building_tools',
+  'q_building_shelter',
 ] as const;
 
 const ZONE_IDS = ['eastbrook_vale', 'mirefen_marsh', 'thornpeak_heights'] as const;
@@ -220,9 +223,6 @@ const LETTER_IDS = [
   'letter_q_wolves',
   'letter_q_greyjaw',
   'letter_q_hollow',
-  'q_building_intro',
-  'q_building_tools',
-  'q_building_shelter',
 ] as const;
 
 type MobId = (typeof MOB_IDS)[number];

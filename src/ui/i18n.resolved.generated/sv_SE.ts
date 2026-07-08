@@ -6662,6 +6662,11 @@ export const sv_SE: EnTranslations = {
         "title": "Gruvförman",
         "greeting": "Hela utgrävningen kryllar av de där lerinkrustade skadedjuren!"
       },
+      "builder_kael": {
+        "name": "Apprentice Builder Kael",
+        "title": "Construction Tutor",
+        "greeting": "New to the Vale, {playerName}? Every homestead needs a strong foundation. Let me teach you the basics of construction."
+      },
       "warden_fenwick": {
         "name": "Väktaren Fenwick",
         "title": "Väktare av Fenbridge",
@@ -7528,6 +7533,39 @@ export const sv_SE: EnTranslations = {
         "objectives": {
           "0": {
             "label": "Mogger dräpt"
+          }
+        }
+      },
+      "q_building_intro": {
+        "title": "A Foundation to Build On",
+        "text": "Welcome to Eastbrook, {playerName}. I am Kael, the apprentice builder. The town needs new homesteads. Gather 4 Rough Stone and 4 Raw Lumber from the world, and I will show you the basics of construction.",
+        "completion": "Good eye, {playerName}. You can spot usable material. Now let us put them to work.",
+        "objectives": {
+          "0": {
+            "label": "Rough Stone gathered"
+          },
+          "1": {
+            "label": "Raw Lumber gathered"
+          }
+        }
+      },
+      "q_building_tools": {
+        "title": "The Right Tool for the Job",
+        "text": "No builder works with bare hands. Speak to Trader Wilkes in the market square - he carries a Builder Trowel that will help you shape stone and mortar. Buy one from him and bring it to me.",
+        "completion": "A fine trowel. Trader Wilkes always stocks the best. Now - let us build something real.",
+        "objectives": {
+          "0": {
+            "label": "Builder's Trowel obtained"
+          }
+        }
+      },
+      "q_building_shelter": {
+        "title": "A Roof Over Your Head",
+        "text": "You have your materials and your tools. Now learn to build. Visit the building authority at the edge of town and purchase a plot of land. Use your trowel to raise a humble tent. Once it stands, enter your new shelter and claim a well-earned rest.",
+        "completion": "Look at that, {playerName}. You built something that will last. Eastbrook needs more folks like you.",
+        "objectives": {
+          "0": {
+            "label": "Purchase a building plot"
           }
         }
       },

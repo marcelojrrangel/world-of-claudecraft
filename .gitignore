@@ -70,6 +70,9 @@ Thumbs.db
 !.claude/hooks/
 !.claude/settings.json
 .cursor/
+.opencode/
+opencode.json
+TUTORIAL_OPCODE.md
 
 # local SDK/tooling dump (extracted command-line tools, not project source)
 postgres/

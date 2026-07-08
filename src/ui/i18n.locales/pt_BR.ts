@@ -3200,6 +3200,9 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.npcs.foreman_odell.title': 'Capataz da mina',
   'entities.npcs.foreman_odell.greeting':
     'A galeria inteira está fervilhando desses vermes cobertos de terra!',
+  'entities.npcs.builder_kael.name': 'Aprendiz Construtor Kael',
+  'entities.npcs.builder_kael.title': 'Tutor de Construção',
+  'entities.npcs.builder_kael.greeting': 'Novato no Vale, $N? Toda propriedade precisa de uma fundação sólida. Deixe-me ensinar os fundamentos da construção.',
   'entities.npcs.warden_fenwick.name': 'Guardião Fenwick',
   'entities.npcs.warden_fenwick.title': 'Guardião de Fenbridge',
   'entities.npcs.warden_fenwick.greeting':

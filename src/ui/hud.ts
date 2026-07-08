@@ -331,6 +331,7 @@ import { UnitFramePainter } from './unit_frame_painter';
 import { crestIdForEntity } from './unit_portrait';
 import { UnitPortraitPainter } from './unit_portrait_painter';
 import { buildVendorView } from './vendor_view';
+import { renderBuildModeWindow } from './build_mode_window';
 import { renderVendorWindow } from './vendor_window';
 import { nextVoicedYell, type VoicedYellState, voicedYellGain } from './voice_events';
 import {
@@ -1000,6 +1001,7 @@ export class Hud {
     { event: Extract<SimEvent, { type: 'masterLoot' }>; receivedAt: number; durationMs: number }
   >();
   private openVendorNpcId: number | null = null;
+  private buildModeOpen = false;
   private openDelveBoardNpcId: number | null = null;
   private lastDelveTrackerSig = '';
   private selectedDelveTier: 'normal' | 'heroic' = 'normal';
@@ -1954,6 +1956,9 @@ export class Hud {
         break;
       case 'vendor-window':
         this.closeVendor();
+        break;
+      case 'build-mode-window':
+        this.closeBuildMode();
         break;
       case 'loot-window':
         this.closeLoot();
@@ -9608,6 +9613,35 @@ export class Hud {
 
   get vendorOpen(): boolean {
     return this.openVendorNpcId !== null;
+  }
+
+  toggleBuildMode(): void {
+    if (this.buildModeOpen) {
+      this.closeBuildMode();
+    } else {
+      this.openBuildMode();
+    }
+  }
+
+  private openBuildMode(): void {
+    this.buildModeOpen = true;
+    $('#build-mode-window').style.display = 'block';
+    this.renderBuildMode();
+  }
+
+  private closeBuildMode(): void {
+    this.buildModeOpen = false;
+    $('#build-mode-window').style.display = 'none';
+    this.hideTooltip();
+  }
+
+  private renderBuildMode(): void {
+    if (!this.buildModeOpen) return;
+    renderBuildModeWindow($('#build-mode-window'), {
+      sim: this.sim,
+      hideTooltip: () => this.hideTooltip(),
+      onClose: () => this.closeBuildMode(),
+    });
   }
 
   // -------------------------------------------------------------------------

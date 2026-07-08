@@ -3516,9 +3516,11 @@ export class GameServer {
     maybe('hprog', this.sim.currentHouseProgressFor(anchorSession.pid));
     // Phase 5: placed furniture (delta-guarded, rides only on change).
     maybe('furn', this.sim.placedFurnitureFor(anchorSession.pid));
-    // Phase 6: house rested bonus and stations.
+    // Phase 3: house state (plot + tier) and stations.
+    maybe('hstate', this.sim.houseStateFor(anchorSession.pid));
+    maybe('hstatn', this.sim.houseStationsFor(anchorSession.pid));
+    // Phase 6: house rested bonus and chest contents (delta-guarded).
     maybe('hben', this.sim.houseRestedBonusFor(anchorSession.pid));
-    // Phase 6: chest contents (delta-guarded).
     maybe('chests', this.sim.chestContentsAllFor(anchorSession.pid));
     // stats + weapon stay per-tick: recalcPlayerStats re-derives them on every
     // stat-affecting aura gain/loss (Bear/Cat Form, shouts, debuffs, elixir

@@ -25,6 +25,7 @@ import type {
 
 export type { FishingEntry } from './content/items';
 export { FISHING_RARE_ID, FISHING_TABLES };
+import { HOUSE_X } from './types';
 
 import {
   BROTHER_HALVEN,
@@ -463,7 +464,7 @@ export function delveOrigin(delveIndex: number, slot: number): { x: number; z: n
 }
 
 export function isDelvePos(x: number): boolean {
-  return x >= DELVE_BAND_X_MIN;
+  return x >= DELVE_BAND_X_MIN && x < HOUSE_X;
 }
 
 export function delveAt(x: number): DelveDef | null {

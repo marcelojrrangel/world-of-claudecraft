@@ -6846,8 +6846,14 @@ export class Sim {
     return this.houseRestedBonusFor(this.primaryId);
   }
 
-  get houseStations(): import('../world_api/construction').StationView[] {
-    const meta = this.primary;
+  houseStateFor(pid: number): import('../world_api/construction').HouseView {
+    const meta = this.players.get(pid);
+    if (!meta) return { plotId: null, houseTier: 0 };
+    return { plotId: meta.construction.plotId, houseTier: meta.construction.houseTier };
+  }
+
+  houseStationsFor(pid: number): import('../world_api/construction').StationView[] {
+    const meta = this.players.get(pid);
     if (!meta) return [];
     const out: import('../world_api/construction').StationView[] = [];
     for (const f of placedFurnitureFor({ construction: meta.construction })) {
@@ -6857,6 +6863,10 @@ export class Sim {
       }
     }
     return out;
+  }
+
+  get houseStations(): import('../world_api/construction').StationView[] {
+    return this.houseStationsFor(this.primaryId);
   }
 
   useStation(placedId: string): boolean {

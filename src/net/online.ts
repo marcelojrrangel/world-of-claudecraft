@@ -1664,6 +1664,8 @@ export class ClientWorld implements IWorld {
       if (s.const !== undefined) this.constructionSkill = s.const ?? { skill: 0, maxSkill: 300 };
       if (s.bps !== undefined) this.knownBlueprints = s.bps ?? [];
       if (s.hprog !== undefined) this.currentHouseProgress = s.hprog ?? null;
+      if (s.hstate !== undefined) this.houseState = s.hstate ?? { plotId: null, houseTier: 0 };
+      if (s.hstatn !== undefined) this.houseStations = s.hstatn ?? [];
       if (s.furn !== undefined) this.placedFurniture = s.furn ?? [];
       if (s.chests !== undefined) this.chestContentsData = s.chests ?? {};
       if (s.hben !== undefined) this.houseRestedBonus = s.hben ?? 0;

@@ -2,7 +2,7 @@
 
 | Fase | Status | Inicio | Fim | Branch |
 |------|--------|--------|-----|--------|
-| 1 - Fix blockers | pending | - | - | `feature/construction-fix-blockers` |
+| 1 - Fix blockers | done | 2026-07-08 | - | `feature/construction-fix-blockers` |
 | 1 QA | pending | - | - | mesma |
 | 2 - Interior renderer | pending | - | - | `feature/construction-interior` |
 | 2 QA | pending | - | - | mesma |

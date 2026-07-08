@@ -1,11 +1,27 @@
 import { esc } from './esc';
 import { t } from './i18n';
+import { isPlaceableFurniture } from '../sim/professions/construction/furniture';
 import type { IWorld } from '../world_api';
 
 export interface BuildModeWindowDeps {
   sim: IWorld;
   hideTooltip(): void;
   onClose(): void;
+  onPlaceFurniture(itemId: string): void;
+  onMoveFurniture(placedId: string): void;
+  onRemoveFurniture(placedId: string): void;
+}
+
+/** Furniture items the player can place (filtered from inventory). */
+function placeableInventoryItems(sim: IWorld): { itemId: string; count: number }[] {
+  const inv = sim.inventory;
+  const seen = new Map<string, number>();
+  for (const slot of inv) {
+    if (slot.count > 0 && isPlaceableFurniture(slot.itemId)) {
+      seen.set(slot.itemId, (seen.get(slot.itemId) ?? 0) + slot.count);
+    }
+  }
+  return [...seen.entries()].map(([itemId, count]) => ({ itemId, count }));
 }
 
 export function renderBuildModeWindow(
@@ -17,8 +33,9 @@ export function renderBuildModeWindow(
   const progress = sim.currentHouseProgress;
   const houseState = sim.houseState;
   const tier = houseState.houseTier;
-  const stationCount = sim.houseStations.length;
   const furnitureCount = sim.placedFurniture.length;
+  const placed = sim.placedFurniture;
+  const inventoryItems = placeableInventoryItems(sim);
 
   el.innerHTML = `
     <div class="panel-title">
@@ -46,9 +63,38 @@ export function renderBuildModeWindow(
           <p>${esc(t('hudChrome.construction.buildMode.phase', { current: progress.currentPhase, total: progress.totalPhases }))}</p>
         </div>`
         : ''}
+      <div class="build-mode-section">
+        <h3>${esc(t('hudChrome.construction.furniture.place'))}</h3>
+        ${inventoryItems.length === 0
+          ? `<p class="build-mode-empty">${esc(t('hudChrome.construction.buildMode.noSelection'))}</p>`
+          : `<ul class="build-mode-furn-list">
+            ${inventoryItems.map((fi) => `<li><button type="button" class="build-mode-place-btn" data-item="${esc(fi.itemId)}">${esc(fi.itemId)} (${fi.count})</button></li>`).join('')}
+          </ul>`}
+      </div>
+      ${placed.length > 0
+        ? `<div class="build-mode-section">
+          <h3>${esc(t('hudChrome.construction.furniture.remove'))}</h3>
+          <ul class="build-mode-placed-list">
+            ${placed.map((pf) => `<li>
+              <span>${esc(pf.itemId)}</span>
+              <button type="button" class="build-mode-move-btn" data-placed="${esc(pf.id)}">${esc(t('hudChrome.construction.furniture.move'))}</button>
+              <button type="button" class="build-mode-remove-btn" data-placed="${esc(pf.id)}">${esc(t('hudChrome.construction.furniture.remove'))}</button>
+            </li>`).join('')}
+          </ul>
+        </div>`
+        : ''}
     </div>`;
 
-  // Wire close button
   const closeBtn = el.querySelector('[data-close]');
   if (closeBtn) closeBtn.addEventListener('click', () => deps.onClose());
+
+  for (const btn of el.querySelectorAll('.build-mode-place-btn')) {
+    btn.addEventListener('click', () => deps.onPlaceFurniture((btn as HTMLElement).dataset.item!));
+  }
+  for (const btn of el.querySelectorAll('.build-mode-move-btn')) {
+    btn.addEventListener('click', () => deps.onMoveFurniture((btn as HTMLElement).dataset.placed!));
+  }
+  for (const btn of el.querySelectorAll('.build-mode-remove-btn')) {
+    btn.addEventListener('click', () => deps.onRemoveFurniture((btn as HTMLElement).dataset.placed!));
+  }
 }

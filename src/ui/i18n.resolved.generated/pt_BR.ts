@@ -6930,9 +6930,9 @@ export const pt_BR: EnTranslations = {
         "greeting": "A galeria inteira está fervilhando desses vermes cobertos de terra!"
       },
       "builder_kael": {
-        "name": "Apprentice Builder Kael",
-        "title": "Construction Tutor",
-        "greeting": "New to the Vale, {playerName}? Every homestead needs a strong foundation. Let me teach you the basics of construction."
+        "name": "Aprendiz Construtor Kael",
+        "title": "Tutor de Construção",
+        "greeting": "Novato no Vale, {playerName}? Toda propriedade precisa de uma fundação sólida. Deixe-me ensinar os fundamentos da construção."
       },
       "warden_fenwick": {
         "name": "Guardião Fenwick",
@@ -7804,35 +7804,35 @@ export const pt_BR: EnTranslations = {
         }
       },
       "q_building_intro": {
-        "title": "A Foundation to Build On",
-        "text": "Welcome to Eastbrook, {playerName}. I am Kael, the apprentice builder. The town needs new homesteads. Gather 4 Rough Stone and 4 Raw Lumber from the world, and I will show you the basics of construction.",
-        "completion": "Good eye, {playerName}. You can spot usable material. Now let us put them to work.",
+        "title": "Uma Fundação para Construir",
+        "text": "Bem-vindo a Eastbrook, {playerName}. Sou Kael, o aprendiz de construtor. A cidade precisa de novas moradias. Junte 4 Pedras Brutas e 4 Madeiras Brutas pelo mundo, e eu lhe mostrarei os fundamentos da construção.",
+        "completion": "Bom olho, {playerName}. Você sabe reconhecer material utilizável. Agora vamos colocá-los para trabalhar.",
         "objectives": {
           "0": {
-            "label": "Rough Stone gathered"
+            "label": "Pedra Bruta coletada"
           },
           "1": {
-            "label": "Raw Lumber gathered"
+            "label": "Madeira Bruta coletada"
           }
         }
       },
       "q_building_tools": {
-        "title": "The Right Tool for the Job",
-        "text": "No builder works with bare hands. Speak to Trader Wilkes in the market square - he carries a Builder Trowel that will help you shape stone and mortar. Buy one from him and bring it to me.",
-        "completion": "A fine trowel. Trader Wilkes always stocks the best. Now - let us build something real.",
+        "title": "A Ferramenta Certa para o Trabalho",
+        "text": "Nenhum construtor trabalha com as mãos nuas. Fale com o Comerciante Wilkes na praça do mercado -- ele vende uma Colher de Pedreiro que o ajudará a moldar pedra e argamassa. Compre uma dele e traga para mim.",
+        "completion": "Uma bela colher de pedreiro. O Comerciante Wilkes sempre tem os melhores equipamentos. Agora -- vamos construir algo de verdade.",
         "objectives": {
           "0": {
-            "label": "Builder's Trowel obtained"
+            "label": "Colher de Pedreiro obtida"
           }
         }
       },
       "q_building_shelter": {
-        "title": "A Roof Over Your Head",
-        "text": "You have your materials and your tools. Now learn to build. Visit the building authority at the edge of town and purchase a plot of land. Use your trowel to raise a humble tent. Once it stands, enter your new shelter and claim a well-earned rest.",
-        "completion": "Look at that, {playerName}. You built something that will last. Eastbrook needs more folks like you.",
+        "title": "Um Teto sobre Sua Cabeça",
+        "text": "Você tem seus materiais e suas ferramentas. Agora aprenda a construir. Visite a autoridade de construção na entrada da cidade e compre um terreno. Use sua colher de pedreiro para erguer uma tenda modesta. Quando estiver de pé, entre em seu novo abrigo e descanse merecidamente.",
+        "completion": "Olhe só, {playerName}. Você construiu algo que vai durar. Eastbrook precisa de mais pessoas como você.",
         "objectives": {
           "0": {
-            "label": "Purchase a building plot"
+            "label": "Compre um terreno"
           }
         }
       },

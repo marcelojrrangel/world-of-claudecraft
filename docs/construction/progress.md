@@ -100,10 +100,10 @@
 - [x] `npx tsc --noEmit` green
 
 ### Phase 7 — UI & HUD
-- [ ] Build mode HUD panel (blueprint list, phase progress, material requirements)
+- [x] Build mode HUD panel (blueprint list, phase progress, material requirements)
 - [ ] House overview window (tier, rooms, furniture count, rested bonus)
 - [ ] Furniture placement controls (pick, move, rotate, remove)
-- [ ] Build mode toggle keybind (default: B)
+- [x] Build mode toggle keybind (default: F3)
 - [x] i18n keys for all construction UI text (hud_chrome.ts + sim_i18n.ts)
 - [x] S3 drift guard green (`tests/localization_fixes.test.ts`)
 - [ ] Mobile touch support for build mode

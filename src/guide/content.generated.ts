@@ -80,6 +80,21 @@ export interface GuideDelve {
   affixes: string[];
 }
 
+export interface GuideBlueprintPhaseMaterial { itemId: string; count: number; }
+export interface GuideBlueprintPhase { nameId: string; materials: GuideBlueprintPhaseMaterial[]; toolTier: number; skillGain: number; trivialAt: number; }
+export interface GuideBlueprint {
+  id: string;
+  name: string;
+  tier: number;
+  requiredSkill: number;
+  itemId: string;
+  phases: GuideBlueprintPhase[];
+}
+export interface GuideFurnitureItem { id: string; name: string; }
+export interface GuideFurnitureSet { setId: string; label: string; quality: string; minTier: number; items: GuideFurnitureItem[]; }
+export interface GuideCraftStation { id: string; name: string; }
+export interface GuideChestItem { id: string; name: string; quality: string; }
+
 export const GUIDE_CLASSES: GuideClassInfo[] = [
   {
     "id": "warrior",
@@ -2017,3 +2032,772 @@ export const GUIDE_MODELS: Record<string, GuideModelSpec> = {
     "tintStrength": 0.2
   }
 };
+
+export const GUIDE_BLUEPRINTS: GuideBlueprint[] = [
+  {
+    "id": "blueprint_tent",
+    "name": "Builder's Tent",
+    "tier": 1,
+    "requiredSkill": 0,
+    "itemId": "blueprint_tent",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "rough_stone",
+            "count": 5
+          },
+          {
+            "itemId": "raw_lumber",
+            "count": 2
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 2,
+        "trivialAt": 30
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "raw_lumber",
+            "count": 3
+          },
+          {
+            "itemId": "sawed_plank",
+            "count": 2
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 2,
+        "trivialAt": 30
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "canvas_scrap",
+            "count": 4
+          },
+          {
+            "itemId": "raw_lumber",
+            "count": 3
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 2,
+        "trivialAt": 30
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "canvas_scrap",
+            "count": 3
+          },
+          {
+            "itemId": "rough_stone",
+            "count": 2
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 2,
+        "trivialAt": 30
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "bedroll",
+            "count": 1
+          },
+          {
+            "itemId": "candle",
+            "count": 1
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 2,
+        "trivialAt": 35
+      }
+    ]
+  },
+  {
+    "id": "blueprint_wooden_shack",
+    "name": "Wooden Shack",
+    "tier": 2,
+    "requiredSkill": 25,
+    "itemId": "blueprint_wooden_shack",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "rough_stone",
+            "count": 10
+          },
+          {
+            "itemId": "clay_lump",
+            "count": 5
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 4,
+        "trivialAt": 65
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "raw_lumber",
+            "count": 8
+          },
+          {
+            "itemId": "sawed_plank",
+            "count": 10
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 10
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 4,
+        "trivialAt": 65
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "sawed_plank",
+            "count": 12
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 10
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 4,
+        "trivialAt": 65
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "clay_tile",
+            "count": 10
+          },
+          {
+            "itemId": "sawed_plank",
+            "count": 6
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 4,
+        "trivialAt": 70
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "door_wooden",
+            "count": 1
+          },
+          {
+            "itemId": "window_shutter",
+            "count": 1
+          }
+        ],
+        "toolTier": 1,
+        "skillGain": 4,
+        "trivialAt": 70
+      }
+    ]
+  },
+  {
+    "id": "blueprint_timber_cottage",
+    "name": "Timber Cottage",
+    "tier": 3,
+    "requiredSkill": 60,
+    "itemId": "blueprint_timber_cottage",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "cut_stone",
+            "count": 15
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 8
+          }
+        ],
+        "toolTier": 2,
+        "skillGain": 6,
+        "trivialAt": 125
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "sawed_plank",
+            "count": 12
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 15
+          },
+          {
+            "itemId": "iron_hinge",
+            "count": 4
+          }
+        ],
+        "toolTier": 2,
+        "skillGain": 6,
+        "trivialAt": 125
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "sawed_plank",
+            "count": 20
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 5
+          }
+        ],
+        "toolTier": 2,
+        "skillGain": 6,
+        "trivialAt": 125
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "clay_tile",
+            "count": 15
+          },
+          {
+            "itemId": "sawed_plank",
+            "count": 8
+          }
+        ],
+        "toolTier": 2,
+        "skillGain": 6,
+        "trivialAt": 130
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "door_sturdy",
+            "count": 1
+          },
+          {
+            "itemId": "glass_pane",
+            "count": 2
+          }
+        ],
+        "toolTier": 2,
+        "skillGain": 6,
+        "trivialAt": 130
+      }
+    ]
+  },
+  {
+    "id": "blueprint_stone_house",
+    "name": "Stone House",
+    "tier": 4,
+    "requiredSkill": 120,
+    "itemId": "blueprint_stone_house",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "granite_block",
+            "count": 25
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 15
+          }
+        ],
+        "toolTier": 3,
+        "skillGain": 7,
+        "trivialAt": 185
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "reinforced_beam",
+            "count": 20
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 20
+          },
+          {
+            "itemId": "iron_hinge",
+            "count": 8
+          }
+        ],
+        "toolTier": 3,
+        "skillGain": 7,
+        "trivialAt": 185
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "granite_block",
+            "count": 30
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 20
+          }
+        ],
+        "toolTier": 3,
+        "skillGain": 7,
+        "trivialAt": 185
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "fired_brick",
+            "count": 20
+          },
+          {
+            "itemId": "clay_tile",
+            "count": 10
+          }
+        ],
+        "toolTier": 3,
+        "skillGain": 7,
+        "trivialAt": 190
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "door_ironbound",
+            "count": 1
+          },
+          {
+            "itemId": "glass_pane",
+            "count": 4
+          },
+          {
+            "itemId": "iron_grille",
+            "count": 2
+          }
+        ],
+        "toolTier": 3,
+        "skillGain": 7,
+        "trivialAt": 190
+      }
+    ]
+  },
+  {
+    "id": "blueprint_manor",
+    "name": "Country Manor",
+    "tier": 5,
+    "requiredSkill": 180,
+    "itemId": "blueprint_manor",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "marble_block",
+            "count": 40
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 25
+          }
+        ],
+        "toolTier": 4,
+        "skillGain": 8,
+        "trivialAt": 240
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "reinforced_beam",
+            "count": 30
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 30
+          },
+          {
+            "itemId": "iron_hinge",
+            "count": 12
+          }
+        ],
+        "toolTier": 4,
+        "skillGain": 8,
+        "trivialAt": 240
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "marble_block",
+            "count": 50
+          },
+          {
+            "itemId": "limestone_mortar",
+            "count": 30
+          }
+        ],
+        "toolTier": 4,
+        "skillGain": 8,
+        "trivialAt": 240
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "fired_brick",
+            "count": 30
+          },
+          {
+            "itemId": "clay_tile",
+            "count": 20
+          },
+          {
+            "itemId": "glass_pane",
+            "count": 5
+          }
+        ],
+        "toolTier": 4,
+        "skillGain": 8,
+        "trivialAt": 245
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "door_ironbound",
+            "count": 2
+          },
+          {
+            "itemId": "crystal_pane",
+            "count": 6
+          },
+          {
+            "itemId": "iron_grille",
+            "count": 3
+          }
+        ],
+        "toolTier": 4,
+        "skillGain": 8,
+        "trivialAt": 245
+      }
+    ]
+  },
+  {
+    "id": "blueprint_grand_estate",
+    "name": "Grand Estate",
+    "tier": 6,
+    "requiredSkill": 240,
+    "itemId": "blueprint_grand_estate",
+    "phases": [
+      {
+        "nameId": "foundation",
+        "materials": [
+          {
+            "itemId": "rune_carved_stone",
+            "count": 60
+          },
+          {
+            "itemId": "enchanted_lumber",
+            "count": 40
+          }
+        ],
+        "toolTier": 5,
+        "skillGain": 10,
+        "trivialAt": 300
+      },
+      {
+        "nameId": "frame",
+        "materials": [
+          {
+            "itemId": "enchanted_lumber",
+            "count": 50
+          },
+          {
+            "itemId": "iron_nail",
+            "count": 40
+          },
+          {
+            "itemId": "iron_hinge",
+            "count": 20
+          }
+        ],
+        "toolTier": 5,
+        "skillGain": 10,
+        "trivialAt": 300
+      },
+      {
+        "nameId": "walls",
+        "materials": [
+          {
+            "itemId": "rune_carved_stone",
+            "count": 60
+          },
+          {
+            "itemId": "enchanted_lumber",
+            "count": 40
+          }
+        ],
+        "toolTier": 5,
+        "skillGain": 10,
+        "trivialAt": 300
+      },
+      {
+        "nameId": "roof",
+        "materials": [
+          {
+            "itemId": "fired_brick",
+            "count": 40
+          },
+          {
+            "itemId": "clay_tile",
+            "count": 30
+          },
+          {
+            "itemId": "crystal_pane",
+            "count": 10
+          }
+        ],
+        "toolTier": 5,
+        "skillGain": 10,
+        "trivialAt": 300
+      },
+      {
+        "nameId": "details",
+        "materials": [
+          {
+            "itemId": "door_runic",
+            "count": 2
+          },
+          {
+            "itemId": "crystal_pane",
+            "count": 10
+          },
+          {
+            "itemId": "rune_carved_stone",
+            "count": 5
+          }
+        ],
+        "toolTier": 5,
+        "skillGain": 10,
+        "trivialAt": 300
+      }
+    ]
+  }
+];
+
+export const GUIDE_FURNITURE_SETS: GuideFurnitureSet[] = [
+  {
+    "setId": "rustic",
+    "label": "Rustic",
+    "quality": "poor",
+    "minTier": 1,
+    "items": [
+      {
+        "id": "rustic_chair",
+        "name": "Rustic Chair"
+      },
+      {
+        "id": "rustic_table",
+        "name": "Rustic Table"
+      },
+      {
+        "id": "rustic_bed",
+        "name": "Rustic Bed"
+      },
+      {
+        "id": "rustic_shelf",
+        "name": "Rustic Shelf"
+      },
+      {
+        "id": "rustic_rug",
+        "name": "Rustic Rug"
+      },
+      {
+        "id": "rustic_lamp",
+        "name": "Rustic Lamp"
+      },
+      {
+        "id": "rustic_cabinet",
+        "name": "Rustic Cabinet"
+      }
+    ]
+  },
+  {
+    "setId": "sturdy",
+    "label": "Sturdy",
+    "quality": "common",
+    "minTier": 2,
+    "items": [
+      {
+        "id": "sturdy_chair",
+        "name": "Sturdy Chair"
+      },
+      {
+        "id": "sturdy_table",
+        "name": "Sturdy Table"
+      },
+      {
+        "id": "sturdy_bed",
+        "name": "Sturdy Bed"
+      },
+      {
+        "id": "sturdy_shelf",
+        "name": "Sturdy Shelf"
+      },
+      {
+        "id": "sturdy_rug",
+        "name": "Sturdy Rug"
+      },
+      {
+        "id": "sturdy_lamp",
+        "name": "Sturdy Lamp"
+      }
+    ]
+  },
+  {
+    "setId": "ornate",
+    "label": "Ornate",
+    "quality": "uncommon",
+    "minTier": 3,
+    "items": [
+      {
+        "id": "ornate_chair",
+        "name": "Ornate Chair"
+      },
+      {
+        "id": "ornate_table",
+        "name": "Ornate Table"
+      },
+      {
+        "id": "ornate_bed",
+        "name": "Ornate Bed"
+      },
+      {
+        "id": "ornate_cabinet",
+        "name": "Ornate Cabinet"
+      },
+      {
+        "id": "ornate_lamp",
+        "name": "Ornate Lamp"
+      },
+      {
+        "id": "ornate_rug",
+        "name": "Ornate Rug"
+      }
+    ]
+  },
+  {
+    "setId": "exquisite",
+    "label": "Exquisite",
+    "quality": "rare",
+    "minTier": 4,
+    "items": [
+      {
+        "id": "exquisite_chair",
+        "name": "Exquisite Chair"
+      },
+      {
+        "id": "exquisite_table",
+        "name": "Exquisite Table"
+      },
+      {
+        "id": "exquisite_bed",
+        "name": "Exquisite Bed"
+      },
+      {
+        "id": "exquisite_lamp",
+        "name": "Exquisite Lamp"
+      }
+    ]
+  },
+  {
+    "setId": "masterwork",
+    "label": "Masterwork",
+    "quality": "epic",
+    "minTier": 5,
+    "items": [
+      {
+        "id": "masterwork_chair",
+        "name": "Masterwork Chair"
+      },
+      {
+        "id": "masterwork_table",
+        "name": "Masterwork Table"
+      },
+      {
+        "id": "masterwork_bed",
+        "name": "Masterwork Bed"
+      },
+      {
+        "id": "masterwork_rug",
+        "name": "Masterwork Rug"
+      }
+    ]
+  }
+];
+
+export const GUIDE_CRAFT_STATIONS: GuideCraftStation[] = [
+  {
+    "id": "station_workbench",
+    "name": "Workbench"
+  },
+  {
+    "id": "station_anvil",
+    "name": "Anvil"
+  },
+  {
+    "id": "station_alchemy",
+    "name": "Alchemy Station"
+  },
+  {
+    "id": "station_cooking_fire",
+    "name": "Cooking Fire"
+  },
+  {
+    "id": "station_loom",
+    "name": "Loom"
+  }
+];
+
+export const GUIDE_CHESTS: GuideChestItem[] = [
+  {
+    "id": "chest_small",
+    "name": "Small Chest",
+    "quality": "common"
+  },
+  {
+    "id": "chest_medium",
+    "name": "Medium Chest",
+    "quality": "uncommon"
+  },
+  {
+    "id": "chest_large",
+    "name": "Large Chest",
+    "quality": "rare"
+  }
+];

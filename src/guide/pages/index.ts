@@ -8,6 +8,7 @@ import { arena } from './arena';
 import { bestiary } from './bestiary';
 import { classes } from './classes';
 import { combat } from './combat';
+import { construction } from './construction';
 import { controls } from './controls';
 import { delves } from './delves';
 import { dungeons } from './dungeons';
@@ -43,6 +44,7 @@ const PAGES: Record<string, GuidePage> = {
   quests,
   dungeons,
   delves,
+  construction,
   arena,
   combat,
   stats,

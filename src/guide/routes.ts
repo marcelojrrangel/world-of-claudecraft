@@ -141,6 +141,13 @@ export const GUIDE_ROUTES: GuideRoute[] = [
     descKey: 'guide.delvesPage.intro',
   },
   {
+    id: 'construction',
+    sub: 'construction',
+    navKey: 'guide.nav.construction',
+    group: 'compendium',
+    descKey: 'guide.constructionPage.intro',
+  },
+  {
     id: 'arena',
     sub: 'arena',
     navKey: 'guide.nav.arena',

@@ -1231,6 +1231,7 @@ export const es: EnTranslations = {
       "quests": "Misiones",
       "dungeons": "Mazmorras y bandas",
       "delves": "Expediciones",
+      "construction": "Housing & Construction",
       "reference": "Referencia",
       "controls": "Controles",
       "combat": "Combate",
@@ -2027,6 +2028,24 @@ export const es: EnTranslations = {
     },
     "placeholder": {
       "note": "Esta parte de la guía está en camino."
+    },
+    "constructionPage": {
+      "heading": "Housing & Construction",
+      "intro": "Buy a plot, raise a building, and fill it with furniture. Housing is your personal space in the world, and Construction is the crafting profession that builds it.",
+      "plotsTitle": "Getting a Plot",
+      "plotsBody": "Visit the quartermaster in any major hub to purchase a plot deed. Plots are located in the housing district and come in several sizes. Your first plot deed is earned through the building tutorial chain starting with Apprentice Builder Kael in Eastbrook.",
+      "skillTitle": "Construction Skill",
+      "skillBody": "Construction is a gathering-and-crafting profession. Gather raw materials from the world, refine them at crafting stations, then use blueprints to build structures and furniture on your plot. Higher skill lets you build finer blueprints and craft higher-tier furniture sets.",
+      "blueprintsTitle": "Blueprints",
+      "blueprintsBody": "Each blueprint represents a complete building you can erect on your plot, from a simple tent to a grand estate. Blueprints are learned from scroll items and require multiple construction phases, each consuming materials and a minimum tool tier.",
+      "furnitureTitle": "Furniture Sets",
+      "furnitureBody": "Furniture comes in quality sets from Rustic (poor) to Masterwork (epic). Higher-tier furniture requires more skill, finer materials, and better tools. Craft furniture at stations and place it inside your house.",
+      "stationsTitle": "Crafting Stations",
+      "stationsBody": "These special furniture items act as crafting stations on your plot. Place them to refine raw materials and craft higher-tier components.",
+      "chestsTitle": "Storage Chests",
+      "chestsBody": "Chests provide extra storage space inside your house. They come in small, medium, and large sizes, gated by construction skill.",
+      "materialsTitle": "Materials",
+      "materialsBody": "Raw materials are gathered from mining and forestry nodes in the world. Refine them at crafting stations into cut stone, sawed planks, fired bricks, and other building components. Higher-tier structures demand rarer materials like marble blocks and rune-carved stone."
     },
     "notFound": {
       "title": "No hemos podido encontrar esa página",

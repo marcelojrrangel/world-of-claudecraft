@@ -104,8 +104,8 @@
 - [ ] House overview window (tier, rooms, furniture count, rested bonus)
 - [ ] Furniture placement controls (pick, move, rotate, remove)
 - [ ] Build mode toggle keybind (default: B)
-- [ ] i18n keys for all construction UI text
-- [ ] S3 drift guard green (`tests/localization_fixes.test.ts`)
+- [x] i18n keys for all construction UI text (hud_chrome.ts + sim_i18n.ts)
+- [x] S3 drift guard green (`tests/localization_fixes.test.ts`)
 - [ ] Mobile touch support for build mode
 - [ ] `npx tsc --noEmit` green
 

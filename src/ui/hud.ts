@@ -9629,13 +9629,16 @@ export class Hud {
 
   private openBuildMode(): void {
     this.buildModeOpen = true;
-    $('#build-mode-window').style.display = 'block';
+    const el = $('#build-mode-window');
+    if (!el) return; // element not in DOM (shouldn't happen with fresh index.html)
+    el.style.display = 'block';
     this.renderBuildMode();
   }
 
   private closeBuildMode(): void {
     this.buildModeOpen = false;
-    $('#build-mode-window').style.display = 'none';
+    const el = $('#build-mode-window');
+    if (el) el.style.display = 'none';
     this.hideTooltip();
   }
 

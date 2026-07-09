@@ -2792,7 +2792,14 @@ async function startOffline(
     sim.addItem('plot_deed', 1, sim.playerId);
     // Set house tier so the interior renders (buildHouseInterior checks tier >= 1)
     const pm = sim.players.get(sim.playerId);
-    if (pm) pm.construction.houseTier = 1;
+    if (pm) {
+      pm.construction.houseTier = 1;
+      pm.construction.plotId = 'plot_eastbrook_03';
+      // Ensure the plot is marked as owned so buy-plot checks and buildBlueprint pass.
+      if (!sim.plotRegistry.find((r) => r.plotId === 'plot_eastbrook_03')) {
+        sim.plotRegistry.push({ plotId: 'plot_eastbrook_03', ownerPid: sim.playerId });
+      }
+    }
     // Teleport to housing district slot 0 (z = HOUSE_Z0 + 0 * HOUSE_SLOT_SPACING = -1250)
     const e = sim.entities.get(sim.playerId);
     if (e) {

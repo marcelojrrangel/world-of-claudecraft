@@ -61,7 +61,7 @@ describe('The Drowned Temple', () => {
     expect(nearestMob(sim, 'pearlguard_sentinel', origin)).toBeTruthy();
 
     sim.leaveDungeon(a);
-    expect(dist2d(ea.pos, { x: door.x, y: 0, z: door.z })).toBeLessThan(10);
+    expect(dist2d(ea.pos, { x: door.x, z: door.z })).toBeLessThan(10);
   });
 
   it('Ysolei summons Moonspawn at hp thresholds and enrages below 30%', () => {

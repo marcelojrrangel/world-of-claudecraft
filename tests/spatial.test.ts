@@ -6,7 +6,7 @@ import { Entity, dist2d } from '../src/sim/types';
 function bruteForceInRadius(sim: Sim, x: number, z: number, radius: number): Set<number> {
   const out = new Set<number>();
   for (const e of sim.entities.values()) {
-    if (dist2d({ x, y: 0, z }, e.pos) <= radius) out.add(e.id);
+    if (dist2d({ x, z }, e.pos) <= radius) out.add(e.id);
   }
   return out;
 }

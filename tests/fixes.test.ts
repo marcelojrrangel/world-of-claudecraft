@@ -134,7 +134,7 @@ describe('collision & terrain', () => {
     sim.moveInput.forward = true;
     for (let i = 0; i < 120; i++) sim.tick();
     // blocked at the wall: never reaches the interior
-    expect(dist2d(p.pos, { x: 10, y: 0, z: 12 })).toBeGreaterThan(2.2);
+    expect(dist2d(p.pos, { x: 10, z: 12 })).toBeGreaterThan(2.2);
   });
 
   it('steep rims are walls, not ramps', () => {
@@ -407,7 +407,7 @@ describe('the Hollow Crypt doors', () => {
     p.facing = Math.PI;
     sim.tick();
     expect(p.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD);
-    expect(dist2d(p.pos, { x: CRYPT_DOOR_POS.x, y: 0, z: CRYPT_DOOR_POS.z }) < 8).toBe(true);
+    expect(dist2d(p.pos, { x: CRYPT_DOOR_POS.x, z: CRYPT_DOOR_POS.z }) < 8).toBe(true);
   });
 
   it('party members who walk in share one instance', () => {

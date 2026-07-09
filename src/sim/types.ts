@@ -2218,7 +2218,7 @@ export function emptyMoveInput(): MoveInput {
   };
 }
 
-export function dist2d(a: Vec3, b: Vec3): number {
+export function dist2d(a: { x: number; z: number }, b: { x: number; z: number }): number {
   const dx = a.x - b.x,
     dz = a.z - b.z;
   return Math.sqrt(dx * dx + dz * dz);

@@ -244,6 +244,7 @@ export const IWORLD_MEMBERS = [
   { name: 'placeFurniture', kind: 'method' },
   { name: 'moveFurniture', kind: 'method' },
   { name: 'removeFurniture', kind: 'method' },
+  { name: 'isPlaceableFurniture', kind: 'method' },
   { name: 'houseRestedBonus', kind: 'data' },
   { name: 'houseStations', kind: 'data' },
   { name: 'delveMarks', kind: 'data' },
@@ -378,9 +379,9 @@ beforeAll(() => {
 
 describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => {
   it('pins total / data / method counts', () => {
-    expect(IWORLD_MEMBERS.length).toBe(192);
+    expect(IWORLD_MEMBERS.length).toBe(193);
     expect(DATA_MEMBERS.length).toBe(50);
-    expect(METHOD_MEMBERS.length).toBe(142);
+    expect(METHOD_MEMBERS.length).toBe(143);
   });
 
   it('has no duplicate member names', () => {
@@ -390,7 +391,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
 
   // Sorted-name `toEqual` snapshots: a dropped, renamed, or kind-flipped member reddens
   // these deliberately, forcing a reviewed edit. NOT length-only.
-  it('the full sorted member set is exactly the pinned 192', () => {
+  it('the full sorted member set is exactly the pinned 193', () => {
     expect(IWORLD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -480,6 +481,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'houseStations',
       'interact',
       'inventory',
+      'isPlaceableFurniture',
       'known',
       'knownBlueprints',
       'leaderboard',
@@ -642,7 +644,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
     ]);
   });
 
-  it('the sorted method-kind set is exactly the pinned 142', () => {
+  it('the sorted method-kind set is exactly the pinned 143', () => {
     expect(METHOD_MEMBERS.map((m) => m.name).sort()).toEqual([
       'abandonPet',
       'abandonQuest',
@@ -710,6 +712,7 @@ describe('IWORLD_MEMBERS is the pinned IWorld contract (anti-loosening)', () => 
       'harvestNode',
       'healPet',
       'interact',
+      'isPlaceableFurniture',
       'leaderboard',
       'learnBlueprint',
       'leaveDelve',
@@ -1134,6 +1137,7 @@ const FACET_CONSTRUCTION = [
   'placeFurniture',
   'moveFurniture',
   'removeFurniture',
+  'isPlaceableFurniture',
   'chestContents',
   'storeInChest',
   'retrieveFromChest',
@@ -1200,10 +1204,10 @@ describe('W1: aggregate IWorld member set equals the disjoint union of the 23 fa
     expect(overlaps, `members filed in more than one facet:\n${overlaps.join('\n')}`).toEqual([]);
   });
 
-  it('the union of the 23 facets equals the pinned 192-member IWORLD_MEMBERS set', () => {
+  it('the union of the 23 facets equals the pinned 193-member IWORLD_MEMBERS set', () => {
     const union = Object.values(FACET_MEMBER_ARRAYS).flatMap((arr) => [...arr]);
-    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(192);
-    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(192);
+    expect(union.length, 'union size before dedup (catches a duplicated member)').toBe(193);
+    expect(new Set(union).size, 'union size after dedup (catches a duplicated member)').toBe(193);
     const sortedUnion = [...union].sort();
     const pinned = IWORLD_MEMBERS.map((m) => m.name).sort();
     expect(sortedUnion).toEqual(pinned);

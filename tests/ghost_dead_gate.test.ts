@@ -42,7 +42,7 @@ function teleport(sim: AnySim, p: AnyEntity, x: number, z: number): void {
 function healerInRange(sim: AnySim, pos: { x: number; z: number }, range: number): boolean {
   for (const e of sim.entities.values() as IterableIterator<AnyEntity>) {
     if (e.kind !== 'npc' || e.templateId !== SPIRIT_HEALER_NPC_ID) continue;
-    if (dist2d(e.pos, { x: pos.x, y: 0, z: pos.z }) <= range) return true;
+    if (dist2d(e.pos, { x: pos.x, z: pos.z }) <= range) return true;
   }
   return false;
 }
@@ -291,7 +291,7 @@ describe('auto-release-on-logout: save/load of a dead-unreleased character', () 
     expect(e2.ghost).toBe(true);
     // the corpse lies at the death spot
     expect(e2.corpsePos).toBeTruthy();
-    expect(dist2d(e2.corpsePos!, { x: 0, y: 0, z: -120 })).toBeLessThan(1);
+    expect(dist2d(e2.corpsePos!, { x: 0, z: -120 })).toBeLessThan(1);
     // the spirit stands exactly where the normal release path puts it
     expect(Math.abs(e2.pos.x - releasedPos.x)).toBeLessThan(1);
     expect(Math.abs(e2.pos.z - releasedPos.z)).toBeLessThan(1);
@@ -323,7 +323,7 @@ describe('auto-release-on-logout: save/load of a dead-unreleased character', () 
     expect(e2.ghost).toBe(true);
     // corpse marked at the death spot inside the instance band
     expect(e2.corpsePos!.x).toBeGreaterThan(DUNGEON_X_THRESHOLD);
-    expect(dist2d(e2.corpsePos!, { x: deathSpot.x, y: 0, z: deathSpot.z })).toBeLessThan(1);
+    expect(dist2d(e2.corpsePos!, { x: deathSpot.x, z: deathSpot.z })).toBeLessThan(1);
     // the spirit rises OUTSIDE, at an overworld graveyard with an angel
     expect(e2.pos.x).toBeLessThan(DUNGEON_X_THRESHOLD);
     expect(healerInRange(sim2, e2.pos, SPIRIT_HEALER_RANGE)).toBe(true);

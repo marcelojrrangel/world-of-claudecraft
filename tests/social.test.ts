@@ -1174,7 +1174,7 @@ describe('the new dungeons', () => {
     const vael = nearestMob(sim, 'vael_the_mistcaller', origin);
     expect(vael).toBeTruthy();
     sim.leaveDungeon(a);
-    expect(dist2d(ea.pos, { x: 45, y: 0, z: 515 })).toBeLessThan(10);
+    expect(dist2d(ea.pos, { x: 45, z: 515 })).toBeLessThan(10);
 
     teleport(sim, a, 0, 858);
     sim.enterDungeon('gravewyrm_sanctum', a);
@@ -1185,7 +1185,7 @@ describe('the new dungeons', () => {
     expect(korzul).toBeTruthy();
     expect(korzul.level).toBe(20);
     sim.leaveDungeon(a);
-    expect(dist2d(ea.pos, { x: 0, y: 0, z: 858 })).toBeLessThan(10);
+    expect(dist2d(ea.pos, { x: 0, z: 858 })).toBeLessThan(10);
   });
 
   it('Velkhar summons add waves at hp thresholds and Korgath enrages below 30%', () => {

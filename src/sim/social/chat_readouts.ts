@@ -194,7 +194,7 @@ export function poisReadout(self: Entity): string {
   const zone = zoneAt(self.pos.z);
   if (zone.pois.length === 0) return `${zone.name} has no notable landmarks.`;
   const parts = zone.pois
-    .map((p) => ({ label: p.label, d: dist2d(self.pos, { x: p.x, y: 0, z: p.z }) }))
+    .map((p) => ({ label: p.label, d: dist2d(self.pos, { x: p.x, z: p.z }) }))
     .sort((a, b) => a.d - b.d)
     .map((p) => `${p.label} (${Math.round(p.d)}yd)`);
   return `Landmarks in ${zone.name} (${parts.length}): ${parts.join(', ')}.`;

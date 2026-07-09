@@ -82,7 +82,7 @@ function objects(sim: Sim, itemId: string, near?: { x: number; z: number }): Ent
     (e) =>
       e.kind === 'object' &&
       e.objectItemId === itemId &&
-      (!near || dist2d(e.pos, { x: near.x, y: 0, z: near.z }) < 140),
+      (!near || dist2d(e.pos, { x: near.x, z: near.z }) < 140),
   );
 }
 

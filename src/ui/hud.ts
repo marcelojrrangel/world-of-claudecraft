@@ -9651,6 +9651,7 @@ export class Hud {
       sim: this.sim,
       hideTooltip: () => this.hideTooltip(),
       onClose: () => this.closeBuildMode(),
+      onBuildBlueprint: (blueprintId) => this.sim.buildBlueprint(blueprintId),
       placementRotation: this.buildModeRotation,
       onRotationChange: (rot) => { this.buildModeRotation = rot; },
       onPlaceFurniture: (itemId) => {

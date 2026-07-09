@@ -7,6 +7,7 @@ export interface BuildModeWindowDeps {
   sim: IWorld;
   hideTooltip(): void;
   onClose(): void;
+  onBuildBlueprint(blueprintId: string): void;
   onPlaceFurniture(itemId: string): void;
   onMoveFurniture(placedId: string): void;
   onRemoveFurniture(placedId: string): void;
@@ -101,6 +102,10 @@ export function renderBuildModeWindow(
 
   const closeBtn = el.querySelector('[data-close]');
   if (closeBtn) closeBtn.addEventListener('click', () => deps.onClose());
+
+  for (const btn of el.querySelectorAll('.build-mode-bp-item')) {
+    btn.addEventListener('click', () => deps.onBuildBlueprint((btn as HTMLElement).dataset.bp!));
+  }
 
   // Rotation buttons
   for (const btn of el.querySelectorAll('.build-mode-rot-btn')) {

@@ -2790,11 +2790,11 @@ async function startOffline(
     // Grant the tent blueprint and plot deed
     sim.addItem('blueprint_tent', 1, sim.playerId);
     sim.addItem('plot_deed', 1, sim.playerId);
-    // Teleport to housing district
+    // Teleport to housing district slot 0 (z = HOUSE_Z0 + 0 * HOUSE_SLOT_SPACING = -1250)
     const e = sim.entities.get(sim.playerId);
     if (e) {
       e.pos.x = 15000;
-      e.pos.z = 0;
+      e.pos.z = -1250;
       e.pos.y = 0;
       e.prevPos = { ...e.pos };
     }

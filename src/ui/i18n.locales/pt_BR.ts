@@ -6061,6 +6061,7 @@ export const pt_BR: Partial<Record<TranslationKey, string>> = {
   'entities.items.chest_small.name': 'Baú Pequeno',
   'entities.items.chest_medium.name': 'Baú Médio',
   'entities.items.chest_large.name': 'Baú Grande',
+  'entities.items.plot_deed.name': 'Escritura de Terreno',
   // ---- Guide: Construction page ----
   'guide.constructionPage.heading': 'Habitação e Construção',
   'guide.constructionPage.intro': 'Compre um terreno, erga uma construção e mobílie-a. Habitação é seu espaço pessoal no mundo, e Construção é a profissão de artesanato que a edifica.',

@@ -1082,6 +1082,11 @@ export const ZONE1_CHAPEL_CAMPS: CampDef[] = [
 
 export const ZONE1_OBJECTS: GroundObjectDef[] = [
   {
+    itemId: 'plot_deed',
+    name: 'Building Plot Deed',
+    positions: [{ x: -3, z: 9 }],
+  },
+  {
     itemId: 'supply_crate',
     name: 'Stolen Supply Crate',
     positions: [

@@ -6548,6 +6548,9 @@ export const pt_BR: EnTranslations = {
       },
       "chest_large": {
         "name": "Baú Grande"
+      },
+      "plot_deed": {
+        "name": "Escritura de Terreno"
       }
     },
     "mobs": {

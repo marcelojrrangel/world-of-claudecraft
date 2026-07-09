@@ -567,4 +567,13 @@ export const CONSTRUCTION_ITEMS: Record<string, ItemDef> = {
     quality: 'rare',
     sellValue: 200,
   },
+  // Quest interact item: plot deed (sparkle object near builder_kael).
+  plot_deed: {
+    id: 'plot_deed',
+    name: 'Building Plot Deed',
+    kind: 'quest',
+    quality: 'common',
+    sellValue: 0,
+    noDiscard: true,
+  },
 };

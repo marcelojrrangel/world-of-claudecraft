@@ -2771,12 +2771,33 @@ async function startOffline(
     if (usable[0]) sim.equipItem(usable[0], sim.playerId);
   }
   // Temporary dev convenience: naming your character "pedreiro" (Portuguese
-  // for "builder") grants a starter mining pick and handaxe so you can test the
-  // construction tutorial without visiting a vendor. TODO: remove this once the
-  // construction tutorial is fully playable from a fresh character.
+  // for "builder") grants all tent materials + tools and teleports to the
+  // housing district so you can test construction end-to-end without grinding.
+  // TODO: remove this once the construction tutorial is fully playable from a
+  // fresh character.
   if (name === 'pedreiro') {
+    // Tools
     sim.addItem('copper_mining_pick', 1, sim.playerId);
     sim.addItem('handaxe', 1, sim.playerId);
+    sim.addItem('trowel_t1', 1, sim.playerId);
+    // Tent blueprint materials
+    sim.addItem('rough_stone', 10, sim.playerId);
+    sim.addItem('raw_lumber', 10, sim.playerId);
+    sim.addItem('sawed_plank', 5, sim.playerId);
+    sim.addItem('canvas_scrap', 10, sim.playerId);
+    sim.addItem('bedroll', 1, sim.playerId);
+    sim.addItem('candle', 1, sim.playerId);
+    // Grant the tent blueprint and plot deed
+    sim.addItem('blueprint_tent', 1, sim.playerId);
+    sim.addItem('plot_deed', 1, sim.playerId);
+    // Teleport to housing district
+    const e = sim.entities.get(sim.playerId);
+    if (e) {
+      e.pos.x = 15000;
+      e.pos.z = 0;
+      e.pos.y = 0;
+      e.prevPos = { ...e.pos };
+    }
   }
   // Offline characters are not persisted (a fresh name is typed each session),
   // so the only stable handle is class + name. Keybinds scope to that pair.

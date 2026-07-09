@@ -2554,4 +2554,7 @@ export class ClientWorld implements IWorld {
   setHousePermission(permission: import('../sim/types').HousePermission): void {
     this.cmd({ cmd: 'set_permission', permission });
   }
+  isPlaceableFurniture(_itemId: string): boolean {
+    return true; // server validates; safe to show all items as potentially placeable
+  }
 }

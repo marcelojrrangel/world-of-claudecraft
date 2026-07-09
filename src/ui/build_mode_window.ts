@@ -1,6 +1,6 @@
 import { esc } from './esc';
 import { t } from './i18n';
-import { isPlaceableFurniture } from '../sim/professions/construction/furniture';
+import { tEntity } from './entity_i18n';
 import type { IWorld } from '../world_api';
 
 export interface BuildModeWindowDeps {
@@ -20,7 +20,7 @@ function placeableInventoryItems(sim: IWorld): { itemId: string; count: number }
   const inv = sim.inventory;
   const seen = new Map<string, number>();
   for (const slot of inv) {
-    if (slot.count > 0 && isPlaceableFurniture(slot.itemId)) {
+    if (slot.count > 0 && sim.isPlaceableFurniture(slot.itemId)) {
       seen.set(slot.itemId, (seen.get(slot.itemId) ?? 0) + slot.count);
     }
   }
@@ -57,7 +57,7 @@ export function renderBuildModeWindow(
         ${blueprints.length === 0
           ? `<p class="build-mode-empty">${esc(t('hudChrome.construction.buildMode.noSelection'))}</p>`
           : `<ul class="build-mode-bp-list">
-            ${blueprints.map((bp) => `<li><button type="button" class="build-mode-bp-item" data-bp="${esc(bp)}">${esc(bp)}</button></li>`).join('')}
+            ${blueprints.map((bp) => `<li><button type="button" class="build-mode-bp-item" data-bp="${esc(bp)}">${esc(tEntity({ kind: 'item', id: bp, field: 'name' }))}</button></li>`).join('')}
           </ul>`}
       </div>
       ${progress
@@ -82,7 +82,7 @@ export function renderBuildModeWindow(
         ${inventoryItems.length === 0
           ? `<p class="build-mode-empty">${esc(t('hudChrome.construction.buildMode.noSelection'))}</p>`
           : `<ul class="build-mode-furn-list">
-            ${inventoryItems.map((fi) => `<li><button type="button" class="build-mode-place-btn" data-item="${esc(fi.itemId)}">${esc(fi.itemId)} (${fi.count})</button></li>`).join('')}
+            ${inventoryItems.map((fi) => `<li><button type="button" class="build-mode-place-btn" data-item="${esc(fi.itemId)}">${esc(tEntity({ kind: 'item', id: fi.itemId, field: 'name' }))} (${fi.count})</button></li>`).join('')}
           </ul>`}
       </div>
       ${placed.length > 0
@@ -90,7 +90,7 @@ export function renderBuildModeWindow(
           <h3>${esc(t('hudChrome.construction.furniture.remove'))}</h3>
           <ul class="build-mode-placed-list">
             ${placed.map((pf) => `<li>
-              <span>${esc(pf.itemId)}</span>
+              <span>${esc(tEntity({ kind: 'item', id: pf.itemId, field: 'name' }))}</span>
               <button type="button" class="build-mode-move-btn" data-placed="${esc(pf.id)}">${esc(t('hudChrome.construction.furniture.move'))}</button>
               <button type="button" class="build-mode-remove-btn" data-placed="${esc(pf.id)}">${esc(t('hudChrome.construction.furniture.remove'))}</button>
             </li>`).join('')}

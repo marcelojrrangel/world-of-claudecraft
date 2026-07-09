@@ -55,4 +55,6 @@ export interface IWorldConstruction {
   visitHouse(targetPid: number): void;
   /** Phase 6: set the house permission level. */
   setHousePermission(permission: HousePermission): void;
+  /** Whether an item id is placeable furniture. */
+  isPlaceableFurniture(itemId: string): boolean;
 }

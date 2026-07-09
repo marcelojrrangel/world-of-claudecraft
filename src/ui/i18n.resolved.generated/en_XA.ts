@@ -1192,6 +1192,7 @@ export const en_XA: EnTranslations = {
         "furniture": "[Ƒúŕñíţúŕé: {count}]",
         "restedBonus": "[Ŕéšţéð Ɓóñúš: {bonus}ẋ]",
         "permission": "[Þéŕɱíššíóñ: {level}]",
+        "stations": "[Šţáţíóñš: {count}]",
         "visit": "[Ʋíšíţ]",
         "setPermission": "[Šéţ Þéŕɱíššíóñ]"
       },

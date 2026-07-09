@@ -1192,6 +1192,7 @@ export const vi_VN: EnTranslations = {
         "furniture": "Furniture: {count}",
         "restedBonus": "Rested Bonus: {bonus}x",
         "permission": "Permission: {level}",
+        "stations": "Stations: {count}",
         "visit": "Visit",
         "setPermission": "Set Permission"
       },

@@ -29,7 +29,7 @@ export function renderHouseWindow(
       <p>${esc(t('hudChrome.construction.house.furniture', { count: formatNumber(furn, { maximumFractionDigits: 0 }) }))}</p>
       <p>${esc(t('hudChrome.construction.house.restedBonus', { bonus: formatNumber(bonus, { maximumFractionDigits: 1 }) }))}</p>
       <p>${esc(t('hudChrome.construction.buildMode.blueprints'))}: ${esc(formatNumber(bp, { maximumFractionDigits: 0 }))}</p>
-      <p>${esc(t('hudChrome.construction.house.title'))} stations: ${esc(formatNumber(stations, { maximumFractionDigits: 0 }))}</p>
+      <p>${esc(t('hudChrome.construction.house.stations', { count: formatNumber(stations, { maximumFractionDigits: 0 }) }))}</p>
     </div>`;
 
   const closeBtn = el.querySelector('[data-close]');

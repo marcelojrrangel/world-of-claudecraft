@@ -241,6 +241,7 @@ import {
   setHousePermission as setHousePermissionImpl,
   visitHouse as visitHouseImpl,
 } from './professions/construction/housing';
+import { isPlaceableFurniture as isPlaceableFurnitureImpl } from './professions/construction/furniture';
 import { advancePendingProjectiles, type PendingProjectile } from './projectile_travel';
 import { sanitizeRemovedZone1Content } from './removed_zone1_content';
 import { Rng } from './rng';
@@ -6879,6 +6880,9 @@ export class Sim {
 
   setHousePermission(permission: import('./types').HousePermission): void {
     setHousePermissionImpl(this.ctx, this.primaryId, permission);
+  }
+  isPlaceableFurniture(itemId: string): boolean {
+    return isPlaceableFurnitureImpl(itemId);
   }
 }
 

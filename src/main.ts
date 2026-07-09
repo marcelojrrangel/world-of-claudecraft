@@ -2791,7 +2791,8 @@ async function startOffline(
     sim.addItem('blueprint_tent', 1, sim.playerId);
     sim.addItem('plot_deed', 1, sim.playerId);
     // Set house tier so the interior renders (buildHouseInterior checks tier >= 1)
-    sim.houseState.houseTier = 1;
+    const pm = sim.players.get(sim.playerId);
+    if (pm) pm.construction.houseTier = 1;
     // Teleport to housing district slot 0 (z = HOUSE_Z0 + 0 * HOUSE_SLOT_SPACING = -1250)
     const e = sim.entities.get(sim.playerId);
     if (e) {

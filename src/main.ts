@@ -97,7 +97,7 @@ import { navigatorSaveData } from './render/sky';
 import { desktopBridge } from './runtime';
 import { pathCrossesFence } from './sim/colliders';
 import { ABILITIES, CLASSES } from './sim/content/classes';
-import { ITEMS, setActiveWorldContent } from './sim/data';
+import { GATHER_NODES, ITEMS, setActiveWorldContent } from './sim/data';
 import { canEquipItem } from './sim/equipment_rules';
 import { findPlayerPath, resolvePlayerDestination } from './sim/pathfind';
 import { Sim } from './sim/sim';
@@ -1785,6 +1785,20 @@ async function startGame(
       else hud.openQuestDialog(bestNpc);
       return;
     }
+    // Gather nodes (mining/wood/herb): nearest within INTERACT_RANGE.
+    let bestNodeD = INTERACT_RANGE;
+    let bestNode: string | null = null;
+    for (const node of GATHER_NODES) {
+      const d = dist2d(p.pos, node.pos);
+      if (d < bestNodeD) {
+        bestNodeD = d;
+        bestNode = node.id;
+      }
+    }
+    if (bestNode !== null) {
+      world.harvestNode(bestNode);
+      return;
+    }
     hud.showError(t('errors.nothingInteract'));
   }
 
@@ -2755,6 +2769,14 @@ async function startOffline(
     const usable = TEST_WEAPONS.filter((id) => ITEMS[id] && canEquipItem(playerClass, ITEMS[id]));
     for (const id of usable) sim.addItem(id, 1, sim.playerId);
     if (usable[0]) sim.equipItem(usable[0], sim.playerId);
+  }
+  // Temporary dev convenience: naming your character "pedreiro" (Portuguese
+  // for "builder") grants a starter mining pick and handaxe so you can test the
+  // construction tutorial without visiting a vendor. TODO: remove this once the
+  // construction tutorial is fully playable from a fresh character.
+  if (name === 'pedreiro') {
+    sim.addItem('copper_mining_pick', 1, sim.playerId);
+    sim.addItem('handaxe', 1, sim.playerId);
   }
   // Offline characters are not persisted (a fresh name is typed each session),
   // so the only stable handle is class + name. Keybinds scope to that pair.

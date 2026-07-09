@@ -187,6 +187,15 @@ export class HouseInteriors {
       }
     }
 
+    // Central warm ambient light so the house is visible in underground lighting
+    const houseLight = new THREE.PointLight(0xffd4a0, 1.5, 40);
+    houseLight.position.set(0, WALL_HEIGHT * 0.6, zMin + zLen / 2);
+    group.add(houseLight);
+    // A second softer light near the ceiling for fill
+    const fillLight = new THREE.PointLight(0xffd4a0, 0.6, 30);
+    fillLight.position.set(0, WALL_HEIGHT * 0.8, zMin + zLen / 2);
+    group.add(fillLight);
+
     group.position.set(originX, 0, originZ);
     this.scene.add(group);
     this.interiorGroups.set(key, group);
